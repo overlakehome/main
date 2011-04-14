@@ -23,155 +23,191 @@ import com.google.common.collect.ImmutableList;
 // quicksort with in-place partitioning and tail recursion uses only O(log n) space.
 
 public class oyster {
-    public static String toExcelColumn(int n) {
-        // 26 cases : A - Z
-        // 26^2 cases : AA - ZZ
-        // 26^3 cases : AAA - ZZZ
+    public static class Arrays {
+        // Kadane's algorithm http://en.wikipedia.org/wiki/Maximum_subarray_problem
+        public static int[] kadane(int... a) {
+            int maxHead = 0, maxTail = 0, maxSum = a[0];
+            for (int head = 0, tail = 1, sum = a[0]; tail < a.length; tail++) {
+                sum = sum + a[tail];
+                if (sum > maxSum) {
+                    maxHead = head;
+                    maxTail = tail;
+                    maxSum = sum;
+                }
 
-        int cases = 26;
-        int k = 0;
-        for (; n > cases; k++) { // k is the level of recursion.
-            n -= cases;
-            cases *= 26;
-        }
+                if (0 > sum) {
+                    head = tail + 1;
+                    sum = 0;
+                }
+            }
 
-        n -= 1; // n falls between 0 and (26^k - 1).
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i <= k; i++) {
-            sb.insert(0, (char) (n % 26 + 'A'));
-            n /= 26;
-        }
-
-        return sb.toString();
-    }
-
-    public static int fromExcelColumn(String s) {
-        int columns = 0;
-        for (int k = 1, cases = 26; k < s.length(); k++, cases *= 26) {
-            columns += cases;
-        }
-
-        for (int k = s.length() - 1, cases = 1; k >= 0; k--, cases *= 26) {
-            columns += cases * (int) (s.charAt(k) - 'A');
-        }
-
-        return columns + 1;
-    }
-
-    public static void mergeSort(int[] elements) {
-        int[] temp = new int[elements.length];
-        mergeSort(elements, temp, 0, elements.length - 1);
-    }
-
-    private static void mergeSort(int[] input, int[] temp, int left, int right) {
-        if (left < right) {
-            int center = (left + right) / 2;
-            mergeSort(input, temp, left, center);
-            mergeSort(input, temp, center + 1, right);
-            merge(input, temp, left, center + 1, right);
+            return new int[] { maxSum, maxHead, maxTail };
         }
     }
 
-    private static void merge(int[] input, int[] temp, int left, int right, int rightEnd) {
-        int leftEnd = right - 1;
-        int leftBegin = left;
-        int position = 0;
-        while (left <= leftEnd && right <= rightEnd) {
-            if (input[left] <= input[right]) {
+    public static class Strings {
+        
+    }
+
+    public static class LinkedLists {
+        public static class SNode<T> implements Comparable<SNode<T>> {
+            public T item;
+            public SNode<T> next;
+
+            public SNode<T> mergeSort(SNode<T> p) {
+                if (null == p || null == p.next)
+                    return p;
+                SNode<T> q = partition(p);
+                p = mergeSort(p);
+                q = mergeSort(q);
+                p = merge(p, q);
+                return p;
+            }
+
+            public SNode<T> partition(SNode<T> p) {
+                SNode<T> p1 = p;
+                SNode<T> p2 = p.next;
+                while (null != p2 && null != p2.next) {
+                    p2 = p2.next.next;
+                    p2 = p1.next;
+                }
+
+                SNode<T> q = p1.next;
+                p1.next = null;
+                return q;
+            }
+
+            public SNode<T> merge(SNode<T> p, SNode<T> q) {
+                SNode<T> head = null, r = null;
+                while (null != p && null != q) {
+                    SNode<T> next;
+                    if (p.compareTo(q) < 0) {
+                        next = p;
+                        p = p.next;
+                    } else {
+                        next = q;
+                        q = q.next;
+                    }
+
+                    if (null == head) {
+                        head = r = next;
+                    } else {
+                        r.next = next;
+                        r = r.next;
+                    }
+                }
+
+                if (null == p)
+                    r.next = q;
+                if (null == q)
+                    r.next = p;
+                return head;
+            }
+
+            @Override
+            public int compareTo(SNode<T> o) {
+                return 0;
+            }
+        }
+
+        public static class DNode<T> {
+            public T item;
+            public DNode<T> next;
+            public DNode<T> prev;
+
+            public static <T> DNode<T> reverse(DNode<T> current) {
+                if (null == current)
+                    return current;
+
+                while (null != current.next) {
+                    DNode<T> save = current.next;
+                    current.next = current.prev;
+                    current.prev = save;
+                    current = save;
+                }
+
+                return current;
+            }
+        }
+    }
+
+    public static class Stacks {
+        
+    }
+
+    public static class Recursions {
+        public static String toExcelColumn(int n) {
+            // 26 cases : A - Z
+            // 26^2 cases : AA - ZZ
+            // 26^3 cases : AAA - ZZZ
+
+            int cases = 26;
+            int k = 0;
+            for (; n > cases; k++) { // k is the level of recursion.
+                n -= cases;
+                cases *= 26;
+            }
+
+            n -= 1; // n falls between 0 and (26^k - 1).
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= k; i++) {
+                sb.insert(0, (char) (n % 26 + 'A'));
+                n /= 26;
+            }
+
+            return sb.toString();
+        }
+
+        public static int fromExcelColumn(String s) {
+            int columns = 0;
+            for (int k = 1, cases = 26; k < s.length(); k++, cases *= 26) {
+                columns += cases;
+            }
+
+            for (int k = s.length() - 1, cases = 1; k >= 0; k--, cases *= 26) {
+                columns += cases * (int) (s.charAt(k) - 'A');
+            }
+
+            return columns + 1;
+        }
+    }
+
+    public static class Sorting {
+        public static void mergeSort(int[] elements) {
+            int[] temp = new int[elements.length];
+            mergeSort(elements, temp, 0, elements.length - 1);
+        }
+
+        private static void mergeSort(int[] input, int[] temp, int left, int right) {
+            if (left < right) {
+                int center = (left + right) / 2;
+                mergeSort(input, temp, left, center);
+                mergeSort(input, temp, center + 1, right);
+                merge(input, temp, left, center + 1, right);
+            }
+        }
+
+        private static void merge(int[] input, int[] temp, int left, int right, int rightEnd) {
+            int leftEnd = right - 1;
+            int leftBegin = left;
+            int position = 0;
+            while (left <= leftEnd && right <= rightEnd) {
+                if (input[left] <= input[right]) {
+                    temp[position++] = input[left++];
+                } else {
+                    temp[position++] = input[right++];
+                }
+            }
+
+            while (left <= leftEnd) {
                 temp[position++] = input[left++];
-            } else {
+            }
+
+            while (right <= rightEnd) {
                 temp[position++] = input[right++];
             }
-        }
 
-        while (left <= leftEnd) {
-            temp[position++] = input[left++];
-        }
-
-        while (right <= rightEnd) {
-            temp[position++] = input[right++];
-        }
-
-        System.arraycopy(temp, 0, input, leftBegin, rightEnd - leftBegin + 1);
-    }
-
-    public static class SNode<T> implements Comparable<SNode<T>> {
-        public T item;
-        public SNode<T> next;
-
-        public SNode<T> mergeSort(SNode<T> p) {
-            if (null == p || null == p.next)
-                return p;
-            SNode<T> q = partition(p);
-            p = mergeSort(p);
-            q = mergeSort(q);
-            p = merge(p, q);
-            return p;
-        }
-
-        public SNode<T> partition(SNode<T> p) {
-            SNode<T> p1 = p;
-            SNode<T> p2 = p.next;
-            while (null != p2 && null != p2.next) {
-                p2 = p2.next.next;
-                p2 = p1.next;
-            }
-
-            SNode<T> q = p1.next;
-            p1.next = null;
-            return q;
-        }
-
-        public SNode<T> merge(SNode<T> p, SNode<T> q) {
-            SNode<T> head = null, r = null;
-            while (null != p && null != q) {
-                SNode<T> next;
-                if (p.compareTo(q) < 0) {
-                    next = p;
-                    p = p.next;
-                } else {
-                    next = q;
-                    q = q.next;
-                }
-
-                if (null == head) {
-                    head = r = next;
-                } else {
-                    r.next = next;
-                    r = r.next;
-                }
-            }
-
-            if (null == p)
-                r.next = q;
-            if (null == q)
-                r.next = p;
-            return head;
-        }
-
-        @Override
-        public int compareTo(SNode<T> o) {
-            return 0;
-        }
-    }
-
-    public static class DNode<T> {
-        public T item;
-        public DNode<T> next;
-        public DNode<T> prev;
-
-        public static <T> DNode<T> reverse(DNode<T> current) {
-            if (null == current)
-                return current;
-
-            while (null != current.next) {
-                DNode<T> save = current.next;
-                current.next = current.prev;
-                current.prev = save;
-                current = save;
-            }
-
-            return current;
+            System.arraycopy(temp, 0, input, leftBegin, rightEnd - leftBegin + 1);
         }
     }
 
@@ -492,9 +528,9 @@ public class oyster {
 
     @Test
     public void testToAndFromExcelColumn() {
-        assertEquals("AB", toExcelColumn(28));
-        assertEquals("ABC", toExcelColumn(731));
-        assertEquals(28, fromExcelColumn(toExcelColumn(28)));
-        assertEquals(731, fromExcelColumn(toExcelColumn(731)));
+        assertEquals("AB", Recursions.toExcelColumn(28));
+        assertEquals("ABC", Recursions.toExcelColumn(731));
+        assertEquals(28, Recursions.fromExcelColumn(Recursions.toExcelColumn(28)));
+        assertEquals(731, Recursions.fromExcelColumn(Recursions.toExcelColumn(731)));
     }
 }
