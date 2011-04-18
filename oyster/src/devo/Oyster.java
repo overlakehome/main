@@ -2,11 +2,13 @@ package devo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
@@ -161,13 +163,13 @@ public class Oyster {
                 this.next = null; // this line seems unnecessary, as the uninitialized fields remain to be null.
             }
 
-            public static SNode of(int data) {
+            public static SNode snodeOf(int data) {
                 SNode snode = new SNode();
                 snode.data = data;
                 return snode;
             }
 
-            public static SNode of(int data, SNode next) {
+            public static SNode snodeOf(int data, SNode next) {
                 SNode snode = new SNode();
                 snode.data = data;
                 snode.next = next;
@@ -176,7 +178,7 @@ public class Oyster {
 
             // This method inserts an data element into a sorted linked list, and returns the new head node.
             public static SNode insert(SNode head, int insert) {
-                return insert(head, SNode.of(insert));
+                return insert(head, SNode.snodeOf(insert));
             }
 
             private static SNode insert(SNode head, SNode insert) {
@@ -252,6 +254,7 @@ public class Oyster {
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
             public static SNode removeDupsInConstantSpace(SNode head) {
+                // Time: O(n*n), Space: O(1)
                 for (SNode remaining = head; remaining != null; remaining = remaining.next) {
                     SNode previous = remaining;
                     SNode current = remaining.next;
@@ -271,13 +274,14 @@ public class Oyster {
             // This method removes duplicates using a hash map.
             public static void removeDupsUsingHashMap(SNode current) {
                 // HashSet may be a better fit, but Hashtable is an old school
-                Map<Integer, Object> map = new HashMap<Integer, Object>();
+                Set<Integer> set = new HashSet<Integer>();
                 SNode previous = null;
-                while (current != null) {
-                    if (map.containsKey(current.data))
+
+                while (current != null) { // Time: O(n), Space(n)
+                    if (set.contains(current.data))
                         previous.next = current.next;
                     else {
-                        map.put(current.data, null);
+                        set.add(current.data);
                         previous = current;
                     }
 
