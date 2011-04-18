@@ -208,21 +208,23 @@ public class Oyster {
                 return head;
             }
 
-            //delete a node from linked list
-            public static SNode deleteSNode(SNode head, int delete){
+            // This method deletes an data element into a sorted linked list, and returns the new head node.
+            public static SNode delete(SNode head, int delete){
                 if (head == null) return head;
                 if (head.data == delete) return head.next;
+
                 for (SNode current = head; current.next != null; current = current.next){
                     if (current.next.data == delete) {
                         current.next = current.next.next;
                         break;
                     }
                 }
+
                 return head;
             }
 
-            //delete in a constant time : Time O(1) Space: O(1)
-            public static void deleteSNode2(SNode delete) {
+            // This method deletes a node in a constant time, i.e. time O(1), space: O(1)
+            public static void delete(SNode delete) {
                 if (delete.next != null) {
                     delete.data = delete.next.data;
                     delete.next = delete.next.next;
@@ -231,18 +233,20 @@ public class Oyster {
                 }
             }
 
-            //Reverse a linked list without recursion
-            public static <T extends Comparable<T>> SNode reverse(SNode current){
+            // This method reverses a linked list in an iteration.
+            public static <T extends Comparable<T>> SNode reverse(SNode current) {
                 SNode result = null;
-                while(current != null){
+                while (current != null) {
                     SNode save = current.next;
                     current.next = result;
                     result = current;
                     current = save;
                 }
+
                 return result;
             }
 
+            // Jeongim: let's kill the following method --- commented by Henry Lee.
             //Reverse a linked list with recursion
             public static SNode reverse2(SNode current, SNode result){
                 if (current == null) return result;
