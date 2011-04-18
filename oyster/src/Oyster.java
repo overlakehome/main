@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
@@ -258,35 +260,42 @@ public class Oyster {
 
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
-            public static <T extends Comparable<T>> SNode deleteDupes(SNode head){
-                if(head == null || head.next == null) return head;
-                for(SNode current = head.next; current != null;){
+            public static <T extends Comparable<T>> SNode removeDupsInConstantTime(SNode head){
+                if (head == null || head.next == null)
+                    return head;
+
+                for (SNode current = head.next; current != null;) {
                     SNode runner = head;
-                    for(;runner.next != current; runner = runner.next){
-                        if(runner.data == current.data) {
+                    for (; runner.next != current; runner = runner.next) {
+                        if (runner.data == current.data) {
                             SNode save = current.next;
                             runner.next = save;
                             current = save;
                             break;
                         }
                     }
+
                     if (runner == current) // in case no dupe in prior nodes
                         current = current.next;
                 }
+
                 return head;
             }
 
-            //2.1.a   if we can use a buffer
-            public static <T extends Comparable<T>> void deleteDupes2(SNode head){
-                Hashtable table = new Hashtable();
+            // This method removes duplicates using a hash map.
+            public static void removeDupsUsingHashMap(SNode current) {
+                // HashSet may be a better fit, but Hashtable is an old school
+                Map<Integer, Object> map = new HashMap<Integer, Object>();
                 SNode previous = null;
-                while(head != null){
-                    if(table.containsKey(head.data)) previous.next = head.next;
-                    else{
-                        table.put(head.data, true);
-                        previous = head;
+                while (current != null) {
+                    if (map.containsKey(current.data))
+                        previous.next = current.next;
+                    else {
+                        map.put(current.data, null);
+                        previous = current;
                     }
-                    head = head.next;
+
+                    current = current.next;
                 }
             }
 
@@ -295,7 +304,7 @@ public class Oyster {
                 if(head == null || n < 1) return null;
                 SNode p1 = head;
                 SNode p2 = head;
-                
+
                 for(int i = 0; i < n; i++){
                     if (p2 == null) return null;
                     p2 = p2.next;
