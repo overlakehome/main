@@ -13,14 +13,27 @@ public class TestOyster {
     // Command-F11, or Run | Debug
     @Test
     public void testSNodeInsert() {
-        Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 1);
-        assertEquals(1, head.data);
+        Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 2);
+        assertEquals(2, head.data);
         assertEquals(null, head.next);
 
-        Oyster.LinkedLists.SNode head2 = Oyster.LinkedLists.SNode.insert(head, 2);
-        assertEquals(1, head2.data);
-        assertEquals(2, head2.next.data);
+        Oyster.LinkedLists.SNode head2 = Oyster.LinkedLists.SNode.insert(head, 4); // to be a tail.
+        assertEquals(2, head2.data);
+        assertEquals(4, head2.next.data);
         assertEquals(null, head2.next.next);
+
+        Oyster.LinkedLists.SNode head3 = Oyster.LinkedLists.SNode.insert(head2, 3); // to be a middle man.
+        assertEquals(2, head3.data);
+        assertEquals(3, head3.next.data);
+        assertEquals(4, head3.next.next.data);
+        assertEquals(null, head3.next.next.next);
+
+        Oyster.LinkedLists.SNode head4 = Oyster.LinkedLists.SNode.insert(head2, 1); // to be a head.
+        assertEquals(1, head4.data);
+        assertEquals(2, head4.next.data);
+        assertEquals(3, head4.next.next.data);
+        assertEquals(4, head4.next.next.next.data);
+        assertEquals(null, head4.next.next.next.next);
     }
 
     /*
