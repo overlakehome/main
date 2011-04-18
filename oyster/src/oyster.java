@@ -3,6 +3,7 @@ import static junit.framework.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -73,47 +74,50 @@ public class oyster {
 
     public static class LinkedLists {
         public static class SNode<T> implements Comparable<SNode<T>> {
-            public T item;
+            public T data;
             public SNode<T> next;
-            
-            public SNode(T item) {
-                // TODO Auto-generated constructor stub
-            }
-            @Override
-            public int compareTo(SNode<T> o) {
-                // TODO Auto-generated method stub
-                return 0;
+
+            public SNode(T data) {
+                this.data = data;
+                this.next = null; // this line seems unnecessary, as the uninitialized fields remain to be null.
             }
 
-            // Insert a node to sorted linked list.
-            public static <T> SNode<T> insertSNode(SNode<T> head, T insert){
-                if (insert == null) return head;
-                SNode<T> insertnode = new SNode<T>(insert);
-                
-                if (head == null) return insertnode;
-                
-                if (head.compareTo(insertnode) >= 0){
-                    insertnode.next = head;
-                    return insertnode;
+            // This method inserts an data element into a sorted linked list, and returns the new head node.
+            public static <T> SNode<T> insert(SNode<T> head, T insert) {
+                return insert(head, new SNode<T>(insert));
+            }
+
+            private static <T> SNode<T> insert(SNode<T> head, SNode<T> insert) {
+                if (insert == null) {
+                    return head;
                 }
-                
-                for(SNode<T> current = head; current.next != null; current = current.next){
-                    if (current.next.compareTo(insertnode) >= 0){
-                        insertnode.next = current.next;
-                        current.next = insertnode;
+
+                if (head == null) {
+                    return insert;
+                }
+
+                if (head.compareTo(insert) >= 0) {
+                    insert.next = head;
+                    return insert;
+                }
+
+                for (SNode<T> current = head; current.next != null; current = current.next) {
+                    if (current.next.compareTo(insert) >= 0) {
+                        insert.next = current.next;
+                        current.next = insert;
                         break;
                     }
                 }
+
                 return head;
-                    
             }
-            
+
             //delete a node from linked list
             public static <T> SNode<T> deleteSNode(SNode<T> head, T delete){
                 if (head == null) return head;
                 if (head == delete) return head.next;
                 for (SNode<T> current = head; current.next != null; current = current.next){
-                    if(current.next.item == delete)
+                    if(current.next.data == delete)
                     {
                         current.next = current.next.next;
                         break;
@@ -121,18 +125,17 @@ public class oyster {
                 }
                 return head;
             }
-            
+
             //delete in a constant time : Time O(1) Space: O(1)
             public static <T> void deleteSNode2(SNode<T> delete){
-                if (delete.next != null){
-                    delete.item = delete.next.item;
+                if (delete.next != null) {
+                    delete.data = delete.next.data;
                     delete.next = delete.next.next;
-                }
-                else{
-                    delete.item = default(T); //mark it deleted and collect garbage later on
+                } else{
+                    delete.data = null; //mark it deleted and collect garbage later on
                 }
             }
-            
+
             //Reverse a linked list without recursion
             public static <T> SNode<T> reverse(SNode<T> current){
                 SNode<T> result = null;
@@ -144,7 +147,7 @@ public class oyster {
                 }
                 return result;
             }
-            
+
             //Reverse a linked list with recursion
             public static <T> SNode<T> reverse2(SNode<T> current, SNode<T> result){
                 if (current == null) return result;
@@ -153,7 +156,7 @@ public class oyster {
                 result = current;
                 return reverse2(save, result);
             }
-        
+
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
             public static <T> SNode<T> deleteDupes(SNode<T> head){
@@ -161,7 +164,7 @@ public class oyster {
                 for(SNode<T> current = head.next; current != null;){
                     SNode<T> runner = head;
                     for(;runner.next != current; runner = runner.next){
-                        if(runner.item == current.item) {
+                        if(runner.data == current.data) {
                             SNode<T> save = current.next;
                             runner.next = save;
                             current = save;
@@ -178,9 +181,9 @@ public class oyster {
                 Hashtable table = new Hashtable();
                 SNode<T> previous = null;
                 while(head != null){
-                    if(table.containsKey(head.item)) previous.next = head.next;
+                    if(table.containsKey(head.data)) previous.next = head.next;
                     else{
-                        table.put(head.item, true);
+                        table.put(head.data, true);
                         previous = head;
                     }
                     head = head.next;
@@ -207,17 +210,20 @@ public class oyster {
             // 2.2.2 Find nth to last element using Queue
             public static <T> SNode<T> nthToLast2(SNode<T>head, int n){
                 if(head == null || n < 1) return null;
-                Queue<SNode<T>> q = new Queue<SNode<T>>();
+                Queue<SNode<T>> q = new LinkedList<SNode<T>>();
                 while(head != null){
-                    if(q.count > n) q.dequeue();
-                    else{
-                        q.enqueue(head);
+                    if(q.size() > n) {
+                        q.remove(); // dequeue
+                    } else{
+                        q.add(head); // enqueue
                     }
+
                     head = head.next;
                 }
 
-                return q.count < n ? null : head.peek();
+                return q.size() < n ? null : q.peek();
             }
+
             // 2.3. Implement an algorithm to delete a node in the middle of a single linked list, given only access to that node.
             //      EXAMPLE: Input: the node ÔcÕ from the linked list a->b->c->d->e
             //               Result: nothing is returned, but the new linked list looks like a->b->d->e
@@ -256,7 +262,7 @@ public class oyster {
                 p1.next = null;
                 return q;
             }
-            
+
             public SNode<T> merge(SNode<T> p, SNode<T> q) {
                 SNode<T> head = null, r = null;
                 while (null != p && null != q) {
