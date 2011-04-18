@@ -163,38 +163,36 @@ public class Oyster {
             }
 
             private static SNode insert(SNode head, SNode insert) {
-                if (insert == null) {
-                    return head;
-                }
+                assert null != insert : insert;
 
                 if (head == null) {
                     return insert;
                 }
 
-                SNode current = head;
-                SNode previous = null;
-                for (; current != null; previous = current, current = current.next) {
-                    if (insert.data <= current.data) break;
-                }
-
-                if (previous == null) // update head when it has to come first
-                    head = insert;
-                else // link to previous when it has previous
-                    previous.next = insert;
-                insert.next = current;
-
-//                if (head.data > insert.data) {
-//                    insert.next = head;
-//                    return insert;
+//                SNode current = head;
+//                SNode previous = null;
+//                for (; current != null; previous = current, current = current.next) {
+//                    if (insert.data <= current.data) break;
 //                }
 //
-//                for (SNode current = head; current.next != null; current = current.next) {
-//                    if (current.next.compareTo(insert) <= 0) {
-//                        insert.next = current.next;
-//                        current.next = insert;
-//                        break;
-//                    }
-//                }
+//                if (previous == null) // update head when insert has to come first
+//                    head = insert;
+//                else // next to previous when it has previous
+//                    previous.next = insert;
+//                insert.next = current;
+
+                if (head.data > insert.data) {
+                    insert.next = head;
+                    return insert;
+                }
+
+                for (SNode current = head; current.next != null; current = current.next) {
+                    if (current.next.compareTo(insert) <= 0) {
+                        insert.next = current.next;
+                        current.next = insert;
+                        break;
+                    }
+                }
 
                 return head;
             }
@@ -414,7 +412,7 @@ public class Oyster {
             }
 
             // Delete a node to a doubly linked list
-            public static DNode deleteDNode(DNode head, T delete){
+            public static DNode deleteDNode(DNode head, int delete){
                 if (head == null) return null;
                 if (head.data == delete) return head.next;
 
