@@ -50,6 +50,12 @@ public class TestOyster {
         assertEquals(1, head1.data);
         assertEquals(2, head1.next.data);
         assertEquals(null, head1.next.next);
+
+        SNode head2 = Oyster.LinkedLists.SNode.removeDupsInConstantSpace(of(1, of(2, of(2, of(3, of(3, of(3, null)))))));
+        assertEquals(1, head2.data);
+        assertEquals(2, head2.next.data);
+        assertEquals(3, head2.next.next.data);
+        assertEquals(null, head2.next.next.next);
     }
 
     /*

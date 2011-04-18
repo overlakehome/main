@@ -256,13 +256,12 @@ public class Oyster {
                     SNode previous = remaining;
                     SNode current = remaining.next;
 
-                    for (; null != current; ) {
+                    for (; null != current; current = current.next) {
                         if (remaining.data == current.data) {
-                            previous.next = current.next;
+                            previous.next = current.next; // previous remains to be the same.
+                        } else {
+                            previous = current;
                         }
-
-                        previous = current;
-                        current = current.next;
                     }
                 }
 
