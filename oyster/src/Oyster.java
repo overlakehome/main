@@ -1,6 +1,3 @@
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,9 +6,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
-import org.junit.Test;
-
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
@@ -26,7 +20,7 @@ import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 // quicksort with in-place partitioning and tail recursion uses only O(log n) space.
 
 public class Oyster {
-    public static class ArrayAndStrings {
+    public static class Arrays {
         // 1.1. Implement an algorithm to determine if a string has all unique characters.
         //      What if you can not use additional data structures?
 
@@ -154,21 +148,21 @@ public class Oyster {
     }
 
     public static class LinkedLists {
-        public static class SNode<T> implements Comparable<SNode<T>> {
-            public T data;
-            public SNode<T> next;
+        public static class SNode implements Comparable<SNode> {
+            public int data;
+            public SNode next;
 
-            public SNode(T data) {
+            public SNode(Integer data) {
                 this.data = data;
                 this.next = null; // this line seems unnecessary, as the uninitialized fields remain to be null.
             }
 
             // This method inserts an data element into a sorted linked list, and returns the new head node.
-            public static <T> SNode<T> insert(SNode<T> head, T insert) {
-                return insert(head, new SNode<T>(insert));
+            public static SNode insert(SNode head, int insert) {
+                return insert(head, new SNode(insert));
             }
 
-            private static <T> SNode<T> insert(SNode<T> head, SNode<T> insert) {
+            private static SNode insert(SNode head, SNode insert) {
                 if (insert == null) {
                     return head;
                 }
@@ -177,29 +171,40 @@ public class Oyster {
                     return insert;
                 }
 
-                if (head.compareTo(insert) >= 0) {
-                    insert.next = head;
-                    return insert;
+                SNode current = head;
+                SNode previous = null;
+                for (; current != null; previous = current, current = current.next) {
+                    if (insert.compareTo(current) <= 0) break;
                 }
 
-                for (SNode<T> current = head; current.next != null; current = current.next) {
-                    if (current.next.compareTo(insert) >= 0) {
-                        insert.next = current.next;
-                        current.next = insert;
-                        break;
-                    }
-                }
+                if (previous == null) // update head when it has to come first
+                    head = insert;
+                else // link to previous when it has previous
+                    previous.next = insert;
+                insert.next = current;
+
+//                if (head.data > insert.data) {
+//                    insert.next = head;
+//                    return insert;
+//                }
+//
+//                for (SNode current = head; current.next != null; current = current.next) {
+//                    if (current.next.compareTo(insert) <= 0) {
+//                        insert.next = current.next;
+//                        current.next = insert;
+//                        break;
+//                    }
+//                }
 
                 return head;
             }
 
             //delete a node from linked list
-            public static <T> SNode<T> deleteSNode(SNode<T> head, T delete){
+            public static SNode deleteSNode(SNode head, int delete){
                 if (head == null) return head;
-                if (head == delete) return head.next;
-                for (SNode<T> current = head; current.next != null; current = current.next){
-                    if(current.next.data == delete)
-                    {
+                if (head.data == delete) return head.next;
+                for (SNode current = head; current.next != null; current = current.next){
+                    if (current.next.data == delete) {
                         current.next = current.next.next;
                         break;
                     }
@@ -208,20 +213,20 @@ public class Oyster {
             }
 
             //delete in a constant time : Time O(1) Space: O(1)
-            public static <T> void deleteSNode2(SNode<T> delete){
+            public static void deleteSNode2(SNode delete) {
                 if (delete.next != null) {
                     delete.data = delete.next.data;
                     delete.next = delete.next.next;
-                } else{
-                    delete.data = null; //mark it deleted and collect garbage later on
+                } else {
+                    delete.data = 0; // mark it deleted and collect garbage later on
                 }
             }
 
             //Reverse a linked list without recursion
-            public static <T> SNode<T> reverse(SNode<T> current){
-                SNode<T> result = null;
+            public static <T extends Comparable<T>> SNode reverse(SNode current){
+                SNode result = null;
                 while(current != null){
-                    SNode<T> save = current.next;
+                    SNode save = current.next;
                     current.next = result;
                     result = current;
                     current = save;
@@ -230,9 +235,9 @@ public class Oyster {
             }
 
             //Reverse a linked list with recursion
-            public static <T> SNode<T> reverse2(SNode<T> current, SNode<T> result){
+            public static SNode reverse2(SNode current, SNode result){
                 if (current == null) return result;
-                SNode<T> save = current.next;
+                SNode save = current.next;
                 current.next = result;
                 result = current;
                 return reverse2(save, result);
@@ -240,13 +245,13 @@ public class Oyster {
 
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
-            public static <T> SNode<T> deleteDupes(SNode<T> head){
+            public static <T extends Comparable<T>> SNode deleteDupes(SNode head){
                 if(head == null || head.next == null) return head;
-                for(SNode<T> current = head.next; current != null;){
-                    SNode<T> runner = head;
+                for(SNode current = head.next; current != null;){
+                    SNode runner = head;
                     for(;runner.next != current; runner = runner.next){
                         if(runner.data == current.data) {
-                            SNode<T> save = current.next;
+                            SNode save = current.next;
                             runner.next = save;
                             current = save;
                             break;
@@ -257,10 +262,11 @@ public class Oyster {
                 }
                 return head;
             }
+
             //2.1.a   if we can use a buffer
-            public static <T> void deleteDupes2(SNode<T> head){
+            public static <T extends Comparable<T>> void deleteDupes2(SNode head){
                 Hashtable table = new Hashtable();
-                SNode<T> previous = null;
+                SNode previous = null;
                 while(head != null){
                     if(table.containsKey(head.data)) previous.next = head.next;
                     else{
@@ -272,10 +278,10 @@ public class Oyster {
             }
 
             // 2.2.1 Implement an algorithm to find the nth to last element of a singly linked list.
-            public static <T> SNode<T> nthToLast(SNode<T> head, int n){
+            public static <T extends Comparable<T>> SNode nthToLast(SNode head, int n){
                 if(head == null || n < 1) return null;
-                SNode<T> p1 = head;
-                SNode<T> p2 = head;
+                SNode p1 = head;
+                SNode p2 = head;
                 
                 for(int i = 0; i < n; i++){
                     if (p2 == null) return null;
@@ -289,12 +295,12 @@ public class Oyster {
             }
 
             // 2.2.2 Find nth to last element using Queue
-            public static <T> SNode<T> nthToLast2(SNode<T>head, int n){
+            public static <T extends Comparable<T>> SNode nthToLast2(SNode head, int n){
                 if (head == null || n < 1) {
                     return null;
                 }
 
-                Queue<SNode<T>> q = new LinkedList<SNode<T>>();
+                Queue<SNode> q = new LinkedList<SNode>();
                 while(head != null){
                     if(q.size() > n) {
                         q.remove(); // dequeue
@@ -324,33 +330,33 @@ public class Oyster {
             //      Output: C
 
             // 2-A. Merge sort in linked list.
-            public SNode<T> mergeSort(SNode<T> p) {
+            public SNode mergeSort(SNode p) {
                 if (null == p || null == p.next)
                     return p;
-                SNode<T> q = partition(p);
+                SNode q = partition(p);
                 p = mergeSort(p);
                 q = mergeSort(q);
                 p = merge(p, q);
                 return p;
             }
 
-            public SNode<T> partition(SNode<T> p) {
-                SNode<T> p1 = p;
-                SNode<T> p2 = p.next;
+            public SNode partition(SNode p) {
+                SNode p1 = p;
+                SNode p2 = p.next;
                 while (null != p2 && null != p2.next) {
                     p2 = p2.next.next;
                     p2 = p1.next;
                 }
 
-                SNode<T> q = p1.next;
+                SNode q = p1.next;
                 p1.next = null;
                 return q;
             }
 
-            public SNode<T> merge(SNode<T> p, SNode<T> q) {
-                SNode<T> head = null, r = null;
+            public SNode merge(SNode p, SNode q) {
+                SNode head = null, r = null;
                 while (null != p && null != q) {
-                    SNode<T> next;
+                    SNode next;
                     if (p.compareTo(q) < 0) {
                         next = p;
                         p = p.next;
@@ -375,8 +381,8 @@ public class Oyster {
             }
 
             @Override
-            public int compareTo(SNode<T> o) {
-                return 0;
+            public int compareTo(SNode other) {
+                return this.data - other.data;
             }
         }
         // Doubly linked list
@@ -650,107 +656,6 @@ public class Oyster {
 
     public static int rand5() {
         return new Random().nextInt() % 5 + 1;
-    }
-
-
-
-    public static class TestOyster {
-        /*
-         * Positive test cases: - {1} yields {1}. - {1, 2, 2} yields {2}. - {1, 2,
-         * 2, 3, 3, 3} yields {3}. - {2, 2} yields {2}. - {1, 1, 2, 2} yields {1,
-         * 2}.
-         * 
-         * Negative test cases: - null throws NPE. - empty yields empty.
-         */
-        @Test
-        public void testFindModesUsingMap() {
-            testFindModes(new Function<int[], List<Integer>>() {
-                public List<Integer> apply(int[] input) {
-                    return findModesUsingMap(input);
-                };
-            });
-        }
-
-        @Test
-        public void testFindModesUsingArray() {
-            testFindModes(new Function<int[], List<Integer>>() {
-                public List<Integer> apply(int[] input) {
-                    return findModesUsingArray(input);
-                };
-            });
-        }
-
-        @Test
-        public void testFindModes(Function<int[], List<Integer>> findModes) {
-            try {
-                findModes.apply(null);
-                fail("findsModes should have thrown NPE.");
-            } catch (AssertionError ae) {
-            } catch (NullPointerException npe) {
-            } catch (Exception e) {
-                fail("findsModes should have thrown NPE.");
-            }
-
-            assertEquals(ImmutableList.of(), findModes.apply(new int[0]));
-
-            assertEquals(ImmutableList.of(1), findModes.apply(new int[] { 1 }));
-            assertEquals(ImmutableList.of(2), findModes.apply(new int[] { 1, 2, 2 }));
-            assertEquals(ImmutableList.of(3), findModes.apply(new int[] { 1, 2, 2, 3, 3, 3 }));
-
-            assertEquals(ImmutableList.of(2), findModes.apply(new int[] { 2, 2 }));
-            assertEquals(ImmutableList.of(1, 2), findModes.apply(new int[] { 1, 1, 2, 2 }));
-        }
-
-        @Test
-        public void testIndexOutOfCycle() {
-            assertEquals(4, Sorting.indexOutOfCycle(30, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-            assertEquals(3, Sorting.indexOutOfCycle(20, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-            assertEquals(0, Sorting.indexOutOfCycle(90, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-            assertEquals(-1, Sorting.indexOutOfCycle(95, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-            assertEquals(5, Sorting.indexOutOfCycle(40, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-            assertEquals(9, Sorting.indexOutOfCycle(80, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-            assertEquals(8, Sorting.indexOutOfCycle(70, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-            assertEquals(-1, Sorting.indexOutOfCycle(75, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-
-            assertEquals(4, Sorting.indexOutOfCycle(70, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-            assertEquals(0, Sorting.indexOutOfCycle(30, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-            assertEquals(3, Sorting.indexOutOfCycle(60, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-            assertEquals(-1, Sorting.indexOutOfCycle(55, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-            assertEquals(5, Sorting.indexOutOfCycle(80, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-            assertEquals(9, Sorting.indexOutOfCycle(20, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-            assertEquals(8, Sorting.indexOutOfCycle(10, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-            assertEquals(-1, Sorting.indexOutOfCycle(15, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-        }
-
-        @Test
-        public void testFindSmallestOutOfCycle() {
-            try {
-                Sorting.smallestOutOfCycle(null);
-                fail("'numbers' must be non-null.");
-            } catch (IllegalArgumentException e) {
-            }
-
-            try {
-                Sorting.smallestOutOfCycle(new int[0]);
-                fail("'numbers' must not be empty.");
-            } catch (IllegalArgumentException e) {
-            }
-
-            assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 6 }));
-            assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 6, 7 }));
-            assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 7, 6 }));
-            assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 38, 40, 55, 89, 6, 13, 20, 23, 36 }));
-            assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 6, 13, 20, 23, 36, 38, 40, 55, 89 }));
-            assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 13, 20, 23, 36, 38, 40, 55, 89, 6 }));
-        }
-
-        @Test
-        public void testToAndFromExcelColumn() {
-            assertEquals("AB", Recursions.toExcelColumn(28));
-            assertEquals("ABC", Recursions.toExcelColumn(731));
-            assertEquals(28, Recursions.fromExcelColumn(Recursions.toExcelColumn(28)));
-            assertEquals(731, Recursions.fromExcelColumn(Recursions.toExcelColumn(731)));
-        }
     }
 
     public static void swap(char[] chars, int i, int j) {
