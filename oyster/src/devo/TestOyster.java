@@ -19,7 +19,8 @@ public class TestOyster {
     // Window | Open Perspective | Other ... | Debug
     // Window | Show View | Other ... | Problem
     // Control-Q to go to the last edit; Command-[, Command-]
-    // Command-Shift-G to see usages.
+    // Command-Shift-G to see usages of classes, fields, and methods.
+    // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
     @Test
     public void testSNodeInsert() {
         Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 2); // to be the one and the only node.
