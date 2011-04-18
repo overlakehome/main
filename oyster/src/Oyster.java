@@ -169,6 +169,7 @@ public class Oyster {
                     return insert;
                 }
 
+                // Henry's original solution;
 //                SNode current = head;
 //                SNode previous = null;
 //                for (; current != null; previous = current, current = current.next) {
@@ -186,14 +187,23 @@ public class Oyster {
                     return insert;
                 }
 
-                for (SNode current = head; current.next != null; current = current.next) {
-                    if (current.next.compareTo(insert) <= 0) {
-                        insert.next = current.next;
-                        current.next = insert;
-                        break;
-                    }
+                // Jeongim has a lady bug injected here.
+//                for (SNode current = head; current.next != null; current = current.next) {
+//                    if (current.next.compareTo(insert) <= 0) {
+//                        insert.next = current.next;
+//                        current.next = insert;
+//                        break;
+//                    }
+//                }
+
+                // Henry's proposal for fix as follows:
+                SNode previous = head;
+                for (; previous.next != null && previous.next.data < insert.data; previous = previous.next) {
+                    // no op.
                 }
 
+                insert.next = previous.next;
+                previous.next = insert;
                 return head;
             }
 
@@ -379,8 +389,18 @@ public class Oyster {
             }
 
             @Override
-            public int compareTo(SNode other) {
-                return this.data - other.data;
+            public String toString() {
+                StringBuilder sb = new StringBuilder();
+                for (SNode n = this; null != n; n = n.next) {
+                    sb.append("{").append(n.data).append("}, ");
+                }
+
+                return sb.substring(0, sb.length() - 2);
+            }
+
+            @Override
+            public int compareTo(SNode o) {
+                return this.data - o.data;
             }
         }
         // Doubly linked list
@@ -438,6 +458,16 @@ public class Oyster {
                 }
 
                 return current;
+            }
+
+            @Override
+            public String toString() {
+                StringBuilder sb = new StringBuilder();
+                for (DNode n = this; null != n; n = n.next) {
+                    sb.append("{").append(n.data).append("}, ");
+                }
+
+                return sb.substring(0, sb.length() - 2);
             }
 
             @Override
