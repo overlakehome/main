@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 
 import org.junit.Test;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
 // Heapsort competes with quicksort, another very efficient nearly-in-place sort algorithm
 // Quicksort is typically somewhat faster, due to better cache behavior and other factors.
@@ -73,12 +75,149 @@ public class oyster {
         public static class SNode<T> implements Comparable<SNode<T>> {
             public T item;
             public SNode<T> next;
+            
+            public SNode(T item) {
+                // TODO Auto-generated constructor stub
+            }
+            @Override
+            public int compareTo(SNode<T> o) {
+                // TODO Auto-generated method stub
+                return 0;
+            }
 
-            // 2.1. Write code to remove duplicates from an unsorted linked list.
+            // Insert a node to sorted linked list.
+            public static <T> SNode<T> insertSNode(SNode<T> head, T insert){
+                if (insert == null) return head;
+                SNode<T> insertnode = new SNode<T>(insert);
+                
+                if (head == null) return insertnode;
+                
+                if (head.compareTo(insertnode) >= 0){
+                    insertnode.next = head;
+                    return insertnode;
+                }
+                
+                for(SNode<T> current = head; current.next != null; current = current.next){
+                    if (current.next.compareTo(insertnode) >= 0){
+                        insertnode.next = current.next;
+                        current.next = insertnode;
+                        break;
+                    }
+                }
+                return head;
+                    
+            }
+            
+            //delete a node from linked list
+            public static <T> SNode<T> deleteSNode(SNode<T> head, T delete){
+                if (head == null) return head;
+                if (head == delete) return head.next;
+                for (SNode<T> current = head; current.next != null; current = current.next){
+                    if(current.next.item == delete)
+                    {
+                        current.next = current.next.next;
+                        break;
+                    }
+                }
+                return head;
+            }
+            
+            //delete in a constant time : Time O(1) Space: O(1)
+            public static <T> void deleteSNode2(SNode<T> delete){
+                if (delete.next != null){
+                    delete.item = delete.next.item;
+                    delete.next = delete.next.next;
+                }
+                else{
+                    delete.item = default(T); //mark it deleted and collect garbage later on
+                }
+            }
+            
+            //Reverse a linked list without recursion
+            public static <T> SNode<T> reverse(SNode<T> current){
+                SNode<T> result = null;
+                while(current != null){
+                    SNode<T> save = current.next;
+                    current.next = result;
+                    result = current;
+                    current = save;
+                }
+                return result;
+            }
+            
+            //Reverse a linked list with recursion
+            public static <T> SNode<T> reverse2(SNode<T> current, SNode<T> result){
+                if (current == null) return result;
+                SNode<T> save = current.next;
+                current.next = result;
+                result = current;
+                return reverse2(save, result);
+            }
+        
+            // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
+            public static <T> SNode<T> deleteDupes(SNode<T> head){
+                if(head == null || head.next == null) return head;
+                for(SNode<T> current = head.next; current != null;){
+                    SNode<T> runner = head;
+                    for(;runner.next != current; runner = runner.next){
+                        if(runner.item == current.item) {
+                            SNode<T> save = current.next;
+                            runner.next = save;
+                            current = save;
+                            break;
+                        }
+                    }
+                    if (runner == current) // in case no dupe in prior nodes
+                        current = current.next;
+                }
+                return head;
+            }
+            //2.1.a   if we can use a buffer
+            public static <T> void deleteDupes2(SNode<T> head){
+                Hashtable table = new Hashtable();
+                SNode<T> previous = null;
+                while(head != null){
+                    if(table.containsKey(head.item)) previous.next = head.next;
+                    else{
+                        table.put(head.item, true);
+                        previous = head;
+                    }
+                    head = head.next;
+                }
+            }
+            
 
-            // 2.2. Implement an algorithm to find the nth to last element of a singly linked list.
+            // 2.2.1 Implement an algorithm to find the nth to last element of a singly linked list.
+            public static <T> SNode<T> nthToLast(SNode<T> head, int n){
+                if(head == null || n < 1) return null;
+                SNode<T> p1 = head;
+                SNode<T> p2 = head;
+                
+                for(int i = 0; i < n; i++){
+                    if (p2 == null) return null;
+                    p2 = p2.next;
+                }
+                while(p2.next != null){
+                    p1 = p1.next;
+                    p2 = p2.next;
+                }
+                return p1;
+            }
+            // 2.2.2 Find nth to last element using Queue
+            public static <T> SNode<T> nthToLast2(SNode<T>head, int n){
+                if(head == null || n < 1) return null;
+                Queue<SNode<T>> q = new Queue<SNode<T>>();
+                while(head != null){
+                    if(q.count > n) q.dequeue();
+                    else{
+                        q.enqueue(head);
+                    }
+                    head = head.next;
+                }
 
+                return q.count < n ? null : head.peek();
+            }
             // 2.3. Implement an algorithm to delete a node in the middle of a single linked list, given only access to that node.
             //      EXAMPLE: Input: the node ÔcÕ from the linked list a->b->c->d->e
             //               Result: nothing is returned, but the new linked list looks like a->b->d->e
@@ -117,7 +256,7 @@ public class oyster {
                 p1.next = null;
                 return q;
             }
-
+            
             public SNode<T> merge(SNode<T> p, SNode<T> q) {
                 SNode<T> head = null, r = null;
                 while (null != p && null != q) {
@@ -150,12 +289,49 @@ public class oyster {
                 return 0;
             }
         }
-
-        public static class DNode<T> {
+        // Doubly linked list
+        public static class DNode<T> implements Comparable<DNode<T>>{
             public T item;
             public DNode<T> next;
             public DNode<T> prev;
 
+            // Insert a node to a doubly linked list
+            public static <T> DNode<T> insertDNode(DNode<T> head, DNode<T> insert){
+                if (head == null) return insert;
+                if (insert == null) return head;
+                
+                if (head.compareTo(insert) >= 0) {
+                    insert.next = head;
+                    head.prev = insert;
+                    return insert;
+                }
+                
+                for (DNode<T> current = head; current.next != null; current = current.next){
+                    if (current.next.compareTo(insert) >=0) {
+                        insert.next = current.next;
+                        if (insert.next != null) insert.next.prev = insert;
+                        current.next = insert;
+                        insert.prev = current;
+                    }
+                }
+                return head;
+            }
+            
+            // Delete a node to a doubly linked list
+            public static <T> DNode<T> deleteDNode(DNode<T> head, T delete){
+                if (head == null) return null;
+                if (head.item == delete) return head.next;
+                
+                for (DNode<T> current = head; current.next != null; current = current.next){
+                    if (current.next.item == delete){
+                        current.next = current.next.next;
+                        if(current.next != null) current.next.prev = current;
+                    }
+                }
+                return head;
+            }
+            
+            // Reverse
             public static <T> DNode<T> reverse(DNode<T> current) {
                 if (null == current)
                     return current;
@@ -168,6 +344,12 @@ public class oyster {
                 }
 
                 return current;
+            }
+
+            @Override
+            public int compareTo(DNode<T> o) {
+                // TODO Auto-generated method stub
+                return 0;
             }
         }
     }
@@ -524,6 +706,12 @@ public class oyster {
         }
     }
 
+/*    @Test
+    public void testInsertDNode(){
+        assertEquals(, insert())
+    }
+ */   
+    
     @Test
     public void testIndexOutOfCycle() {
         assertEquals(4, indexOutOfCycle(30, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
