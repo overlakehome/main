@@ -174,7 +174,7 @@ public class Oyster {
                 SNode current = head;
                 SNode previous = null;
                 for (; current != null; previous = current, current = current.next) {
-                    if (insert.compareTo(current) <= 0) break;
+                    if (insert.data <= current.data) break;
                 }
 
                 if (previous == null) // update head when it has to come first
@@ -386,23 +386,23 @@ public class Oyster {
             }
         }
         // Doubly linked list
-        public static class DNode<T> implements Comparable<DNode<T>>{
-            public T item;
-            public DNode<T> next;
-            public DNode<T> prev;
+        public static class DNode implements Comparable<DNode>{
+            public int data;
+            public DNode next;
+            public DNode prev;
 
             // Insert a node to a doubly linked list
-            public static <T> DNode<T> insertDNode(DNode<T> head, DNode<T> insert){
+            public static DNode insertDNode(DNode head, DNode insert){
                 if (head == null) return insert;
                 if (insert == null) return head;
-                
+
                 if (head.compareTo(insert) >= 0) {
                     insert.next = head;
                     head.prev = insert;
                     return insert;
                 }
-                
-                for (DNode<T> current = head; current.next != null; current = current.next){
+
+                for (DNode current = head; current.next != null; current = current.next){
                     if (current.next.compareTo(insert) >=0) {
                         insert.next = current.next;
                         if (insert.next != null) insert.next.prev = insert;
@@ -412,14 +412,14 @@ public class Oyster {
                 }
                 return head;
             }
-            
+
             // Delete a node to a doubly linked list
-            public static <T> DNode<T> deleteDNode(DNode<T> head, T delete){
+            public static DNode deleteDNode(DNode head, T delete){
                 if (head == null) return null;
-                if (head.item == delete) return head.next;
-                
-                for (DNode<T> current = head; current.next != null; current = current.next){
-                    if (current.next.item == delete){
+                if (head.data == delete) return head.next;
+
+                for (DNode current = head; current.next != null; current = current.next){
+                    if (current.next.data == delete){
                         current.next = current.next.next;
                         if(current.next != null) current.next.prev = current;
                     }
@@ -428,12 +428,12 @@ public class Oyster {
             }
             
             // Reverse
-            public static <T> DNode<T> reverse(DNode<T> current) {
+            public static DNode reverse(DNode current) {
                 if (null == current)
                     return current;
 
                 while (null != current.next) {
-                    DNode<T> save = current.next;
+                    DNode save = current.next;
                     current.next = current.prev;
                     current.prev = save;
                     current = save;
@@ -443,9 +443,8 @@ public class Oyster {
             }
 
             @Override
-            public int compareTo(DNode<T> o) {
-                // TODO Auto-generated method stub
-                return 0;
+            public int compareTo(DNode o) {
+                return this.data - o.data;
             }
         }
     }

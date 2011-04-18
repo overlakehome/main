@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableList;
 public class TestOyster {
     // Shift-Command-B, or Run | Toggle Breakpoint
     // Command-F11, or Run | Debug
+    // F5 (step into), F6 (step over), F7 (step out), F8 (resume)
     @Test
     public void testSNodeInsert() {
         Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 2);
