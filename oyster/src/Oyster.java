@@ -1,15 +1,12 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
 // Heapsort competes with quicksort, another very efficient nearly-in-place sort algorithm
 // Quicksort is typically somewhat faster, due to better cache behavior and other factors.
