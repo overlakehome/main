@@ -14,6 +14,7 @@ public class TestOyster {
     // F5 (step into), F6 (step over), F7 (step out), F8 (resume)
     // Window | Open Perspective | Other ... | Debug
     // Window | Show View | Other ... | Problem
+    // Control-Q to go to the last edit; Command-[, Command-]
     @Test
     public void testSNodeInsert() {
         Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 2); // to be the one and the only node.

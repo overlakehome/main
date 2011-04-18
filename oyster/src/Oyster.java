@@ -172,41 +172,27 @@ public class Oyster {
                     return insert;
                 }
 
-                // Henry's original solution;
-//                SNode current = head;
-//                SNode previous = null;
-//                for (; current != null; previous = current, current = current.next) {
-//                    if (insert.data <= current.data) break;
-//                }
-//
-//                if (previous == null) // update head when insert has to come first
-//                    head = insert;
-//                else // next to previous when it has previous
-//                    previous.next = insert;
-//                insert.next = current;
-
                 if (head.data > insert.data) {
                     insert.next = head;
                     return insert;
                 }
 
-                // Jeongim has a lady bug injected here.
-//                for (SNode current = head; current.next != null; current = current.next) {
-//                    if (current.next.compareTo(insert) <= 0) {
-//                        insert.next = current.next;
-//                        current.next = insert;
-//                        break;
-//                    }
-//                }
-
-                // Henry's proposal for fix as follows:
-                SNode previous = head;
-                for (; previous.next != null && previous.next.data < insert.data; previous = previous.next) {
-                    // no op.
+                for (SNode previous = head; ; previous = previous.next) {
+                    if (previous.next == null || previous.next.data >= insert.data) { // repeat until ...
+                        insert.next = previous.next;
+                        previous.next = insert;
+                        break;
+                    }
                 }
 
-                insert.next = previous.next;
-                previous.next = insert;
+                // Henry's proposal for fix as follows:
+//                SNode previous = head;
+//                for (; previous.next != null && previous.next.data < insert.data; previous = previous.next) {
+//                }
+//
+//                insert.next = previous.next;
+//                previous.next = insert;
+
                 return head;
             }
 
