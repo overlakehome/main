@@ -1,3 +1,5 @@
+package devo;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -151,14 +153,30 @@ public class Oyster {
             public int data;
             public SNode next;
 
-            public SNode(Integer data) {
+            public SNode() {
+            }
+
+            public SNode(int data) {
                 this.data = data;
                 this.next = null; // this line seems unnecessary, as the uninitialized fields remain to be null.
             }
 
+            public static SNode of(int data) {
+                SNode snode = new SNode();
+                snode.data = data;
+                return snode;
+            }
+
+            public static SNode of(int data, SNode next) {
+                SNode snode = new SNode();
+                snode.data = data;
+                snode.next = next;
+                return snode;
+            }
+
             // This method inserts an data element into a sorted linked list, and returns the new head node.
             public static SNode insert(SNode head, int insert) {
-                return insert(head, new SNode(insert));
+                return insert(head, SNode.of(insert));
             }
 
             private static SNode insert(SNode head, SNode insert) {
@@ -233,23 +251,19 @@ public class Oyster {
 
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
-            public static SNode removeDupsInConstantSpace(SNode head){
-                if (head == null || head.next == null)
-                    return head;
+            public static SNode removeDupsInConstantSpace(SNode head) {
+                for (SNode remaining = head; remaining != null; remaining = remaining.next) {
+                    SNode previous = remaining;
+                    SNode current = remaining.next;
 
-                for (SNode current = head.next; current != null;) {
-                    SNode runner = head;
-                    for (; runner.next != current; runner = runner.next) {
-                        if (runner.data == current.data) {
-                            SNode save = current.next;
-                            runner.next = save;
-                            current = save;
-                            break;
+                    for (; null != current; ) {
+                        if (remaining.data == current.data) {
+                            previous.next = current.next;
                         }
-                    }
 
-                    if (runner == current) // in case no dupe in prior nodes
+                        previous = current;
                         current = current.next;
+                    }
                 }
 
                 return head;

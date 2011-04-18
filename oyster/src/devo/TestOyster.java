@@ -1,6 +1,10 @@
+package devo;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
+import static devo.Oyster.LinkedLists.SNode.of;
 
+import devo.Oyster.LinkedLists.SNode;
 import java.util.List;
 
 import org.junit.Test;
@@ -38,6 +42,14 @@ public class TestOyster {
         assertEquals(3, head4.next.next.data);
         assertEquals(4, head4.next.next.next.data);
         assertEquals(null, head4.next.next.next.next);
+    }
+
+    @Test
+    public void testRemoveDupsInConstantSpace() {
+        SNode head1 = Oyster.LinkedLists.SNode.removeDupsInConstantSpace(of(1, of(2, of(2, null))));
+        assertEquals(1, head1.data);
+        assertEquals(2, head1.next.data);
+        assertEquals(null, head1.next.next);
     }
 
     /*
