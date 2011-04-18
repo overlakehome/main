@@ -229,7 +229,7 @@ public class Oyster {
             }
 
             // This method deletes a node in a constant time, i.e. time O(1), space: O(1)
-            public static void delete(SNode delete) {
+            public static void deleteInConstantTime(SNode delete) {
                 if (delete.next != null) {
                     delete.data = delete.next.data;
                     delete.next = delete.next.next;
@@ -239,7 +239,7 @@ public class Oyster {
             }
 
             // This method reverses a linked list in an iteration.
-            public static <T extends Comparable<T>> SNode reverse(SNode current) {
+            public static SNode reverse(SNode current) {
                 SNode result = null;
                 while (current != null) {
                     SNode save = current.next;

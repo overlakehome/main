@@ -47,6 +47,31 @@ public class TestOyster {
     }
 
     @Test
+    public void testLinkedListCRUD() { // CRUD: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete
+        SNode reverse = Oyster.LinkedLists.SNode.reverse(snodeOf(4, snodeOf(3, snodeOf(2, snodeOf(1, null)))));
+        assertEquals(1, reverse.data);
+        assertEquals(2, reverse.next.data);
+        assertEquals(3, reverse.next.next.data);
+        assertEquals(4, reverse.next.next.next.data);
+        assertEquals(null, reverse.next.next.next.next);
+
+        SNode head1 = Oyster.LinkedLists.SNode.delete(reverse, 2);
+        assertEquals(1, head1.data);
+        assertEquals(3, head1.next.data);
+        assertEquals(4, head1.next.next.data);
+        assertEquals(null, head1.next.next.next);
+
+        SNode head3 = Oyster.LinkedLists.SNode.delete(reverse, 1);
+        assertEquals(3, head3.data);
+        assertEquals(4, head3.next.data);
+        assertEquals(null, head3.next.next);
+
+        Oyster.LinkedLists.SNode.deleteInConstantTime(head3);
+        assertEquals(4, head3.data);
+        assertEquals(null, head3.next);
+    }
+
+    @Test
     public void testRemoveDupsInConstantSpace() {
         SNode head2 = Oyster.LinkedLists.SNode.removeDupsInConstantSpace(
             snodeOf(1, snodeOf(2, snodeOf(2, snodeOf(3, snodeOf(3, snodeOf(3, null)))))));
