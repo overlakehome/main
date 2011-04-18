@@ -35,6 +35,32 @@ public class Oyster {
         //      FOLLOW UP: Write the test cases for this method.
 
         // 1.4. Write a method to decide if two strings are anagrams or not.
+        public static boolean anagrams(String s, String t) {
+            if (s == t) return true;
+            if (null == s || null == t) return false;
+            if (s.length() != t.length()) return false;
+
+            Map<Character, Integer> hits = new HashMap<Character, Integer>();
+            for (char c : s.toCharArray()) {
+                hits.put(c, 1 + (hits.containsKey(c) ? hits.get(c) : 0));
+            }
+
+            for (char c : t.toCharArray()) {
+                if (hits.containsKey(c)) {
+                    hits.put(c, hits.get(c) - 1);
+                } else {
+                    return false;
+                }
+            }
+
+            for (int i : hits.values()) {
+                if (0 != i) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         // 1.5. Write a method to replace all spaces in a string with '%20'.
 
@@ -414,6 +440,7 @@ public class Oyster {
                 return this.data - o.data;
             }
         }
+
         // Doubly linked list
         public static class DNode implements Comparable<DNode>{
             public int data;
@@ -494,7 +521,7 @@ public class Oyster {
 
     public static class Recursions {
         public static String toExcelColumn(int n) {
-            // 26 cases : A - Z
+            // 26   cases : A - Z
             // 26^2 cases : AA - ZZ
             // 26^3 cases : AAA - ZZZ
 

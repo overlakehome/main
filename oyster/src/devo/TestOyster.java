@@ -1,16 +1,18 @@
 package devo;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
 import static devo.Oyster.LinkedLists.SNode.snodeOf;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
-import devo.Oyster.LinkedLists.SNode;
 import java.util.List;
 
 import org.junit.Test;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+
+import devo.Oyster.LinkedLists.SNode;
 
 public class TestOyster {
     // Shift-Command-B, or Run | Toggle Breakpoint
@@ -21,6 +23,11 @@ public class TestOyster {
     // Control-Q to go to the last edit; Command-[, Command-]
     // Command-Shift-G to see usages of classes, fields, and methods.
     // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
+    @Test
+    public void testAnagram() {
+        assertTrue(Oyster.Arrays.anagrams("aab", "aba"));
+    }
+
     @Test
     public void testSNodeInsert() {
         Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 2); // to be the one and the only node.
