@@ -163,6 +163,7 @@ public class Oyster {
             }
 
             private static SNode insert(SNode head, SNode insert) {
+                // how-to assert in Java http://download.oracle.com/javase/1.4.2/docs/guide/lang/assert.html
                 assert null != insert : insert;
 
                 if (head == null) {
