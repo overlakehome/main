@@ -19,6 +19,7 @@ public class TestOyster {
     // Window | Open Perspective | Other ... | Debug
     // Window | Show View | Other ... | Problem
     // Control-Q to go to the last edit; Command-[, Command-]
+    // Command-Shift-G to see usages.
     @Test
     public void testSNodeInsert() {
         Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 2); // to be the one and the only node.
@@ -46,14 +47,18 @@ public class TestOyster {
 
     @Test
     public void testRemoveDupsInConstantSpace() {
-        SNode head1 = Oyster.LinkedLists.SNode.removeDupsInConstantSpace(
-            snodeOf(1, snodeOf(2, snodeOf(2, null))));
-
-        assertEquals(1, head1.data);
-        assertEquals(2, head1.next.data);
-        assertEquals(null, head1.next.next);
-
         SNode head2 = Oyster.LinkedLists.SNode.removeDupsInConstantSpace(
+            snodeOf(1, snodeOf(2, snodeOf(2, snodeOf(3, snodeOf(3, snodeOf(3, null)))))));
+
+        assertEquals(1, head2.data);
+        assertEquals(2, head2.next.data);
+        assertEquals(3, head2.next.next.data);
+        assertEquals(null, head2.next.next.next);
+    }
+
+    @Test
+    public void testRemoveDupsInLinearTime() {
+        SNode head2 = Oyster.LinkedLists.SNode.removeDupsInLinearTime(
             snodeOf(1, snodeOf(2, snodeOf(2, snodeOf(3, snodeOf(3, snodeOf(3, null)))))));
 
         assertEquals(1, head2.data);

@@ -272,11 +272,11 @@ public class Oyster {
             }
 
             // This method removes duplicates using a hash map.
-            public static void removeDupsUsingHashMap(SNode current) {
+            public static SNode removeDupsInLinearTime(SNode head) {
                 // HashSet may be a better fit, but Hashtable is an old school
                 Set<Integer> set = new HashSet<Integer>();
                 SNode previous = null;
-
+                SNode current = head;
                 while (current != null) { // Time: O(n), Space(n)
                     if (set.contains(current.data))
                         previous.next = current.next;
@@ -287,6 +287,8 @@ public class Oyster {
 
                     current = current.next;
                 }
+
+                return head;
             }
 
             // 2.2.1 Implement an algorithm to find the nth to last element of a singly linked list.
