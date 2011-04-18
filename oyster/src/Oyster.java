@@ -234,19 +234,9 @@ public class Oyster {
                 return result;
             }
 
-            // Jeongim: let's kill the following method --- commented by Henry Lee.
-            //Reverse a linked list with recursion
-            public static SNode reverse2(SNode current, SNode result){
-                if (current == null) return result;
-                SNode save = current.next;
-                current.next = result;
-                result = current;
-                return reverse2(save, result);
-            }
-
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
-            public static <T extends Comparable<T>> SNode removeDupsInConstantTime(SNode head){
+            public static SNode removeDupsInConstantSpace(SNode head){
                 if (head == null || head.next == null)
                     return head;
 
@@ -287,18 +277,23 @@ public class Oyster {
 
             // 2.2.1 Implement an algorithm to find the nth to last element of a singly linked list.
             public static <T extends Comparable<T>> SNode nthToLast(SNode head, int n){
-                if(head == null || n < 1) return null;
+                if (head == null) throw new IllegalArgumentException("'head' must be non-null.");
+                if (n <= 0) throw new IllegalArgumentException("'n' must be positive.");
+
                 SNode p1 = head;
                 SNode p2 = head;
 
-                for(int i = 0; i < n; i++){
-                    if (p2 == null) return null;
+                for (int i = 0; i < n - 1; i++) {
+                    if (p2 == null)
+                        return null;
                     p2 = p2.next;
                 }
-                while(p2.next != null){
+
+                while (p2.next != null) {
                     p1 = p1.next;
                     p2 = p2.next;
                 }
+
                 return p1;
             }
 
@@ -309,10 +304,10 @@ public class Oyster {
                 }
 
                 Queue<SNode> q = new LinkedList<SNode>();
-                while(head != null){
-                    if(q.size() > n) {
+                while (head != null) {
+                    if (q.size() > n) {
                         q.remove(); // dequeue
-                    } else{
+                    } else {
                         q.add(head); // enqueue
                     }
 
