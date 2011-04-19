@@ -273,7 +273,6 @@ public class Oyster {
 
             // This method removes duplicates using a hash map.
             public static SNode removeDupsInLinearTime(SNode head) {
-                // HashSet may be a better fit, but Hashtable is an old school
                 Set<Integer> set = new HashSet<Integer>();
                 SNode previous = null;
                 SNode current = head;
@@ -291,8 +290,8 @@ public class Oyster {
                 return head;
             }
 
-            // 2.2.1 Implement an algorithm to find the nth to last element of a singly linked list.
-            public static <T extends Comparable<T>> SNode nthToLast(SNode head, int n){
+            // 2.2.1. Implement an algorithm to find the n-th to last element of a singly linked list.
+            public static SNode nthToLast(SNode head, int n){
                 if (head == null) throw new IllegalArgumentException("'head' must be non-null.");
                 if (n <= 0) throw new IllegalArgumentException("'n' must be positive.");
 
@@ -313,8 +312,8 @@ public class Oyster {
                 return p1;
             }
 
-            // 2.2.2 Find nth to last element using Queue
-            public static <T extends Comparable<T>> SNode nthToLast2(SNode head, int n){
+            // 2.2.2. Implement an algorithm to find the n-th to last element of a singly linked list.
+            public static <T extends Comparable<T>> SNode nthToLastInOneScan(SNode head, int n) {
                 if (head == null || n < 1) {
                     return null;
                 }
@@ -372,6 +371,31 @@ public class Oyster {
             //      DEFINITION: Circular linked list: A (corrupt) linked list in which a nodeÕs next pointer points to an earlier node, so as to make a loop in the linked list.
             //      EXAMPLE: Input: A -> B -> C -> D -> E -> C [the same C as earlier]
             //      Output: C
+
+            public static SNode fixCycle(SNode current) {
+                SNode p1 = current; // walk at normal speed
+                SNode p2 = current; // walk at double speed
+                SNode joint = current; // first node of the cycle
+                SNode chain = null; // chain node to fix up
+
+                while (p2 != null && p2.next != null) {
+                    p2 = p2.next.next;
+                    p1 = p1.next;
+                    if (p1 == p2)
+                        break;
+                }
+
+                if (p2 == null || p2.next == null) return null; 
+
+                while (p1 != joint) {
+                    joint = joint.next;
+                    chain = p1;
+                    p1 = p1.next;
+                }
+
+                chain.next = null;
+                return joint;
+            }
 
             // 2-A. Merge sort in linked list.
             public SNode mergeSort(SNode p) {
