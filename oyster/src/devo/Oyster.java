@@ -343,6 +343,27 @@ public class Oyster {
             //      EXAMPLE: Input: (3 -> 1 -> 5), (5 -> 9 -> 2)
             //               Output: 8 -> 0 -> 8
 
+            public static SNode sumDigitNodes(SNode lhs, SNode rhs) {
+                int sum = 0;
+                for (int i = 1; lhs != null || rhs != null; i *= 10) {
+                    sum += i * ((lhs != null ? lhs.data : 0)
+                                + (rhs != null ? rhs.data : 0));
+                    lhs = lhs != null ? lhs.next : lhs;
+                    rhs = rhs != null ? rhs.next : rhs;
+                }
+
+                SNode current = new SNode(sum % 10);
+                SNode head = current;
+                sum /= 10;
+                for (; sum > 0;) {
+                    current.next = new SNode(sum % 10);
+                    current = current.next;
+                    sum /= 10;
+                }
+
+                return head;
+            }
+
             // 2.5. Given a circular linked list, implement an algorithm which returns node at the beginning of the loop.
             //      DEFINITION: Circular linked list: A (corrupt) linked list in which a nodeÕs next pointer points to an earlier node, so as to make a loop in the linked list.
             //      EXAMPLE: Input: A -> B -> C -> D -> E -> C [the same C as earlier]
