@@ -345,23 +345,27 @@ public class Oyster {
 
             public static SNode sumDigitNodes(SNode lhs, SNode rhs) {
                 int sum = 0;
-                for (int i = 1; lhs != null || rhs != null; i *= 10) {
-                    sum += i * ((lhs != null ? lhs.data : 0)
-                                + (rhs != null ? rhs.data : 0));
-                    lhs = lhs != null ? lhs.next : lhs;
-                    rhs = rhs != null ? rhs.next : rhs;
+                for (int d = 1; lhs != null || lhs != null; d *= 10) {
+                    if (lhs != null) {
+                        sum += d * lhs.data;
+                        lhs = lhs.next;
+                    }
+
+                    if (rhs != null) {
+                        sum += d * rhs.data;
+                        rhs = rhs.next;
+                    }
                 }
 
                 SNode current = new SNode(sum % 10);
-                SNode head = current;
+                SNode output = current;
                 sum /= 10;
-                for (; sum > 0;) {
+                for (; sum > 0; current = current.next) {
                     current.next = new SNode(sum % 10);
-                    current = current.next;
                     sum /= 10;
                 }
 
-                return head;
+                return output;
             }
 
             // 2.5. Given a circular linked list, implement an algorithm which returns node at the beginning of the loop.
