@@ -439,6 +439,7 @@ public class Oyster {
                 return this.data - o.data;
             }
         }
+
         // Doubly linked list
         public static class DNode implements Comparable<DNode>{
             public int data;
@@ -450,20 +451,22 @@ public class Oyster {
                 if (head == null) return insert;
                 if (insert == null) return head;
 
-                if (head.compareTo(insert) >= 0) {
-                    insert.next = head;
-                    head.prev = insert;
-                    return insert;
-                }
+//                if (head.compareTo(insert) >= 0) {
+//                    insert.next = head;
+//                    head.prev = insert;
+//                    return insert;
+//                }
 
                 for (DNode current = head; current.next != null; current = current.next){
                     if (current.next.compareTo(insert) >=0) {
                         insert.next = current.next;
-                        if (insert.next != null) insert.next.prev = insert;
+                        current.next.prev = insert;
+//                        if (insert.next != null) insert.next.prev = insert;
                         current.next = insert;
                         insert.prev = current;
                     }
                 }
+
                 return head;
             }
 
@@ -478,9 +481,10 @@ public class Oyster {
                         if(current.next != null) current.next.prev = current;
                     }
                 }
+
                 return head;
             }
-            
+
             // Reverse
             public static DNode reverse(DNode current) {
                 if (null == current)
@@ -519,7 +523,7 @@ public class Oyster {
 
     public static class Recursions {
         public static String toExcelColumn(int n) {
-            // 26 cases : A - Z
+            // 26   cases : A - Z
             // 26^2 cases : AA - ZZ
             // 26^3 cases : AAA - ZZZ
 
