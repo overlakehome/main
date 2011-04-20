@@ -26,9 +26,46 @@ public class Oyster {
     public static class Arrays {
         // 1.1. Implement an algorithm to determine if a string has all unique characters.
         //      What if you can not use additional data structures?
+        //      O(n*n) time
+        public static boolean isUniqueChars1(String s){
+            int right = s.length();
+            if (right == 1) return true;
+            for (int i = 0; i < right - 1; i++){
+                for(int j = i+1; j < right ; j++){
+                    if (s.charAt(i) == s.charAt(j)){
+                        return false;
+                    }
+                }
+            }
+            
+            return true;
+        }
+
+        //1.1.2 is all unique chars using hash set
+        //      O(n) time, O(10*n) space
+        public static boolean isUniqueChars2(String s){
+            Set<Character> set = new HashSet<Character>();
+            for (char c : s.toCharArray()){
+                if(set.contains(c)) return false;
+                set.add(c);
+            }
+            return true;
+        }
+
+        //1.1.3 C# : BitArray, Java Boolean[] ?
+        //      Assuming char set is ASCII
+        public static boolean isUniqueChars3(String s){
+            boolean[] set = new boolean[256];
+            for (int i = 0; i < s.length(); i++){
+                if(set[s.charAt(i)]) return false;
+                set[s.charAt(i)] = true;
+            }
+            
+            return true;
+        }
 
         // 1.2. Write code to reverse a C-Style String.
-        //      (C-String means that ÒabcdÓ is represented as five characters, including the null character.)
+        //      (C-String means that abcd is represented as five characters, including the null character.)
 
         // 1.3. Design an algorithm and write code to remove the duplicate characters in a string without using any additional buffer.
         //      NOTE: One or two additional variables are fine. An extra copy of the array is not.
@@ -130,7 +167,7 @@ public class Oyster {
             }
 
             // We assert postconditions.
-            assert !modes.isEmpty();
+            assert !modes.isEmpty() : modes;
             return modes;
         }
 
@@ -279,8 +316,8 @@ public class Oyster {
 
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
+            // Time: O(n*n), Space: O(1)
             public static SNode removeDupsInConstantSpace(SNode head) {
-                // Time: O(n*n), Space: O(1)
                 for (SNode remaining = head; remaining != null; remaining = remaining.next) {
                     SNode previous = remaining;
                     SNode current = remaining.next;
@@ -298,11 +335,12 @@ public class Oyster {
             }
 
             // This method removes duplicates using a hash map.
+            // Time: O(n), Space(n)
             public static SNode removeDupsInLinearTime(SNode head) {
                 Set<Integer> set = new HashSet<Integer>();
                 SNode previous = null;
                 SNode current = head;
-                while (current != null) { // Time: O(n), Space(n)
+                while (current != null) { 
                     if (set.contains(current.data))
                         previous.next = current.next;
                     else {
@@ -359,7 +397,7 @@ public class Oyster {
             }
 
             // 2.3. Implement an algorithm to delete a node in the middle of a single linked list, given only access to that node.
-            //      EXAMPLE: Input: the node ÔcÕ from the linked list a->b->c->d->e
+            //      EXAMPLE: Input: the node c from the linked list a->b->c->d->e
             //               Result: nothing is returned, but the new linked list looks like a->b->d->e
 
             // 2.4. You have two numbers represented by a linked list, where each node contains a single digit.
@@ -394,7 +432,7 @@ public class Oyster {
             }
 
             // 2.5. Given a circular linked list, implement an algorithm which returns node at the beginning of the loop.
-            //      DEFINITION: Circular linked list: A (corrupt) linked list in which a nodeÕs next pointer points to an earlier node, so as to make a loop in the linked list.
+            //      DEFINITION: Circular linked list: A (corrupt) linked list in which a nodes next pointer points to an earlier node, so as to make a loop in the linked list.
             //      EXAMPLE: Input: A -> B -> C -> D -> E -> C [the same C as earlier]
             //      Output: C
 
@@ -495,28 +533,46 @@ public class Oyster {
             public int data;
             public DNode next;
             public DNode prev;
+            
+            public DNode() {
+            }
+
+            public DNode(int data) {
+                this.data = data;
+                this.next = null; 
+                this.prev = null;
+            }
+
+            public static DNode dnodeOf(int data) {
+                DNode dnode = new DNode();
+                dnode.data = data;
+                return dnode;
+            }
+
+            public static DNode dnodeOf(int data, DNode next) {
+                DNode dnode = new DNode();
+                dnode.data = data;
+                dnode.next = next;
+                return dnode;
+            }
 
             // Insert a node to a doubly linked list
             public static DNode insertDNode(DNode head, DNode insert){
                 if (head == null) return insert;
                 if (insert == null) return head;
 
-//                if (head.compareTo(insert) >= 0) {
-//                    insert.next = head;
-//                    head.prev = insert;
-//                    return insert;
-//                }
-
-                for (DNode current = head; current.next != null; current = current.next){
-                    if (current.next.compareTo(insert) >=0) {
-                        insert.next = current.next;
-                        current.next.prev = insert;
-//                        if (insert.next != null) insert.next.prev = insert;
-                        current.next = insert;
-                        insert.prev = current;
-                    }
+                if (head.data > insert.data ) {
+                    insert.next = head;
+                    head.prev = insert;
+                    return insert;
                 }
-
+                DNode current = head;
+                for (; current.next != null && current.next.data < insert.data; current = current.next) {
+                }
+                insert.next = current.next;
+                if(insert.next != null) insert.next.prev = insert;
+                current.next = insert;
+                insert.prev = current;
                 return head;
             }
 
@@ -531,10 +587,9 @@ public class Oyster {
                         if(current.next != null) current.next.prev = current;
                     }
                 }
-
                 return head;
             }
-
+            
             // Reverse
             public static DNode reverse(DNode current) {
                 if (null == current)
