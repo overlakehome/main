@@ -224,7 +224,7 @@ public class Oyster {
         }
 
         private static int[] findSubArrayOfSumXPrivate(int x, int[] a) {
-            int[] prefixSums = new int[a.length];
+            int[] prefixSums = new int[a.length]; // prefixSum[i] has the sum of a[0..i]
             prefixSums[0] = a[0];
             for (int i = 1; i < a.length; i++) {
                 prefixSums[i] = prefixSums[i - 1] + a[i];
