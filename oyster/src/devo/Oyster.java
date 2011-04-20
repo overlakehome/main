@@ -25,7 +25,7 @@ import com.google.common.collect.ImmutableList;
 // quicksort with in-place partitioning and tail recursion uses only O(log n) space.
 
 public class Oyster {
-    public static class Arrays {
+    public static class ARRAYS {
         // 1.1. Implement an algorithm to determine if a string has all unique characters.
         //      What if you can not use additional data structures?
 
@@ -219,22 +219,26 @@ public class Oyster {
         // 1-D. Find a sub array that sums up to x given integer array.
         //      Input: x = 6, a = { 5, -1, 3, -2, 5, -3, 4, 2 }
         //      Output: a[2] .. a[4] when you see 3 - 2 + 5 = 6.
-        public static int[] findSubArrayOfSumX(int x, int[] a) {
+        public static int[] findSubArrayOfSumXInLinearTime(int x, int... a) {
+            return findSubArrayOfSumXPrivate(x, a);
+        }
+
+        private static int[] findSubArrayOfSumXPrivate(int x, int[] a) {
             int[] prefixSums = new int[a.length];
             prefixSums[0] = a[0];
             for (int i = 1; i < a.length; i++) {
                 prefixSums[i] = prefixSums[i - 1] + a[i];
             }
 
-            // map has a prefix sum to look for, and a lower bound for a range.
+            // map has a prefix sum to look for, and the lower bound to return.
             Map<Integer, Integer> map = new HashMap<Integer, Integer>();
             for (int i = 0; i < a.length; i++) {
                 if (x == prefixSums[i]) {
-                    return new int[] { i, i };
+                    return new int[] { 0, i };
                 } else if (map.containsKey(prefixSums[i])) {
                     return new int[] { map.get(prefixSums[i]), i };
                 } else {
-                    map.put(x + prefixSums[i], i);
+                    map.put(x + prefixSums[i], i + 1);
                 }
             }
 

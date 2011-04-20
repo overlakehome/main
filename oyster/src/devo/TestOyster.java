@@ -6,6 +6,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -13,8 +14,10 @@ import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 
+import devo.Oyster.ARRAYS;
 import devo.Oyster.LinkedLists.DNode;
 import devo.Oyster.LinkedLists.SNode;
+import devo.Oyster.Recursions;
 import devo.Oyster.Sorting;
 import devo.Oyster.Stacks.MinStack;
 
@@ -33,6 +36,17 @@ public class TestOyster {
     // Control-Q to go to the last edit; Command-[, Command-]
     // Command-Shift-G to see usages of classes, fields, and methods.
     // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
+
+    @Test
+    public void testFindSubArrayOfSumX() {
+        //      Input: x = 6, a = { 5, -1, 3, -2, 5, -3, 4, 2 }
+        //      Output: a[2] .. a[4] when you see 3 - 2 + 5 = 6.
+        assertTrue(Arrays.equals(new int[] {0, 0}, ARRAYS.findSubArrayOfSumXInLinearTime(6, 6, -1, 3, -2, 5, -3, 4, 2)));
+        assertTrue(Arrays.equals(new int[] {7, 7}, ARRAYS.findSubArrayOfSumXInLinearTime(6, 1, -1, 2, -2, 3, -3, 4, 6)));
+        assertTrue(Arrays.equals(new int[] {2, 4}, ARRAYS.findSubArrayOfSumXInLinearTime(6, 5, -1, 3, -2, 5, -3, 4, 2)));
+        assertTrue(Arrays.equals(new int[] {0, 7}, ARRAYS.findSubArrayOfSumXInLinearTime(8, 1, 1, 1, 1, 1, 1, 1, 1)));
+        assertEquals(null, ARRAYS.findSubArrayOfSumXInLinearTime(6, 1, 11, 1, 11, 1, 11, 1, 1));
+    }
 
     @Test
     public void testMinStack() {
@@ -67,7 +81,7 @@ public class TestOyster {
 
     @Test
     public void testAnagram() {
-        assertTrue(Oyster.Arrays.anagrams("aab", "aba"));
+        assertTrue(Oyster.ARRAYS.anagrams("aab", "aba"));
     }
 
     @Test
@@ -203,7 +217,7 @@ public class TestOyster {
     public void testFindModesUsingMap() {
         testFindModes(new Function<int[], List<Integer>>() {
             public List<Integer> apply(int[] input) {
-                return Oyster.Arrays.findModesUsingMap(input);
+                return Oyster.ARRAYS.findModesUsingMap(input);
             };
         });
     }
@@ -212,7 +226,7 @@ public class TestOyster {
     public void testFindModesUsingArray() {
         testFindModes(new Function<int[], List<Integer>>() {
             public List<Integer> apply(int[] input) {
-                return Oyster.Arrays.findModesUsingArray(input);
+                return Oyster.ARRAYS.findModesUsingArray(input);
             };
         });
     }
@@ -282,9 +296,9 @@ public class TestOyster {
 
     @Test
     public void testToAndFromExcelColumn() {
-        assertEquals("AB", Oyster.Recursions.toExcelColumn(28));
-        assertEquals("ABC", Oyster.Recursions.toExcelColumn(731));
-        assertEquals(28, Oyster.Recursions.fromExcelColumn(Oyster.Recursions.toExcelColumn(28)));
-        assertEquals(731, Oyster.Recursions.fromExcelColumn(Oyster.Recursions.toExcelColumn(731)));
+        assertEquals("AB", Recursions.toExcelColumn(28));
+        assertEquals("ABC", Recursions.toExcelColumn(731));
+        assertEquals(28, Recursions.fromExcelColumn(Recursions.toExcelColumn(28)));
+        assertEquals(731, Recursions.fromExcelColumn(Recursions.toExcelColumn(731)));
     }
 }
