@@ -675,6 +675,26 @@ public class Oyster {
                 return element;
             }
         }
+
+        public static class Queueable<T> {
+            Stack<T> stk1 = new Stack<T>();
+            Stack<T> stk2 = new Stack<T>();
+
+            void push(T e) {
+                stk1.push(e);
+            }
+
+            T pop() {
+                if (stk2.size() > 0) {
+                    while (stk1.size() == 0) {
+                        stk2.push(stk1.pop());
+                    }
+                }
+
+                T e = stk2.pop();
+                return e;
+            }
+        }
     }
 
     public static class Recursions {
