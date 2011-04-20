@@ -13,6 +13,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 
 import devo.Oyster.LinkedLists.SNode;
+import devo.Oyster.LinkedLists.DNode;
 
 public class TestOyster {
     // Shift-Command-B, or Run | Toggle Breakpoint
@@ -23,7 +24,6 @@ public class TestOyster {
     // Control-Q to go to the last edit; Command-[, Command-]
     // Command-Shift-G to see usages of classes, fields, and methods.
     // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
-    
     @Test
     public void testSumDigitNodes() {
         SNode lhs = snodeOf(3, snodeOf(4, snodeOf(5)));
@@ -65,7 +65,7 @@ public class TestOyster {
         assertEquals(4, head4.next.next.next.data);
         assertEquals(null, head4.next.next.next.next);
     }
-
+    
     @Test
     public void testLinkedListCRUD() { // CRUD: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete
         SNode reverse = Oyster.LinkedLists.SNode.reverse(snodeOf(4, snodeOf(3, snodeOf(2, snodeOf(1, null)))));
@@ -113,6 +113,35 @@ public class TestOyster {
         assertEquals(null, head2.next.next.next);
     }
 
+    @Test
+    public void testDNodeInsert() {
+
+        Oyster.LinkedLists.DNode head = Oyster.LinkedLists.DNode.insertDNode(null, DNode.dnodeOf(2)); // to be the one and the only node.
+        assertEquals(2, head.data);
+        assertEquals(null, head.next);
+
+        Oyster.LinkedLists.DNode head2 = Oyster.LinkedLists.DNode.insertDNode(head, DNode.dnodeOf(4)); // to be a tail.
+        assertEquals(2, head2.data);
+        assertEquals(4, head2.next.data);
+        assertEquals(2, head2.next.prev.data);
+        assertEquals(null, head2.next.next);
+
+        Oyster.LinkedLists.DNode head3 = Oyster.LinkedLists.DNode.insertDNode(head2, DNode.dnodeOf(3)); // to be a middle man.
+        assertEquals(2, head3.data);
+        assertEquals(3, head3.next.data);
+        assertEquals(4, head3.next.next.data);
+        assertEquals(3, head3.next.next.prev.data);
+        assertEquals(null, head3.next.next.next);
+
+        Oyster.LinkedLists.DNode head4 = Oyster.LinkedLists.DNode.insertDNode(head2, DNode.dnodeOf(1)); // to be a head.
+        assertEquals(1, head4.data);
+        assertEquals(2, head4.next.data);
+        assertEquals(1, head4.next.prev.data);
+        assertEquals(3, head4.next.next.data);
+        assertEquals(4, head4.next.next.next.data);
+        assertEquals(null, head4.next.next.next.next);
+    }
+    
     /*
      * Positive test cases: 
      * - {1} yields {1}.
