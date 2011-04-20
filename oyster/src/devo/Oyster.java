@@ -620,10 +620,8 @@ public class Oyster {
                 return head;
             }
 
-            // Reverse
             public static DNode reverse(DNode current) {
-                if (null == current)
-                    return current;
+                if (null == current) throw new NullPointerException("current");
 
                 while (null != current.next) {
                     DNode save = current.next;
