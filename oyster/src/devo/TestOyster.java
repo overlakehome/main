@@ -22,7 +22,7 @@ public class TestOyster {
     // to pull down other's changes from githut.com at terminal:
     //   cd /Users/henry/github/main; git pull; git status
     // to commit, and push up our local changes to github.com:
-    //   git add .; git commit -m 'no comment'; git push
+    //   git add .; git commit -m 'no comment'; git push; git status
     // See common git commands at https://github.com/0ishi/main
 
     // Shift-Command-B, or Run | Toggle Breakpoint
