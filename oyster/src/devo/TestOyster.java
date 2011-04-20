@@ -18,8 +18,11 @@ import devo.Oyster.LinkedLists.SNode;
 import devo.Oyster.Sorting;
 import devo.Oyster.Stacks.MinStack;
 
-
 public class TestOyster {
+    // Open terminal, and then sync up with other changes:
+    // cd /Users/henry/github/main; git pull; git status
+    // See common git commands at https://github.com/0ishi/main
+
     // Shift-Command-B, or Run | Toggle Breakpoint
     // Command-F11, or Run | Debug
     // F5 (step into), F6 (step over), F7 (step out), F8 (resume)
