@@ -215,6 +215,31 @@ public class Oyster {
             assert !modes.isEmpty() : modes;
             return modes;
         }
+
+        // 1-D. Find a sub array that sums up to x given integer array.
+        //      Input: x = 6, a = { 5, -1, 3, -2, 5, -3, 4, 2 }
+        //      Output: a[2] .. a[4] when you see 3 - 2 + 5 = 6.
+        public static int[] findSubArrayOfSumX(int x, int[] a) {
+            int[] prefixSums = new int[a.length];
+            prefixSums[0] = a[0];
+            for (int i = 1; i < a.length; i++) {
+                prefixSums[i] = prefixSums[i - 1] + a[i];
+            }
+
+            // map has a prefix sum to look for, and a lower bound for a range.
+            Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+            for (int i = 0; i < a.length; i++) {
+                if (x == prefixSums[i]) {
+                    return new int[] { i, i };
+                } else if (map.containsKey(prefixSums[i])) {
+                    return new int[] { map.get(prefixSums[i]), i };
+                } else {
+                    map.put(x + prefixSums[i], i);
+                }
+            }
+
+            return null;
+        }
     }
 
     public static class LinkedLists {
