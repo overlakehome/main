@@ -1,6 +1,7 @@
 package devo;
 
 import static devo.Oyster.LinkedLists.SNode.snodeOf;
+import static devo.Oyster.LinkedLists.DNode.dnodeOf;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
@@ -42,6 +43,23 @@ public class TestOyster {
     }
 
     @Test
+    public void testDNodeDelete() {
+        // Input: null -> 1 -> 1 -> 2 -> 1 -> 1 -> null
+        // Output: null -> 2 -> null
+
+        DNode input = dnodeOf(1);
+        input.next = dnodeOf(1, input);
+        input.next.next = dnodeOf(2, input.next);
+        input.next.next.next = dnodeOf(1, input.next.next);
+        input.next.next.next.next = dnodeOf(1, input.next.next.next);
+
+        DNode output = Oyster.LinkedLists.DNode.deleteDNode(input, 1);
+        assertEquals(2, output.data);
+        assertEquals(null, output.next);
+        assertEquals(null, output.prev);
+    }
+
+    @Test
     public void testSNodeInsert() {
         Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 2); // to be the one and the only node.
         assertEquals(2, head.data);
@@ -65,7 +83,7 @@ public class TestOyster {
         assertEquals(4, head4.next.next.next.data);
         assertEquals(null, head4.next.next.next.next);
     }
-    
+
     @Test
     public void testLinkedListCRUD() { // CRUD: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete
         SNode reverse = Oyster.LinkedLists.SNode.reverse(snodeOf(4, snodeOf(3, snodeOf(2, snodeOf(1, null)))));

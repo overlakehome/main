@@ -550,9 +550,18 @@ public class Oyster {
                 return dnode;
             }
 
-            public static DNode dnodeOf(int data, DNode next) {
+            public static DNode dnodeOf(int data, DNode prev) {
                 DNode dnode = new DNode();
                 dnode.data = data;
+                dnode.prev = prev;
+                dnode.next = null;
+                return dnode;
+            }
+
+            public static DNode dnodeOf(int data, DNode prev, DNode next) {
+                DNode dnode = new DNode();
+                dnode.data = data;
+                dnode.prev = prev;
                 dnode.next = next;
                 return dnode;
             }
@@ -580,7 +589,7 @@ public class Oyster {
             }
 
             // Delete a node to a doubly linked list
-            public static DNode deleteDNode(DNode head, int delete){
+            public static DNode deleteDNodeBuggy(DNode head, int delete){
                 if (head == null) return null;
                 if (head.data == delete) return head.next;
 
@@ -589,6 +598,25 @@ public class Oyster {
                         current.next = current.next.next;
                         if (current.next != null)
                             current.next.prev = current;
+                    }
+                }
+
+                return head;
+            }
+
+            public static DNode deleteDNode(DNode head, int delete){
+                for ( ; delete == head.data; head = head.next, head.prev = null) {
+                }
+
+                for (DNode current = head; current != null; current = current.next){
+                    if (delete == current.data) {
+                        if (null != current.prev) {
+                            current.prev.next = current.next;
+                        }
+
+                        if (null != current.next) {
+                            current.next.prev = current.prev;
+                        }
                     }
                 }
 
