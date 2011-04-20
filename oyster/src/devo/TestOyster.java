@@ -13,8 +13,11 @@ import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 
-import devo.Oyster.LinkedLists.SNode;
 import devo.Oyster.LinkedLists.DNode;
+import devo.Oyster.LinkedLists.SNode;
+import devo.Oyster.Sorting;
+import devo.Oyster.Stacks.MinStack;
+
 
 public class TestOyster {
     // Shift-Command-B, or Run | Toggle Breakpoint
@@ -26,10 +29,29 @@ public class TestOyster {
     // Command-Shift-G to see usages of classes, fields, and methods.
     // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
     @Test
+    public void testMinStack() {
+        MinStack<Integer> stack = new MinStack<Integer>();
+        stack.push(2).push(6).push(4).push(1).push(5).push(1);
+        assertTrue(1 == stack.getMin());
+        assertTrue(1 == stack.pop());
+        assertTrue(1 == stack.getMin());
+        assertTrue(5 == stack.pop());
+        assertTrue(1 == stack.getMin());
+        assertTrue(1 == stack.pop());
+        assertTrue(2 == stack.getMin());
+        assertTrue(4 == stack.pop());
+        assertTrue(2 == stack.getMin());
+        assertTrue(6 == stack.pop());
+        assertTrue(2 == stack.getMin());
+        assertTrue(2 == stack.pop());
+        assertTrue(null == stack.getMin());
+    }
+
+    @Test
     public void testSumDigitNodes() {
         SNode lhs = snodeOf(3, snodeOf(4, snodeOf(5)));
         SNode rhs = snodeOf(6, snodeOf(7, snodeOf(8)));
-        SNode sum = Oyster.LinkedLists.SNode.sumDigitNodes(lhs, rhs);
+        SNode sum = SNode.sumDigitNodes(lhs, rhs);
         assertEquals(9, sum.data);
         assertEquals(1, sum.next.data);
         assertEquals(4, sum.next.next.data);
@@ -53,7 +75,7 @@ public class TestOyster {
         input.next.next.next = dnodeOf(1, input.next.next);
         input.next.next.next.next = dnodeOf(1, input.next.next.next);
 
-        DNode output = Oyster.LinkedLists.DNode.deleteDNode(input, 1);
+        DNode output = DNode.deleteAll(input, 1);
         assertEquals(2, output.data);
         assertEquals(null, output.next);
         assertEquals(null, output.prev);
@@ -61,22 +83,22 @@ public class TestOyster {
 
     @Test
     public void testSNodeInsert() {
-        Oyster.LinkedLists.SNode head = Oyster.LinkedLists.SNode.insert(null, 2); // to be the one and the only node.
+        SNode head = SNode.insert(null, 2); // to be the one and the only node.
         assertEquals(2, head.data);
         assertEquals(null, head.next);
 
-        Oyster.LinkedLists.SNode head2 = Oyster.LinkedLists.SNode.insert(head, 4); // to be a tail.
+        SNode head2 = SNode.insert(head, 4); // to be a tail.
         assertEquals(2, head2.data);
         assertEquals(4, head2.next.data);
         assertEquals(null, head2.next.next);
 
-        Oyster.LinkedLists.SNode head3 = Oyster.LinkedLists.SNode.insert(head2, 3); // to be a middle man.
+        SNode head3 = SNode.insert(head2, 3); // to be a middle man.
         assertEquals(2, head3.data);
         assertEquals(3, head3.next.data);
         assertEquals(4, head3.next.next.data);
         assertEquals(null, head3.next.next.next);
 
-        Oyster.LinkedLists.SNode head4 = Oyster.LinkedLists.SNode.insert(head2, 1); // to be a head.
+        SNode head4 = SNode.insert(head2, 1); // to be a head.
         assertEquals(1, head4.data);
         assertEquals(2, head4.next.data);
         assertEquals(3, head4.next.next.data);
@@ -86,32 +108,32 @@ public class TestOyster {
 
     @Test
     public void testLinkedListCRUD() { // CRUD: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete
-        SNode reverse = Oyster.LinkedLists.SNode.reverse(snodeOf(4, snodeOf(3, snodeOf(2, snodeOf(1, null)))));
+        SNode reverse = SNode.reverse(snodeOf(4, snodeOf(3, snodeOf(2, snodeOf(1, null)))));
         assertEquals(1, reverse.data);
         assertEquals(2, reverse.next.data);
         assertEquals(3, reverse.next.next.data);
         assertEquals(4, reverse.next.next.next.data);
         assertEquals(null, reverse.next.next.next.next);
 
-        SNode head1 = Oyster.LinkedLists.SNode.deleteOne(reverse, 2);
+        SNode head1 = SNode.deleteOne(reverse, 2);
         assertEquals(1, head1.data);
         assertEquals(3, head1.next.data);
         assertEquals(4, head1.next.next.data);
         assertEquals(null, head1.next.next.next);
 
-        SNode head3 = Oyster.LinkedLists.SNode.deleteOne(reverse, 1);
+        SNode head3 = SNode.deleteOne(reverse, 1);
         assertEquals(3, head3.data);
         assertEquals(4, head3.next.data);
         assertEquals(null, head3.next.next);
 
-        Oyster.LinkedLists.SNode.deleteInConstantTime(head3);
+        SNode.deleteInConstantTime(head3);
         assertEquals(4, head3.data);
         assertEquals(null, head3.next);
     }
 
     @Test
     public void testRemoveDupsInConstantSpace() {
-        SNode head2 = Oyster.LinkedLists.SNode.removeDupsInConstantSpace(
+        SNode head2 = SNode.removeDupsInConstantSpace(
             snodeOf(1, snodeOf(2, snodeOf(2, snodeOf(3, snodeOf(3, snodeOf(3, null)))))));
 
         assertEquals(1, head2.data);
@@ -122,7 +144,7 @@ public class TestOyster {
 
     @Test
     public void testRemoveDupsInLinearTime() {
-        SNode head2 = Oyster.LinkedLists.SNode.removeDupsInLinearTime(
+        SNode head2 = SNode.removeDupsInLinearTime(
             snodeOf(1, snodeOf(2, snodeOf(2, snodeOf(3, snodeOf(3, snodeOf(3, null)))))));
 
         assertEquals(1, head2.data);
@@ -134,24 +156,24 @@ public class TestOyster {
     @Test
     public void testDNodeInsert() {
 
-        Oyster.LinkedLists.DNode head = Oyster.LinkedLists.DNode.insertIntoSorted(null, DNode.dnodeOf(2)); // to be the one and the only node.
+        DNode head = DNode.insertIntoSorted(null, DNode.dnodeOf(2)); // to be the one and the only node.
         assertEquals(2, head.data);
         assertEquals(null, head.next);
 
-        Oyster.LinkedLists.DNode head2 = Oyster.LinkedLists.DNode.insertIntoSorted(head, DNode.dnodeOf(4)); // to be a tail.
+        DNode head2 = DNode.insertIntoSorted(head, DNode.dnodeOf(4)); // to be a tail.
         assertEquals(2, head2.data);
         assertEquals(4, head2.next.data);
         assertEquals(2, head2.next.prev.data);
         assertEquals(null, head2.next.next);
 
-        Oyster.LinkedLists.DNode head3 = Oyster.LinkedLists.DNode.insertIntoSorted(head2, DNode.dnodeOf(3)); // to be a middle man.
+        DNode head3 = DNode.insertIntoSorted(head2, DNode.dnodeOf(3)); // to be a middle man.
         assertEquals(2, head3.data);
         assertEquals(3, head3.next.data);
         assertEquals(4, head3.next.next.data);
         assertEquals(3, head3.next.next.prev.data);
         assertEquals(null, head3.next.next.next);
 
-        Oyster.LinkedLists.DNode head4 = Oyster.LinkedLists.DNode.insertIntoSorted(head2, DNode.dnodeOf(1)); // to be a head.
+        DNode head4 = DNode.insertIntoSorted(head2, DNode.dnodeOf(1)); // to be a head.
         assertEquals(1, head4.data);
         assertEquals(2, head4.next.data);
         assertEquals(1, head4.next.prev.data);
@@ -211,45 +233,45 @@ public class TestOyster {
 
     @Test
     public void testIndexOutOfCycle() {
-        assertEquals(4, Oyster.Sorting.indexOutOfCycle(30, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-        assertEquals(3, Oyster.Sorting.indexOutOfCycle(20, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-        assertEquals(0, Oyster.Sorting.indexOutOfCycle(90, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-        assertEquals(-1, Oyster.Sorting.indexOutOfCycle(95, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-        assertEquals(5, Oyster.Sorting.indexOutOfCycle(40, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-        assertEquals(9, Oyster.Sorting.indexOutOfCycle(80, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-        assertEquals(8, Oyster.Sorting.indexOutOfCycle(70, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
-        assertEquals(-1, Oyster.Sorting.indexOutOfCycle(75, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
+        assertEquals(4, Sorting.indexOutOfCycle(30, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
+        assertEquals(3, Sorting.indexOutOfCycle(20, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
+        assertEquals(0, Sorting.indexOutOfCycle(90, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
+        assertEquals(-1, Sorting.indexOutOfCycle(95, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
+        assertEquals(5, Sorting.indexOutOfCycle(40, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
+        assertEquals(9, Sorting.indexOutOfCycle(80, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
+        assertEquals(8, Sorting.indexOutOfCycle(70, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
+        assertEquals(-1, Sorting.indexOutOfCycle(75, new int[] { 90, 100, 10, 20, 30, 40, 50, 60, 70, 80 }));
 
-        assertEquals(4, Oyster.Sorting.indexOutOfCycle(70, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-        assertEquals(0, Oyster.Sorting.indexOutOfCycle(30, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-        assertEquals(3, Oyster.Sorting.indexOutOfCycle(60, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-        assertEquals(-1, Oyster.Sorting.indexOutOfCycle(55, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-        assertEquals(5, Oyster.Sorting.indexOutOfCycle(80, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-        assertEquals(9, Oyster.Sorting.indexOutOfCycle(20, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-        assertEquals(8, Oyster.Sorting.indexOutOfCycle(10, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
-        assertEquals(-1, Oyster.Sorting.indexOutOfCycle(15, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
+        assertEquals(4, Sorting.indexOutOfCycle(70, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
+        assertEquals(0, Sorting.indexOutOfCycle(30, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
+        assertEquals(3, Sorting.indexOutOfCycle(60, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
+        assertEquals(-1, Sorting.indexOutOfCycle(55, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
+        assertEquals(5, Sorting.indexOutOfCycle(80, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
+        assertEquals(9, Sorting.indexOutOfCycle(20, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
+        assertEquals(8, Sorting.indexOutOfCycle(10, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
+        assertEquals(-1, Sorting.indexOutOfCycle(15, new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 10, 20 }));
     }
 
     @Test
     public void testFindSmallestOutOfCycle() {
         try {
-            Oyster.Sorting.smallestOutOfCycle(null);
+            Sorting.smallestOutOfCycle(null);
             fail("'numbers' must be non-null.");
         } catch (IllegalArgumentException e) {
         }
 
         try {
-            Oyster.Sorting.smallestOutOfCycle(new int[0]);
+            Sorting.smallestOutOfCycle(new int[0]);
             fail("'numbers' must not be empty.");
         } catch (IllegalArgumentException e) {
         }
 
-        assertEquals(6, Oyster.Sorting.smallestOutOfCycle(new int[] { 6 }));
-        assertEquals(6, Oyster.Sorting.smallestOutOfCycle(new int[] { 6, 7 }));
-        assertEquals(6, Oyster.Sorting.smallestOutOfCycle(new int[] { 7, 6 }));
-        assertEquals(6, Oyster.Sorting.smallestOutOfCycle(new int[] { 38, 40, 55, 89, 6, 13, 20, 23, 36 }));
-        assertEquals(6, Oyster.Sorting.smallestOutOfCycle(new int[] { 6, 13, 20, 23, 36, 38, 40, 55, 89 }));
-        assertEquals(6, Oyster.Sorting.smallestOutOfCycle(new int[] { 13, 20, 23, 36, 38, 40, 55, 89, 6 }));
+        assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 6 }));
+        assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 6, 7 }));
+        assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 7, 6 }));
+        assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 38, 40, 55, 89, 6, 13, 20, 23, 36 }));
+        assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 6, 13, 20, 23, 36, 38, 40, 55, 89 }));
+        assertEquals(6, Sorting.smallestOutOfCycle(new int[] { 13, 20, 23, 36, 38, 40, 55, 89, 6 }));
     }
 
     @Test

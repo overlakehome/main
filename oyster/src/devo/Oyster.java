@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.Stack;
 
 import com.google.common.collect.ImmutableList;
 
@@ -530,7 +531,7 @@ public class Oyster {
         }
 
         // This class represents a doubly linked list node.
-        public static class DNode implements Comparable<DNode>{
+        public static class DNode {
             public int data;
             public DNode next;
             public DNode prev;
@@ -558,7 +559,7 @@ public class Oyster {
                 return dnode;
             }
 
-            // Insert a node to a doubly linked list
+            // Insert a node to a sorted doubly linked list
             public static DNode insertIntoSorted(DNode head, DNode insert){
                 if (head == null) return insert;
                 if (insert == null) return head;
@@ -584,8 +585,8 @@ public class Oyster {
                 return head;
             }
 
-            // Delete a node to a doubly linked list
-            public static DNode deleteDNodeBuggy(DNode head, int delete){
+            // This method deletes a node from a doubly linked list.
+            public static DNode deleteOneBuggy(DNode head, int delete){
                 if (head == null) return null;
                 if (head.data == delete) return head.next; // buggy, when to delete 1 from null -> 1 -> 1 -> null.
 
@@ -601,7 +602,8 @@ public class Oyster {
                 return head;
             }
 
-            public static DNode deleteDNode(DNode head, int delete){
+            // This method deletes nodes from a doubly linked list.
+            public static DNode deleteAll(DNode head, int delete){
                 for ( ; delete == head.data; head = head.next, head.prev = null) {
                 }
 
@@ -642,16 +644,37 @@ public class Oyster {
 
                 return sb.substring(0, sb.length() - 2);
             }
-
-            @Override
-            public int compareTo(DNode o) {
-                return this.data - o.data;
-            }
         }
     }
 
     public static class Stacks {
+        public static class MinStack<T extends Comparable<T>> {
+            private T mininum;
+            private Stack<T> stack = new Stack<T>();
 
+            public T getMin() {
+                return mininum;
+            }
+
+            public MinStack<T> push(T element) {
+                if (null == mininum || element.compareTo(mininum) <= 0) {
+                    stack.push(mininum);
+                    mininum = element;
+                }
+
+                stack.push(element);
+                return this;
+            }
+
+            public T pop() {
+                T element = stack.pop();
+                if (element.compareTo(mininum) == 0) {
+                    mininum = stack.pop();
+                }
+
+                return element;
+            }
+        }
     }
 
     public static class Recursions {
