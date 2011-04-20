@@ -1,6 +1,7 @@
 package devo;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -26,41 +27,42 @@ public class Oyster {
     public static class Arrays {
         // 1.1. Implement an algorithm to determine if a string has all unique characters.
         //      What if you can not use additional data structures?
-        //      O(n*n) time
-        public static boolean isUniqueChars1(String s){
-            int right = s.length();
-            if (right == 1) return true;
-            for (int i = 0; i < right - 1; i++){
-                for(int j = i+1; j < right ; j++){
-                    if (s.charAt(i) == s.charAt(j)){
+
+        public static boolean hasNoDupCharsWithNoAuxSpace(String s) {
+            for (int i = 0; i < s.length() - 1; i++) {
+                for (int j = i + 1; j < s.length(); j++) {
+                    if (s.charAt(i) == s.charAt(j)) {
                         return false;
                     }
                 }
             }
-            
+
             return true;
         }
 
-        //1.1.2 is all unique chars using hash set
-        //      O(n) time, O(10*n) space
-        public static boolean isUniqueChars2(String s){
+        public static boolean hasNoDupCharsWithConstantSpace(String s) {
+            BitSet bs = new BitSet(256);
+            for (int i = 0; i < s.length(); i++) {
+                if (bs.get(s.charAt(i))) {
+                    return false;
+                }
+
+                bs.set(s.charAt(i));
+            }
+
+            return true;
+        }
+
+        public static boolean hasNoDupCharsInLinearTime(String s){
             Set<Character> set = new HashSet<Character>();
-            for (char c : s.toCharArray()){
-                if(set.contains(c)) return false;
+            for (char c : s.toCharArray()) {
+                if (set.contains(c)) {
+                    return false;
+                }
+
                 set.add(c);
             }
-            return true;
-        }
 
-        //1.1.3 C# : BitArray, Java Boolean[] ?
-        //      Assuming char set is ASCII
-        public static boolean isUniqueChars3(String s){
-            boolean[] set = new boolean[256];
-            for (int i = 0; i < s.length(); i++){
-                if(set[s.charAt(i)]) return false;
-                set[s.charAt(i)] = true;
-            }
-            
             return true;
         }
 
