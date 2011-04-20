@@ -879,7 +879,7 @@ public class Oyster {
     public static void knuthShuffle(int[] a) {
         Random random = new Random();
         for (int i = 0; i < a.length; i++) {
-            int j = i + random.nextInt(a.length - i);
+            int j = i + random.nextInt(a.length - i); // j is between i and length - 1
             int save = a[j];
             a[j] = a[i];
             a[i] = save;
