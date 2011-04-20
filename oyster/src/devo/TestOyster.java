@@ -33,6 +33,7 @@ public class TestOyster {
     // Control-Q to go to the last edit; Command-[, Command-]
     // Command-Shift-G to see usages of classes, fields, and methods.
     // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
+
     @Test
     public void testMinStack() {
         MinStack<Integer> stack = new MinStack<Integer>();

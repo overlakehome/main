@@ -868,12 +868,12 @@ public class Oyster {
 
         int random = new Random().nextInt(sum);
         for (int i = 0; i < weights.length; i++, random -= weights[i]) {
-            if (random < weights[i])
+            if (random < weights[i]) {
                 return i;
+            }
         }
 
-        // http://download.oracle.com/javase/1.4.2/docs/guide/lang/assert.html
-        throw new RuntimeException("This bug should go unhandled.");
+        throw new RuntimeException("UNCHECKED: This bug should go unhandled.");
     }
 
     public static void knuthShuffle(List<Integer> list) {
