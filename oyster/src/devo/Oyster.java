@@ -876,13 +876,13 @@ public class Oyster {
         throw new RuntimeException("UNCHECKED: This bug should go unhandled.");
     }
 
-    public static void knuthShuffle(List<Integer> list) {
+    public static void knuthShuffle(int[] a) {
         Random random = new Random();
-        for (int i = 0; i < list.size(); i++) {
-            int j = i + random.nextInt(list.size() - i);
-            Integer save = list.get(j);
-            list.set(j, list.get(i));
-            list.set(i, save);
+        for (int i = 0; i < a.length; i++) {
+            int j = i + random.nextInt(a.length - i);
+            int save = a[j];
+            a[j] = a[i];
+            a[i] = save;
         }
     }
 
