@@ -19,8 +19,10 @@ import devo.Oyster.Sorting;
 import devo.Oyster.Stacks.MinStack;
 
 public class TestOyster {
-    // Open terminal, and then sync up with other changes:
-    // cd /Users/henry/github/main; git pull; git status
+    // to pull down other's changes from githut.com at terminal:
+    //   cd /Users/henry/github/main; git pull; git status
+    // to commit, and push up our local changes to github.com:
+    //   git add .; git commit -m 'no comment'; git push
     // See common git commands at https://github.com/0ishi/main
 
     // Shift-Command-B, or Run | Toggle Breakpoint
