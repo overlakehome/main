@@ -41,13 +41,13 @@ public class Oyster {
         }
 
         public static boolean hasNoDupCharsWithConstantSpace(String s) {
-            BitSet bs = new BitSet(256);
+            BitSet bits = new BitSet(256);
             for (int i = 0; i < s.length(); i++) {
-                if (bs.get(s.charAt(i))) {
+                if (bits.get(s.charAt(i))) {
                     return false;
                 }
 
-                bs.set(s.charAt(i));
+                bits.set(s.charAt(i));
             }
 
             return true;
@@ -211,6 +211,7 @@ public class Oyster {
                 }
             }
 
+            assert !modes.isEmpty() : modes;
             return modes;
         }
     }
@@ -436,7 +437,7 @@ public class Oyster {
             //      EXAMPLE: Input: A -> B -> C -> D -> E -> C [the same C as earlier]
             //      Output: C
 
-            public static SNode fixCycle(SNode current) {
+            public static SNode removeCycleInSingleLinkedList(SNode current) {
                 SNode p1 = current; // walk at normal speed
                 SNode p2 = current; // walk at double speed
                 SNode joint = current; // first node of the cycle
@@ -533,7 +534,7 @@ public class Oyster {
             public int data;
             public DNode next;
             public DNode prev;
-            
+
             public DNode() {
             }
 
@@ -587,6 +588,7 @@ public class Oyster {
                         if(current.next != null) current.next.prev = current;
                     }
                 }
+
                 return head;
             }
 
