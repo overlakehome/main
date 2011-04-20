@@ -567,9 +567,11 @@ public class Oyster {
                     head.prev = insert;
                     return insert;
                 }
+
                 DNode current = head;
                 for (; current.next != null && current.next.data < insert.data; current = current.next) {
                 }
+
                 insert.next = current.next;
                 if(insert.next != null) insert.next.prev = insert;
                 current.next = insert;
@@ -583,9 +585,10 @@ public class Oyster {
                 if (head.data == delete) return head.next;
 
                 for (DNode current = head; current.next != null; current = current.next){
-                    if (current.next.data == delete){
+                    if (current.next.data == delete) {
                         current.next = current.next.next;
-                        if(current.next != null) current.next.prev = current;
+                        if (current.next != null)
+                            current.next.prev = current;
                     }
                 }
 
