@@ -299,7 +299,6 @@ public class Oyster {
 
             // This method removes duplicates using a hash map.
             public static SNode removeDupsInLinearTime(SNode head) {
-                // HashSet may be a better fit, but Hashtable is an old school
                 Set<Integer> set = new HashSet<Integer>();
                 SNode previous = null;
                 SNode current = head;
@@ -317,8 +316,8 @@ public class Oyster {
                 return head;
             }
 
-            // 2.2.1 Implement an algorithm to find the nth to last element of a singly linked list.
-            public static <T extends Comparable<T>> SNode nthToLast(SNode head, int n){
+            // 2.2.1. Implement an algorithm to find the n-th to last element of a singly linked list.
+            public static SNode nthToLast(SNode head, int n){
                 if (head == null) throw new IllegalArgumentException("'head' must be non-null.");
                 if (n <= 0) throw new IllegalArgumentException("'n' must be positive.");
 
@@ -339,8 +338,8 @@ public class Oyster {
                 return p1;
             }
 
-            // 2.2.2 Find nth to last element using Queue
-            public static <T extends Comparable<T>> SNode nthToLast2(SNode head, int n){
+            // 2.2.2. Implement an algorithm to find the n-th to last element of a singly linked list.
+            public static <T extends Comparable<T>> SNode nthToLastInOneScan(SNode head, int n) {
                 if (head == null || n < 1) {
                     return null;
                 }
@@ -369,10 +368,60 @@ public class Oyster {
             //      EXAMPLE: Input: (3 -> 1 -> 5), (5 -> 9 -> 2)
             //               Output: 8 -> 0 -> 8
 
+            public static SNode sumDigitNodes(SNode lhs, SNode rhs) {
+                int sum = 0;
+                for (int d = 1; lhs != null || lhs != null; d *= 10) {
+                    if (lhs != null) {
+                        sum += d * lhs.data;
+                        lhs = lhs.next;
+                    }
+
+                    if (rhs != null) {
+                        sum += d * rhs.data;
+                        rhs = rhs.next;
+                    }
+                }
+
+                SNode current = new SNode(sum % 10);
+                SNode output = current;
+                sum /= 10;
+                for (; sum > 0; current = current.next) {
+                    current.next = new SNode(sum % 10);
+                    sum /= 10;
+                }
+
+                return output;
+            }
+
             // 2.5. Given a circular linked list, implement an algorithm which returns node at the beginning of the loop.
             //      DEFINITION: Circular linked list: A (corrupt) linked list in which a nodeÕs next pointer points to an earlier node, so as to make a loop in the linked list.
             //      EXAMPLE: Input: A -> B -> C -> D -> E -> C [the same C as earlier]
             //      Output: C
+
+            public static SNode fixCycle(SNode current) {
+                SNode p1 = current; // walk at normal speed
+                SNode p2 = current; // walk at double speed
+                SNode joint = current; // first node of the cycle
+                SNode chain = null; // chain node to fix up
+
+                while (p2 != null && p2.next != null) {
+                    p2 = p2.next.next;
+                    p1 = p1.next;
+                    if (p1 == p2)
+                        break;
+                }
+
+                if (p2 == null || p2.next == null) return null; 
+
+                while (p1 != joint) {
+                    joint = joint.next;
+                    chain = p1;
+                    p1 = p1.next;
+                }
+
+                chain.next = null;
+                return joint;
+            }
 
             // 2-A. Merge sort in linked list.
             public SNode mergeSort(SNode p) {
@@ -452,20 +501,22 @@ public class Oyster {
                 if (head == null) return insert;
                 if (insert == null) return head;
 
-                if (head.compareTo(insert) >= 0) {
-                    insert.next = head;
-                    head.prev = insert;
-                    return insert;
-                }
+//                if (head.compareTo(insert) >= 0) {
+//                    insert.next = head;
+//                    head.prev = insert;
+//                    return insert;
+//                }
 
                 for (DNode current = head; current.next != null; current = current.next){
                     if (current.next.compareTo(insert) >=0) {
                         insert.next = current.next;
-                        if (insert.next != null) insert.next.prev = insert;
+                        current.next.prev = insert;
+//                        if (insert.next != null) insert.next.prev = insert;
                         current.next = insert;
                         insert.prev = current;
                     }
                 }
+
                 return head;
             }
 
@@ -480,9 +531,10 @@ public class Oyster {
                         if(current.next != null) current.next.prev = current;
                     }
                 }
+
                 return head;
             }
-            
+
             // Reverse
             public static DNode reverse(DNode current) {
                 if (null == current)

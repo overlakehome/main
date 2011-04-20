@@ -23,6 +23,19 @@ public class TestOyster {
     // Control-Q to go to the last edit; Command-[, Command-]
     // Command-Shift-G to see usages of classes, fields, and methods.
     // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
+    
+    @Test
+    public void testSumDigitNodes() {
+        SNode lhs = snodeOf(3, snodeOf(4, snodeOf(5)));
+        SNode rhs = snodeOf(6, snodeOf(7, snodeOf(8)));
+        SNode sum = Oyster.LinkedLists.SNode.sumDigitNodes(lhs, rhs);
+        assertEquals(9, sum.data);
+        assertEquals(1, sum.next.data);
+        assertEquals(4, sum.next.next.data);
+        assertEquals(1, sum.next.next.next.data);
+        assertEquals(null, sum.next.next.next.next);
+    }
+
     @Test
     public void testAnagram() {
         assertTrue(Oyster.Arrays.anagrams("aab", "aba"));
