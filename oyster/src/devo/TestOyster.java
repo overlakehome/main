@@ -93,13 +93,13 @@ public class TestOyster {
         assertEquals(4, reverse.next.next.next.data);
         assertEquals(null, reverse.next.next.next.next);
 
-        SNode head1 = Oyster.LinkedLists.SNode.delete(reverse, 2);
+        SNode head1 = Oyster.LinkedLists.SNode.deleteOne(reverse, 2);
         assertEquals(1, head1.data);
         assertEquals(3, head1.next.data);
         assertEquals(4, head1.next.next.data);
         assertEquals(null, head1.next.next.next);
 
-        SNode head3 = Oyster.LinkedLists.SNode.delete(reverse, 1);
+        SNode head3 = Oyster.LinkedLists.SNode.deleteOne(reverse, 1);
         assertEquals(3, head3.data);
         assertEquals(4, head3.next.data);
         assertEquals(null, head3.next.next);
@@ -134,24 +134,24 @@ public class TestOyster {
     @Test
     public void testDNodeInsert() {
 
-        Oyster.LinkedLists.DNode head = Oyster.LinkedLists.DNode.insertDNode(null, DNode.dnodeOf(2)); // to be the one and the only node.
+        Oyster.LinkedLists.DNode head = Oyster.LinkedLists.DNode.insertIntoSorted(null, DNode.dnodeOf(2)); // to be the one and the only node.
         assertEquals(2, head.data);
         assertEquals(null, head.next);
 
-        Oyster.LinkedLists.DNode head2 = Oyster.LinkedLists.DNode.insertDNode(head, DNode.dnodeOf(4)); // to be a tail.
+        Oyster.LinkedLists.DNode head2 = Oyster.LinkedLists.DNode.insertIntoSorted(head, DNode.dnodeOf(4)); // to be a tail.
         assertEquals(2, head2.data);
         assertEquals(4, head2.next.data);
         assertEquals(2, head2.next.prev.data);
         assertEquals(null, head2.next.next);
 
-        Oyster.LinkedLists.DNode head3 = Oyster.LinkedLists.DNode.insertDNode(head2, DNode.dnodeOf(3)); // to be a middle man.
+        Oyster.LinkedLists.DNode head3 = Oyster.LinkedLists.DNode.insertIntoSorted(head2, DNode.dnodeOf(3)); // to be a middle man.
         assertEquals(2, head3.data);
         assertEquals(3, head3.next.data);
         assertEquals(4, head3.next.next.data);
         assertEquals(3, head3.next.next.prev.data);
         assertEquals(null, head3.next.next.next);
 
-        Oyster.LinkedLists.DNode head4 = Oyster.LinkedLists.DNode.insertDNode(head2, DNode.dnodeOf(1)); // to be a head.
+        Oyster.LinkedLists.DNode head4 = Oyster.LinkedLists.DNode.insertIntoSorted(head2, DNode.dnodeOf(1)); // to be a head.
         assertEquals(1, head4.data);
         assertEquals(2, head4.next.data);
         assertEquals(1, head4.next.prev.data);
@@ -159,7 +159,7 @@ public class TestOyster {
         assertEquals(4, head4.next.next.next.data);
         assertEquals(null, head4.next.next.next.next);
     }
-    
+
     /*
      * Positive test cases: 
      * - {1} yields {1}.

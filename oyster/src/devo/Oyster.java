@@ -244,10 +244,10 @@ public class Oyster {
 
             // This method inserts an data element into a sorted linked list, and returns the new head node.
             public static SNode insert(SNode head, int insert) {
-                return insert(head, SNode.snodeOf(insert));
+                return insertIntoSorted(head, SNode.snodeOf(insert));
             }
 
-            private static SNode insert(SNode head, SNode insert) {
+            private static SNode insertIntoSorted(SNode head, SNode insert) {
                 // how-to assert in Java http://download.oracle.com/javase/1.4.2/docs/guide/lang/assert.html
                 assert null != insert : insert;
 
@@ -280,7 +280,7 @@ public class Oyster {
             }
 
             // This method deletes an data element into a sorted linked list, and returns the new head node.
-            public static SNode delete(SNode head, int delete){
+            public static SNode deleteOne(SNode head, int delete){
                 if (head == null) return head;
                 if (head.data == delete) return head.next;
 
@@ -529,7 +529,7 @@ public class Oyster {
             }
         }
 
-        // Doubly linked list
+        // This class represents a doubly linked list node.
         public static class DNode implements Comparable<DNode>{
             public int data;
             public DNode next;
@@ -558,20 +558,13 @@ public class Oyster {
                 return dnode;
             }
 
-            public static DNode dnodeOf(int data, DNode prev, DNode next) {
-                DNode dnode = new DNode();
-                dnode.data = data;
-                dnode.prev = prev;
-                dnode.next = next;
-                return dnode;
-            }
-
             // Insert a node to a doubly linked list
-            public static DNode insertDNode(DNode head, DNode insert){
+            public static DNode insertIntoSorted(DNode head, DNode insert){
                 if (head == null) return insert;
                 if (insert == null) return head;
 
-                if (head.data > insert.data ) {
+                if (head.data >= insert.data) {
+                    insert.prev = null; // Glitch fixed by Henry
                     insert.next = head;
                     head.prev = insert;
                     return insert;
@@ -581,18 +574,22 @@ public class Oyster {
                 for (; current.next != null && current.next.data < insert.data; current = current.next) {
                 }
 
-                insert.next = current.next;
-                if(insert.next != null) insert.next.prev = insert;
-                current.next = insert;
                 insert.prev = current;
+                insert.next = current.next;
+                if (insert.next != null) {
+                    insert.next.prev = insert;
+                }
+
+                current.next = insert;
                 return head;
             }
 
             // Delete a node to a doubly linked list
             public static DNode deleteDNodeBuggy(DNode head, int delete){
                 if (head == null) return null;
-                if (head.data == delete) return head.next;
+                if (head.data == delete) return head.next; // buggy, when to delete 1 from null -> 1 -> 1 -> null.
 
+                // buggy, b/c you cannot delete 9 if the list ends with 9 -> null.
                 for (DNode current = head; current.next != null; current = current.next){
                     if (current.next.data == delete) {
                         current.next = current.next.next;
