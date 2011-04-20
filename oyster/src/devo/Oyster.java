@@ -318,8 +318,7 @@ public class Oyster {
 
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
-            // Time: O(n*n), Space: O(1)
-            public static SNode removeDupsInConstantSpace(SNode head) {
+            public static SNode removeDupsInConstantSpace(SNode head) { // in O(n*n) time
                 for (SNode remaining = head; remaining != null; remaining = remaining.next) {
                     SNode previous = remaining;
                     SNode current = remaining.next;
@@ -337,15 +336,14 @@ public class Oyster {
             }
 
             // This method removes duplicates using a hash map.
-            // Time: O(n), Space(n)
-            public static SNode removeDupsInLinearTime(SNode head) {
+            public static SNode removeDupsInLinearTime(SNode head) { // in O(n) space
                 Set<Integer> set = new HashSet<Integer>();
                 SNode previous = null;
                 SNode current = head;
                 while (current != null) { 
-                    if (set.contains(current.data))
+                    if (set.contains(current.data)) {
                         previous.next = current.next;
-                    else {
+                    } else {
                         set.add(current.data);
                         previous = current;
                     }
@@ -379,7 +377,7 @@ public class Oyster {
             }
 
             // 2.2.2. Implement an algorithm to find the n-th to last element of a singly linked list.
-            public static <T extends Comparable<T>> SNode nthToLastInOneScan(SNode head, int n) {
+            public static SNode nthToLastInOneScan(SNode head, int n) {
                 if (head == null || n < 1) {
                     return null;
                 }
@@ -591,7 +589,7 @@ public class Oyster {
                 }
                 return head;
             }
-            
+
             // Reverse
             public static DNode reverse(DNode current) {
                 if (null == current)
