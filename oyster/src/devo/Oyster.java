@@ -46,11 +46,13 @@ public class Oyster {
         public static boolean hasNoDupCharsWithConstantSpace(String s) {
             BitSet bits = new BitSet(256);
             for (int i = 0; i < s.length(); i++) {
-                if (bits.get(s.charAt(i))) {
+                if (s.charAt(i) >= 256) {
+                    throw new IllegalArgumentException("'s' should contains no smaller than 256.");
+                } else if (bits.get(s.charAt(i))) {
                     return false;
+                } else {
+                    bits.set(s.charAt(i));
                 }
-
-                bits.set(s.charAt(i));
             }
 
             return true;
@@ -61,9 +63,9 @@ public class Oyster {
             for (char c : s.toCharArray()) {
                 if (set.contains(c)) {
                     return false;
+                } else {
+                    set.add(c);
                 }
-
-                set.add(c);
             }
 
             return true;
