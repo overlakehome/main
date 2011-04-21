@@ -146,7 +146,7 @@ public class Oyster {
                     return false;
                 }
             }
-            
+
             for (int i : hits.values()) {
                 if (0 != i) {
                     return false;
@@ -157,6 +157,19 @@ public class Oyster {
         }
 
         // 1.5. Write a method to replace all spaces in a string with '%20'.
+
+        public static String escapeSpaces(String s) {
+            StringBuilder sb = new StringBuilder();
+            for (char c : s.toCharArray()) {
+                if (' ' == c) {
+                    sb.append("%20");
+                } else {
+                    sb.append(c);
+                }
+            }
+
+            return sb.toString();
+        }
 
         // 1.6. Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, 
         //      write a method to rotate the image by 90 degrees. Can you do this in place?
