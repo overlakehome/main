@@ -39,19 +39,19 @@ public class TestOyster {
 
     @Test
     public void testRemoveDupeChars() {
-        assertEquals(new char[] {'a'}, ARRAYS.removeDupeChars(new char[] {'a'}));
-        assertEquals(new char[] {'a', 'b', 'c', 'd'}, ARRAYS.removeDupeChars(new char[] {'a', 'b', 'c', 'd'}));
-        assertEquals(new char[] {'a' }, ARRAYS.removeDupeChars(new char[] {'a', 'a', 'a', 'a'}));
-        assertEquals(new char[] {'a', 'b'}, ARRAYS.removeDupeChars(new char[] {'a', 'b', 'a', 'b', 'a', 'b'}));
-        assertEquals(new char[] {'a', 'b'}, ARRAYS.removeDupeChars(new char[] {'a', 'a', 'a', 'b', 'b', 'b'}));
-        assertEquals(null, ARRAYS.removeDupeChars(null));
-        assertEquals(new char[] {}, ARRAYS.removeDupeChars(new char[] {}));
+        assertEquals(new char[] {'a'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a'}));
+        assertEquals(new char[] {'a', 'b', 'c', 'd'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'b', 'c', 'd'}));
+        assertEquals(new char[] {'a' }, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'a', 'a', 'a'}));
+        assertEquals(new char[] {'a', 'b'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'b', 'a', 'b', 'a', 'b'}));
+        assertEquals(new char[] {'a', 'b'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'a', 'a', 'b', 'b', 'b'}));
+        assertEquals(null, ARRAYS.removeDupCharsUsingStringBuilder(null));
+        assertEquals(new char[] {}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {}));
     }
 
     @Test
     public void testFindSubArrayOfSumX() {
-        //      Input: x = 6, a = { 5, -1, 3, -2, 5, -3, 4, 2 }
-        //      Output: a[2] .. a[4] when you see 3 - 2 + 5 = 6.
+        // Input: x = 6, a = { 5, -1, 3, -2, 5, -3, 4, 2 }
+        // Output: a[2] .. a[4] when you see 3 - 2 + 5 = 6.
         assertTrue(Arrays.equals(new int[] {0, 0}, ARRAYS.findSubArrayOfSumXInLinearTime(6, 6, -1, 3, -2, 5, -3, 4, 2)));
         assertTrue(Arrays.equals(new int[] {7, 7}, ARRAYS.findSubArrayOfSumXInLinearTime(6, 1, -1, 2, -2, 3, -3, 4, 6)));
         assertTrue(Arrays.equals(new int[] {2, 4}, ARRAYS.findSubArrayOfSumXInLinearTime(6, 5, -1, 3, -2, 5, -3, 4, 2)));

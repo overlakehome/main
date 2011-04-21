@@ -1,6 +1,7 @@
 package devo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,12 +70,24 @@ public class Oyster {
         }
 
         // 1.2. Write code to reverse a C-Style String.
-        //      (C-String means that abcd is represented as five characters, including the null character.)
+        //      (C-String means that abcd is represented as five characters, including the null character).
+
+        public static String reverse(String s) {
+            char[] chars = s.toCharArray();
+            for (int i = 0; i < chars.length / 2; i++) {
+                char save = chars[i];
+                chars[i] = chars[chars.length - i];
+                chars[chars.length - i] = save;
+            }
+
+            return new String(chars);
+        }
 
         // 1.3. Design an algorithm and write code to remove the duplicate characters in a string without using any additional buffer.
         //      NOTE: One or two additional variables are fine. An extra copy of the array is not.
         //      FOLLOW UP: Write the test cases for this method.
-        public static char[] removeDupeChars(char[] input){
+
+        public static char[] removeDupCharsUsingStringBuilder(char[] input){
             if (input == null) return null;
             if (input.length < 2) return input;
 
@@ -91,6 +104,21 @@ public class Oyster {
             }
 
             return sb.toString().toCharArray();
+        }
+
+        public static char[] removeDupCharsUsingArrayCopy(char[] chars){
+            if (chars == null) return null;
+
+            int length = 0;
+            Set<Character> set = new HashSet<Character>(); // HashSet doesn't keep the order.
+            for (char c : chars) {
+                if (!set.contains(c)) {
+                    set.add(c);
+                    chars[length++] = c;
+                }
+            }
+
+            return Arrays.copyOfRange(chars, 0, length);
         }
 
         // 1.4. Write a method to decide if two strings are anagrams or not.
