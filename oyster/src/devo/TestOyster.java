@@ -38,6 +38,17 @@ public class TestOyster {
     // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
 
     @Test
+    public void testRemoveDupeChars() {
+        assertEquals(new char[] {'a'}, ARRAYS.removeDupeChars(new char[] {'a'}));
+        assertEquals(new char[] {'a', 'b', 'c', 'd'}, ARRAYS.removeDupeChars(new char[] {'a', 'b', 'c', 'd'}));
+        assertEquals(new char[] {'a' }, ARRAYS.removeDupeChars(new char[] {'a', 'a', 'a', 'a'}));
+        assertEquals(new char[] {'a', 'b'}, ARRAYS.removeDupeChars(new char[] {'a', 'b', 'a', 'b', 'a', 'b'}));
+        assertEquals(new char[] {'a', 'b'}, ARRAYS.removeDupeChars(new char[] {'a', 'a', 'a', 'b', 'b', 'b'}));
+        assertEquals(null, ARRAYS.removeDupeChars(null));
+        assertEquals(new char[] {}, ARRAYS.removeDupeChars(new char[] {}));
+    }
+
+    @Test
     public void testFindSubArrayOfSumX() {
         //      Input: x = 6, a = { 5, -1, 3, -2, 5, -3, 4, 2 }
         //      Output: a[2] .. a[4] when you see 3 - 2 + 5 = 6.

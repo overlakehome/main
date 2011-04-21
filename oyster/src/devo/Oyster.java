@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,24 @@ public class Oyster {
         // 1.3. Design an algorithm and write code to remove the duplicate characters in a string without using any additional buffer.
         //      NOTE: One or two additional variables are fine. An extra copy of the array is not.
         //      FOLLOW UP: Write the test cases for this method.
+        public static char[] removeDupeChars(char[] input){
+            if (input == null) return null;
+            if (input.length < 2) return input;
+
+            StringBuilder sb = new StringBuilder();
+            Set<Character> set = new LinkedHashSet<Character>(); // LinkedHashSet keeps the order.
+            for (char c : input){
+                if (!set.contains(c)) {
+                    set.add(c);
+                }
+            }
+
+            for (char c : set){
+                sb.append(c);
+            }
+
+            return sb.toString().toCharArray();
+        }
 
         // 1.4. Write a method to decide if two strings are anagrams or not.
         public static boolean anagrams(String s, String t) {
@@ -82,7 +101,12 @@ public class Oyster {
 
             Map<Character, Integer> hits = new HashMap<Character, Integer>();
             for (char c : s.toCharArray()) {
-                hits.put(c, 1 + (hits.containsKey(c) ? hits.get(c) : 0));
+                // hits.put(c, 1 + (hits.containsKey(c) ? hits.get(c) : 0));
+                if (hits.containsKey(c)) {
+                    hits.put(c, hits.get(c) + 1);
+                } else {
+                    hits.put(c, 1);
+                }
             }
 
             for (char c : t.toCharArray()) {
@@ -92,7 +116,7 @@ public class Oyster {
                     return false;
                 }
             }
-
+            
             for (int i : hits.values()) {
                 if (0 != i) {
                     return false;
