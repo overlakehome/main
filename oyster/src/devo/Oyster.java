@@ -174,6 +174,12 @@ public class Oyster {
         // 1.6. Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, 
         //      write a method to rotate the image by 90 degrees. Can you do this in place?
 
+        public static void rotate90Degrees(int[][] image) { // int has 4 bytes on most platforms.
+            for (int i = 0; i < image.length; i++) {
+                
+            }
+        }
+
         // 1.7. Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column is set to 0.
 
         // 1.8. Assume you have a method isSubstring which checks if one word is a substring of another.
