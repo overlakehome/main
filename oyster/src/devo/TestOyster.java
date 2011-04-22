@@ -38,7 +38,7 @@ public class TestOyster {
     // Command-Shift-R to incremental-search sources, e.g. type 'oyster'
 
     @Test
-    public void testRemoveDupeChars() {
+    public void testRemoveDupeCharsUsingStringBuilder() {
         assertEquals(new char[] {'a'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a'}));
         assertEquals(new char[] {'a', 'b', 'c', 'd'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'b', 'c', 'd'}));
         assertEquals(new char[] {'a' }, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'a', 'a', 'a'}));
