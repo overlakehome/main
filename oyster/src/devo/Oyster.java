@@ -170,21 +170,61 @@ public class Oyster {
 
             return sb.toString();
         }
-
+        
         // 1.6. Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, 
         //      write a method to rotate the image by 90 degrees. Can you do this in place?
 
         public static void rotate90Degrees(int[][] image) { // int has 4 bytes on most platforms.
-            for (int i = 0; i < image.length; i++) {
+            for (int layer = 0; layer < image.length/2; layer++) {
+                int first = layer;
+                int last = image.length - 1 - layer;
+                for (int i = first; i < last; i++){
+                    int offset = i - first;
+                    int top = image[first][i];  //save top
+                    //top <- left
+                    image[first][i] = image[last-offset][first];
+                    //left <- bottom
+                    image[last-offset][first] = image[last][last - offset];
+                    //bottom <- right
+                    image[last][last-offset] = image[i][last];
+                    //right <- top
+                    image[i][last] = top;
+                }
                 
             }
         }
 
         // 1.7. Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column is set to 0.
+        public static void setZeros(int[][] matrix){
+            int[] row = new int[matrix.length];
+            int[] column = new int[matrix[0].length];
+            for (int i = 0; i < matrix.length; i++){
+                for (int j = 0; j < matrix[0].length; j++){
+                    if (matrix[i][j] == 0){
+                        row[i] = 1;
+                        column[j] = 1;
+                    }
+                }
+            }
+            for (int i = 0; i < matrix.length; i++){
+                for (int j = 0; j < matrix[0].length; j++){
+                    if (row[i] == 1 || column[j] == 1){
+                        matrix[i][j] = 0;
+                    }
+                }
+            }
+        }
 
         // 1.8. Assume you have a method isSubstring which checks if one word is a substring of another.
         //      Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring
         //      (i.e., "waterbottle" is a rotation of "erbottlewat").
+        public static boolean isRotation(String s1, String s2){
+            if (s1.length() != s2.length()) {
+                return false;
+            }
+            String s = s2 + s2;
+            return isSubString(s, s1);
+        }
 
         // 1-A. Find the max sum sub array.
         //      Kadane's algorithm http://en.wikipedia.org/wiki/Maximum_subarray_problem
@@ -247,7 +287,7 @@ public class Oyster {
             return modes;
         }
 
-        // 1-C. Find the modes using a map in Array (also called Dictionary in C#).
+        // 1-B2. Find the modes using a map in Array (also called Dictionary in C#).
         public static List<Integer> findModesUsingArray(int... numbers) {
             // We assert preconditions; arguments according to assumptions (for debug builds).
             assert null != numbers;
@@ -288,7 +328,44 @@ public class Oyster {
             assert !modes.isEmpty() : modes;
             return modes;
         }
+        
+        // 1-C. Find a set which sums up to x given integer array.
+        //      Input: x = 6, a = { 5, -1, 1, -2, 4, 7, 2 }
+        //      Output: {5, 1}, {-1, 7}, {4, 2}
+        public static List<Integer> findSetOfSumX(int x, int[] a){
+            if(a == null) throw new NullPointerException("'a' must be non-null."); 
+            List<Integer> set = new ArrayList<Integer>();
+            if(a.length < 2 ) return set;
+            for (int i = 0; i < a.length; i++){
+                for (int j = i + 1; j < a.length; j++){
+                    if(a[j] == x - a[i]) {
+                        set.add(a[i]);
+                        set.add(a[j]);
+                    }
+                }
+            }
+            return set ;
+        }
 
+        // 1-C2. Find a set which sums up to x given integer array using Hash set
+        public static List<Integer> findSetOfSumXUsingHashMap(int x, int[] a) {
+            if (a == null)
+                throw new NullPointerException("'a' must be non-null.");
+            List<Integer> set = new ArrayList<Integer>();
+            if (a.length < 2)
+                return set;
+            Set<Integer> map = new HashSet<Integer>();
+            for (int i : a) {
+                if (map.contains(x - i)) {
+                    set.add(i);
+                    set.add(x - i);
+                } else {
+                    map.add(i);
+                }
+            }
+            return set;
+        }
+        
         // 1-D. Find a sub array that sums up to x given integer array.
         //      Input: x = 6, a = { 5, -1, 3, -2, 5, -3, 4, 2 }
         //      Output: a[2] .. a[4] when you see 3 - 2 + 5 = 6.
