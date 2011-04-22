@@ -3,6 +3,7 @@ package devo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -170,7 +171,7 @@ public class Oyster {
 
             return sb.toString();
         }
-        
+
         // 1.6. Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, 
         //      write a method to rotate the image by 90 degrees. Can you do this in place?
 
@@ -333,42 +334,44 @@ public class Oyster {
             assert !modes.isEmpty() : modes;
             return modes;
         }
-        
+
         // 1-C. Find a set which sums up to x given integer array.
         //      Input: x = 6, a = { 5, -1, 1, -2, 4, 7, 2 }
         //      Output: {5, 1}, {-1, 7}, {4, 2}
         public static List<Integer> findPairsOfSumXByBruteForce(int x, int[] a) {
             if (a == null) throw new NullPointerException("'a' must be non-null.");
-            List<Integer> set = new ArrayList<Integer>();
-            if (a.length < 2) return set;
+            if (a.length < 2) return ImmutableList.of(); // or, Collections.emptyList()
 
-            for (int i = 0; i < a.length; i++) {
+            List<Integer> output = new ArrayList<Integer>();
+            for (int i = 0; i < a.length - 1; i++) {
                 for (int j = i + 1; j < a.length; j++) {
-                    if (a[j] == x - a[i]) {
-                        set.add(a[i]);
-                        set.add(a[j]);
+                    if (a[j] + a[i] == x) {
+                        output.add(a[i]);
+                        output.add(a[j]);
                     }
                 }
             }
-            return set;
+
+            return output;
         }
 
-        // 1-C2. Find a set which sums up to x given integer array using Hash set
+        // 1-C2. Find a set which sums up to x given integer array using hash set
         public static List<Integer> findPairsOfSumXByHashSet(int x, int[] a) {
             if (a == null) throw new NullPointerException("'a' must be non-null.");
-            List<Integer> set = new ArrayList<Integer>();
-            if (a.length < 2) return set;
+            if (a.length < 2) return ImmutableList.of(); // or, Collections.emptyList()
 
-            Set<Integer> map = new HashSet<Integer>();
+            List<Integer> output = new ArrayList<Integer>();
+            Set<Integer> set = new HashSet<Integer>();
             for (int i : a) {
-                if (map.contains(x - i)) {
-                    set.add(i);
-                    set.add(x - i);
+                if (set.contains(x - i)) {
+                    output.add(i);
+                    output.add(x - i);
                 } else {
-                    map.add(i);
+                    set.add(i);
                 }
             }
-            return set;
+
+            return output;
         }
 
         // 1-D. Find a sub array that sums up to x given integer array.
