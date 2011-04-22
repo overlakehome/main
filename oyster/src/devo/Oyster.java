@@ -3,7 +3,6 @@ package devo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -1046,20 +1045,18 @@ public class Oyster {
         }
     }
 
-    public static int weighedChoice(int... weights) {
+    public static int weighedChoice(int... weights) { // new int[] { 20, 30, 50 }, or 20, 30, 50
         int sum = 0;
         for (int i = 0; i < weights.length; i++) {
             sum += weights[i];
         }
 
-        int random = new Random().nextInt(sum);
-        for (int i = 0; i < weights.length; i++, random -= weights[i]) {
-            if (random < weights[i]) {
-                return i;
-            }
+        int random = new Random().nextInt(sum); // a random out of [0 .. sum - 1]
+        int i = 0;
+        for (; i < weights.length && random >= weights[i]; i++, random -= weights[i]) {
         }
 
-        throw new RuntimeException("UNCHECKED: This bug should go unhandled.");
+        return i;
     }
 
     public static void knuthShuffle(int[] a) {
