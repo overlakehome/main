@@ -332,28 +332,28 @@ public class Oyster {
         // 1-C. Find a set which sums up to x given integer array.
         //      Input: x = 6, a = { 5, -1, 1, -2, 4, 7, 2 }
         //      Output: {5, 1}, {-1, 7}, {4, 2}
-        public static List<Integer> findSetOfSumX(int x, int[] a){
-            if(a == null) throw new NullPointerException("'a' must be non-null."); 
+        public static List<Integer> findPairsOfSumXByBruteForce(int x, int[] a) {
+            if (a == null) throw new NullPointerException("'a' must be non-null.");
             List<Integer> set = new ArrayList<Integer>();
-            if(a.length < 2 ) return set;
-            for (int i = 0; i < a.length; i++){
-                for (int j = i + 1; j < a.length; j++){
-                    if(a[j] == x - a[i]) {
+            if (a.length < 2) return set;
+
+            for (int i = 0; i < a.length; i++) {
+                for (int j = i + 1; j < a.length; j++) {
+                    if (a[j] == x - a[i]) {
                         set.add(a[i]);
                         set.add(a[j]);
                     }
                 }
             }
-            return set ;
+            return set;
         }
 
         // 1-C2. Find a set which sums up to x given integer array using Hash set
-        public static List<Integer> findSetOfSumXUsingHashMap(int x, int[] a) {
-            if (a == null)
-                throw new NullPointerException("'a' must be non-null.");
+        public static List<Integer> findPairsOfSumXByHashSet(int x, int[] a) {
+            if (a == null) throw new NullPointerException("'a' must be non-null.");
             List<Integer> set = new ArrayList<Integer>();
-            if (a.length < 2)
-                return set;
+            if (a.length < 2) return set;
+
             Set<Integer> map = new HashSet<Integer>();
             for (int i : a) {
                 if (map.contains(x - i)) {
@@ -365,7 +365,7 @@ public class Oyster {
             }
             return set;
         }
-        
+
         // 1-D. Find a sub array that sums up to x given integer array.
         //      Input: x = 6, a = { 5, -1, 3, -2, 5, -3, 4, 2 }
         //      Output: a[2] .. a[4] when you see 3 - 2 + 5 = 6.
