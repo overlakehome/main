@@ -32,7 +32,7 @@ public class Oyster {
         // 1.1. Implement an algorithm to determine if a string has all unique characters.
         //      What if you can not use additional data structures?
 
-        public static boolean hasNoDupCharsWithNoAuxSpace(String s) {
+        public static boolean hasNoDupCharsWithByBruteForce(String s) {
             for (int i = 0; i < s.length() - 1; i++) {
                 for (int j = i + 1; j < s.length(); j++) {
                     if (s.charAt(i) == s.charAt(j)) {
@@ -175,7 +175,7 @@ public class Oyster {
         // 1.6. Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, 
         //      write a method to rotate the image by 90 degrees. Can you do this in place?
 
-        public static void rotate90Degrees(int[][] image) { // int has 4 bytes on most platforms.
+        public static void rotate90Degrees(int[][] image) { // integer has 4 bytes on most platforms.
             for (int layer = 0; layer < image.length/2; layer++) {
                 int first = layer;
                 int last = image.length - 1 - layer;
@@ -191,7 +191,6 @@ public class Oyster {
                     //right <- top
                     image[i][last] = top;
                 }
-                
             }
         }
 
@@ -356,7 +355,7 @@ public class Oyster {
         }
 
         // 1-C2. Find a set which sums up to x given integer array using hash set
-        public static List<Integer> findPairsOfSumXByHashSet(int x, int[] a) {
+        public static List<Integer> findPairsOfSumXByHashing(int x, int[] a) {
             if (a == null) throw new NullPointerException("'a' must be non-null.");
             if (a.length < 2) return ImmutableList.of(); // or, Collections.emptyList()
 
@@ -886,8 +885,8 @@ public class Oyster {
 
     public static class Recursions {
         public static String toExcelColumn(int n) {
-            // 26   cases : A - Z
-            // 26^2 cases : AA - ZZ
+            //   26 cases :   A -   Z
+            // 26^2 cases :  AA -  ZZ
             // 26^3 cases : AAA - ZZZ
 
             int cases = 26;
