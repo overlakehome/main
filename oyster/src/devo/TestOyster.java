@@ -39,13 +39,13 @@ public class TestOyster {
 
     @Test
     public void testRemoveDupeCharsUsingStringBuilder() {
-        assertEquals(new char[] {'a'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a'}));
-        assertEquals(new char[] {'a', 'b', 'c', 'd'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'b', 'c', 'd'}));
-        assertEquals(new char[] {'a' }, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'a', 'a', 'a'}));
-        assertEquals(new char[] {'a', 'b'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'b', 'a', 'b', 'a', 'b'}));
-        assertEquals(new char[] {'a', 'b'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'a', 'a', 'b', 'b', 'b'}));
-        assertEquals(null, ARRAYS.removeDupCharsUsingStringBuilder(null));
-        assertEquals(new char[] {}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {}));
+        assertTrue(Arrays.equals(new char[] {'a'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a'})));
+        assertTrue(Arrays.equals(new char[] {'a', 'b', 'c', 'd'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'b', 'c', 'd'})));
+        assertTrue(Arrays.equals(new char[] {'a' }, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'a', 'a', 'a'})));
+        assertTrue(Arrays.equals(new char[] {'a', 'b'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'b', 'a', 'b', 'a', 'b'})));
+        assertTrue(Arrays.equals(new char[] {'a', 'b'}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {'a', 'a', 'a', 'b', 'b', 'b'})));
+        assertTrue(Arrays.equals(null, ARRAYS.removeDupCharsUsingStringBuilder(null)));
+        assertTrue(Arrays.equals(new char[] {}, ARRAYS.removeDupCharsUsingStringBuilder(new char[] {})));
     }
 
     @Test
