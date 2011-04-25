@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 
+
 import com.google.common.collect.ImmutableList;
 
 // Heapsort competes with quicksort, another very efficient nearly-in-place sort algorithm
@@ -121,6 +122,20 @@ public class Oyster {
             }
 
             return Arrays.copyOfRange(chars, 0, length);
+        }
+        
+        public static char[] removeDupCharsUsingBitSet(char[] chars){
+            BitSet bits = new BitSet(256);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] >= 256) {
+                    throw new IllegalArgumentException("'chars' should contains no smaller than 256.");
+                } else if (!bits.get(chars[i])) {
+                    bits.set(chars[i]);
+                    sb.append(chars[i]);
+                }
+            }
+            return sb.toString().toCharArray();
         }
 
         // 1.4. Write a method to decide if two strings are anagrams or not.
@@ -428,81 +443,6 @@ public class Oyster {
                 return snode;
             }
 
-            // This method inserts an data element into a sorted linked list, and returns the new head node.
-            public static SNode insert(SNode head, int insert) {
-                return insertIntoSorted(head, SNode.snodeOf(insert));
-            }
-
-            private static SNode insertIntoSorted(SNode head, SNode insert) {
-                // how-to assert in Java http://download.oracle.com/javase/1.4.2/docs/guide/lang/assert.html
-                assert null != insert : insert;
-
-                if (head == null) {
-                    return insert;
-                }
-
-                if (head.data > insert.data) {
-                    insert.next = head;
-                    return insert;
-                }
-
-                for (SNode previous = head; ; previous = previous.next) {
-                    if (previous.next == null || previous.next.data >= insert.data) { // repeat until ...
-                        insert.next = previous.next;
-                        previous.next = insert;
-                        break;
-                    }
-                }
-
-                // Henry's proposal for fix as follows:
-//                SNode previous = head;
-//                for (; previous.next != null && previous.next.data < insert.data; previous = previous.next) {
-//                }
-//
-//                insert.next = previous.next;
-//                previous.next = insert;
-
-                return head;
-            }
-
-            // This method deletes an data element into a sorted linked list, and returns the new head node.
-            public static SNode deleteOne(SNode head, int delete){
-                if (head == null) return head;
-                if (head.data == delete) return head.next;
-
-                for (SNode current = head; current.next != null; current = current.next){
-                    if (current.next.data == delete) {
-                        current.next = current.next.next;
-                        break;
-                    }
-                }
-
-                return head;
-            }
-
-            // This method deletes a node in a constant time, i.e. time O(1), space: O(1)
-            public static void deleteInConstantTime(SNode delete) {
-                if (delete.next != null) {
-                    delete.data = delete.next.data;
-                    delete.next = delete.next.next;
-                } else {
-                    delete.data = 0; // mark it deleted and collect garbage later on
-                }
-            }
-
-            // This method reverses a linked list in an iteration.
-            public static SNode reverse(SNode current) {
-                SNode result = null;
-                while (current != null) {
-                    SNode save = current.next;
-                    current.next = result;
-                    result = current;
-                    current = save;
-                }
-
-                return result;
-            }
-
             // 2.1. Write code to remove duplicates from an unsorted linked list. 
             //      FOLLOW UP: How would you solve this problem if a temporary buffer is not allowed?
             public static SNode removeDupsInConstantSpace(SNode head) { // in O(n*n) time
@@ -586,7 +526,8 @@ public class Oyster {
             // 2.3. Implement an algorithm to delete a node in the middle of a single linked list, given only access to that node.
             //      EXAMPLE: Input: the node c from the linked list a->b->c->d->e
             //               Result: nothing is returned, but the new linked list looks like a->b->d->e
-
+            //      Look at 2.B
+            
             // 2.4. You have two numbers represented by a linked list, where each node contains a single digit.
             //      The digits are stored in reverse order, such that the 1's digit is at the head of the list.
             //      Write a function that adds the two numbers and returns the sum as a linked list.
@@ -647,8 +588,85 @@ public class Oyster {
                 chain.next = null;
                 return joint;
             }
+            
+            
+            // 2.A This method inserts an data element into a sorted linked list, and returns the new head node.
+            public static SNode insert(SNode head, int insert) {
+                return insertIntoSorted(head, SNode.snodeOf(insert));
+            }
 
-            // 2-A. Merge sort in linked list.
+            private static SNode insertIntoSorted(SNode head, SNode insert) {
+                // how-to assert in Java http://download.oracle.com/javase/1.4.2/docs/guide/lang/assert.html
+                assert null != insert : insert;
+
+                if (head == null) {
+                    return insert;
+                }
+
+                if (head.data > insert.data) {
+                    insert.next = head;
+                    return insert;
+                }
+
+                for (SNode previous = head; ; previous = previous.next) {
+                    if (previous.next == null || previous.next.data >= insert.data) { // repeat until ...
+                        insert.next = previous.next;
+                        previous.next = insert;
+                        break;
+                    }
+                }
+
+                // Henry's proposal for fix as follows:
+//                SNode previous = head;
+//                for (; previous.next != null && previous.next.data < insert.data; previous = previous.next) {
+//                }
+//
+//                insert.next = previous.next;
+//                previous.next = insert;
+
+                return head;
+            }
+
+            
+            // 2.B This method deletes an data element into a sorted linked list, and returns the new head node.
+            public static SNode deleteOne(SNode head, int delete){
+                if (head == null) return head;
+                if (head.data == delete) return head.next;
+
+                for (SNode current = head; current.next != null; current = current.next){
+                    if (current.next.data == delete) {
+                        current.next = current.next.next;
+                        break;
+                    }
+                }
+
+                return head;
+            }
+
+            //       This method deletes a node in a constant time, i.e. time O(1), space: O(1)
+            public static void deleteInConstantTime(SNode delete) {
+                if (delete.next != null) {
+                    delete.data = delete.next.data;
+                    delete.next = delete.next.next;
+                } else {
+                    delete.data = 0; // mark it deleted and collect garbage later on
+                }
+            }
+
+            
+            // 2.C This method reverses a linked list in an iteration.
+            public static SNode reverse(SNode current) {
+                SNode result = null;
+                while (current != null) {
+                    SNode save = current.next;
+                    current.next = result;
+                    result = current;
+                    current = save;
+                }
+
+                return result;
+            }
+            // 2.D . Merge sort in linked list.
             public SNode mergeSort(SNode p) {
                 if (null == p || null == p.next)
                     return p;
@@ -744,7 +762,7 @@ public class Oyster {
                 return dnode;
             }
 
-            // Insert a node to a sorted doubly linked list
+            // 2.E Insert a node to a sorted doubly linked list
             public static DNode insertIntoSorted(DNode head, DNode insert){
                 if (head == null) return insert;
                 if (insert == null) return head;
@@ -770,7 +788,7 @@ public class Oyster {
                 return head;
             }
 
-            // This method deletes a node from a doubly linked list.
+            // 2.F This method deletes a node from a doubly linked list.
             public static DNode deleteOneBuggy(DNode head, int delete){
                 if (head == null) return null;
                 if (head.data == delete) return head.next; // buggy, when to delete 1 from null -> 1 -> 1 -> null.
@@ -807,6 +825,7 @@ public class Oyster {
                 return head;
             }
 
+            // 2.G Reverse the doubly linked list.
             public static DNode reverse(DNode current) {
                 if (null == current) throw new NullPointerException("current");
 
@@ -832,7 +851,9 @@ public class Oyster {
         }
     }
 
+    // Chapter 3 Stacks and Queues
     public static class Stacks {
+        // 3.2 Push, pop, min
         public static class MinStack<T extends Comparable<T>> {
             private T mininum;
             private Stack<T> stack = new Stack<T>();
@@ -860,7 +881,8 @@ public class Oyster {
                 return element;
             }
         }
-
+        
+        // 3.5 Implement Queue using 2 stacks
         public static class Queueable<T> {
             Stack<T> stk1 = new Stack<T>();
             Stack<T> stk2 = new Stack<T>();
@@ -883,11 +905,41 @@ public class Oyster {
     }
 
     public static class Recursions {
+        
+        // 8.1 Write a method to generate the nth Fibonacci number.
+        // 0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+        // F0 = 0, F1 = 1
+        public static int fibo(int index){
+            if (index < 0) {
+                return -1;
+                //throw new IllegalArgumentException("'index' must be positive.");
+            }
+            if (index == 0) return 0;
+            if ( index < 3) return 1;
+            int number = 0;
+            int oneback = 1;
+            int twoback = 1;
+            for (int i = 3; i <= index; i++){
+                number = oneback + twoback;
+                twoback = oneback;
+                oneback = number;
+            }
+            return number;
+        }
+        
+        public static int fiboUsingRecursion(int index){
+            if (index < 0) return -1;
+            else if (index == 0) return 0;
+            else if (index == 1 || index == 2) return 1; 
+            else return fiboUsingRecursion(index - 1) + fiboUsingRecursion(index - 2);
+        }
+        
+        //8.A To/From Excel Column 
+        //Need Clarification for the problem
+        //   26 cases :   A -   Z
+        // 26^2 cases :  AA -  ZZ
+        // 26^3 cases : AAA - ZZZ
         public static String toExcelColumn(int n) {
-            //   26 cases :   A -   Z
-            // 26^2 cases :  AA -  ZZ
-            // 26^3 cases : AAA - ZZZ
-
             int cases = 26;
             int k = 0;
             for (; n > cases; k++) { // k is the level of recursion.
@@ -920,62 +972,27 @@ public class Oyster {
     }
 
     public static class Sorting {
-        public static int indexOutOfCycle(int i, int... args) {
-            if (null == args)
-                throw new IllegalArgumentException("'args' must be non-null.");
-            if (0 == args.length)
-                throw new IllegalArgumentException("'args' must not be empty.");
-
-            return indexOutOfCycle(0, args.length - 1, i, args);
-        }
-
-        private static int indexOutOfCycle(int left, int right, int i, int... args) {
-            int pivot = (left + right) / 2;
-            if (i == args[pivot]) {
-                return pivot;
-            } else if (left == right) {
-                return -1;
-            } else if (i == args[right]) {
-                return right;
+        // 9.1 You are given two sorted arrays, A and B, and A has a large enough buffer at the end to hold B.
+        //     Write a method to merge B into A in sorted order.
+        public static void merge(int[] a, int[]b, int n, int m){
+            int k = n + m - 1; 
+            int i = n -1;
+            int j = m -1;
+            while (i >= 0 && j >=0){
+                if (a[i] > b[j]){
+                    a[k--] = a[i--];
+                }
+                a[k--] = b[j--];
             }
-
-            if (args[right] < args[pivot]) {
-                if (args[right] < i && i < args[pivot]) {
-                    return indexOutOfCycle(left, pivot - 1, i, args);
-                } else {
-                    return indexOutOfCycle(pivot + 1, right - 1, i, args);
-                }
-            } else {
-                if (args[pivot] < i && i < args[right]) {
-                    return indexOutOfCycle(pivot + 1, right - 1, i, args);
-                } else {
-                    return indexOutOfCycle(left, pivot - 1, i, args);
-                }
+            
+            while (i >= 0){
+                a[k--] = a[i--];
             }
         }
-
-        public static int smallestOutOfCycle(int... args) {
-            if (null == args)
-                throw new IllegalArgumentException("'args' must be non-null.");
-            if (0 == args.length)
-                throw new IllegalArgumentException("'args' must not be empty.");
-
-            return smallestOutOfCycle(0, args.length - 1, args);
-        }
-
-        private static int smallestOutOfCycle(int left, int right, int... args) {
-            if (right == left) {
-                return args[left];
-            } else {
-                int pivot = (left + right) / 2;
-                if (args[right] < args[pivot]) {
-                    return smallestOutOfCycle(pivot + 1, right, args);
-                } else {
-                    return smallestOutOfCycle(left, pivot, args);
-                }
-            }
-        }
-
+        
+        
+        // Merge Sort - sort each pair of elements. Then, sort every four elements by merging every two pairs. 
+        //              Then, sort every 8 elements, etc. O(n log n) expected and worst case.
         public static void mergeSort(int[] elements) {
             int[] temp = new int[elements.length];
             mergeSort(elements, temp, 0, elements.length - 1);
@@ -1012,91 +1029,143 @@ public class Oyster {
 
             System.arraycopy(temp, 0, input, leftBegin, rightEnd - leftBegin + 1);
         }
+        
+        // 9.2 Write a method to sort an array of strings so that all the anagrams are next to each other.
+        
+/*        public class AnagramComparator implements Comparator<String>{
+            public String sortChars(String s){
+                char[] content = s.toCharArray();
+                Arrays.sort(content);
+                Arrays.s
+                return new String(content);
+            }
+            public int compare(String s1, String s2){
+                return sortChars(s1).compareTo(sortChars(s2));
+            }
+        }
+        Arrays.sort(char[] array, new AnagramComparator());------>????*/
+        
+        // 9.3 Given a sorted array of n integers that has been rotated an unknown number of times, 
+        //     give an O(log n) algorithm that finds an element in the array.
+        //     You may assume that the array was originally sorted in increasing order.
+        //      EXAMPLE:
+        //      Input: find 5 in array (15 16 19 20 25 1 3 4 5 7 10 14)
+        //      Output: 8 (the index of 5 in the array)
+        
+        public static int indexOutOfCycle(int i, int... args) {
+            if (null == args)
+                throw new IllegalArgumentException("'args' must be non-null.");
+            if (0 == args.length)
+                throw new IllegalArgumentException("'args' must not be empty.");
+
+            return indexOutOfCycle(0, args.length - 1, i, args);
+        }
+
+        private static int indexOutOfCycle(int left, int right, int i, int... args) {
+            int pivot = (left + right) / 2;
+            if (i == args[pivot]) {
+                return pivot;
+            } else if (left == right) {
+                return -1;
+            } else if (i == args[right]) {
+                return right;
+            }
+
+            if (args[right] < args[pivot]) {
+                if (args[right] < i && i < args[pivot]) {
+                    return indexOutOfCycle(left, pivot - 1, i, args);
+                } else {
+                    return indexOutOfCycle(pivot + 1, right - 1, i, args);
+                }
+            } else {
+                if (args[pivot] < i && i < args[right]) {
+                    return indexOutOfCycle(pivot + 1, right - 1, i, args);
+                } else {
+                    return indexOutOfCycle(left, pivot - 1, i, args);
+                }
+            }
+        }
+        // Find the smallest number in the rotated array
+        //      Input: find the smallest number in array (15 16 19 20 25 1 3 4 5 7 10 14)
+        //      Output: 1 
+        public static int smallestOutOfCycle(int... args) {
+            if (null == args)
+                throw new IllegalArgumentException("'args' must be non-null.");
+            if (0 == args.length)
+                throw new IllegalArgumentException("'args' must not be empty.");
+
+            return smallestOutOfCycle(0, args.length - 1, args);
+        }
+
+        private static int smallestOutOfCycle(int left, int right, int... args) {
+            if (right == left) {
+                return args[left];
+            } else {
+                int pivot = (left + right) / 2;
+                if (args[right] < args[pivot]) {
+                    return smallestOutOfCycle(pivot + 1, right, args);
+                } else {
+                    return smallestOutOfCycle(left, pivot, args);
+                }
+            }
+        }
     }
 
-    public static class BNode<T extends Comparable<T>> implements Comparable<BNode<T>> {
-        public T item;
-        public BNode<T> left;
-        public BNode<T> right;
-        public BNode<T> parent;
 
-        public static <T extends Comparable<T>> BNode<T> of(BNode<T> parent) {
-            BNode<T> node = new BNode<T>();
-            node.parent = parent;
-            return node;
+    public static class Mix {
+        public static int weighedChoice(int... weights) { // new int[] { 20, 30, 50 }, or 20, 30, 50
+            int sum = 0;
+            for (int i = 0; i < weights.length; i++) {
+                sum += weights[i];
+            }
+
+            int random = new Random().nextInt(sum); // a random out of [0 .. sum - 1]
+            int i = 0;
+            for (; i < weights.length && random >= weights[i]; i++, random -= weights[i]) {
+            }
+
+            return i;
         }
 
-        public static <T extends Comparable<T>> BNode<T> of(T item, BNode<T> left, BNode<T> right) {
-            BNode<T> node = new BNode<T>();
-            node.item = item;
-            node.left = left;
-            node.right = right;
-            return node;
+        public static void knuthShuffle(int[] a) {
+            Random random = new Random();
+            for (int i = 0; i < a.length; i++) {
+                int j = i + random.nextInt(a.length - i); // j is between i and length - 1
+                int save = a[j];
+                a[j] = a[i];
+                a[i] = save;
+            }
         }
 
-        @Override
-        public int compareTo(BNode<T> o) {
-            return this.item.compareTo(o.item);
+        public static int rand7() {
+            int rand21;
+            do {
+                rand21 = 5 * (rand5() - 1); // 0, 5, ..., 20.
+                rand21 += rand5(); // 1, 2, ..., 5.
+            } while (rand21 > 21);
+
+            assert rand21 >= 1 && rand21 <= 21;
+            return rand21 % 7 + 1; // 1, 2, ..., 7
         }
 
-        @Override
-        public String toString() {
-            return item.toString();
-        }
-    }
-
-    public static int weighedChoice(int... weights) { // new int[] { 20, 30, 50 }, or 20, 30, 50
-        int sum = 0;
-        for (int i = 0; i < weights.length; i++) {
-            sum += weights[i];
+        public static int rand5() {
+            return new Random().nextInt() % 5 + 1;
         }
 
-        int random = new Random().nextInt(sum); // a random out of [0 .. sum - 1]
-        int i = 0;
-        for (; i < weights.length && random >= weights[i]; i++, random -= weights[i]) {
+        public static void swap(char[] chars, int i, int j) {
+            if (chars[i] != chars[j]) {
+                chars[i] ^= chars[j];
+                chars[j] ^= chars[i];
+                chars[i] ^= chars[j];
+            }
         }
 
-        return i;
-    }
-
-    public static void knuthShuffle(int[] a) {
-        Random random = new Random();
-        for (int i = 0; i < a.length; i++) {
-            int j = i + random.nextInt(a.length - i); // j is between i and length - 1
-            int save = a[j];
-            a[j] = a[i];
-            a[i] = save;
-        }
-    }
-
-    public static int rand7() {
-        int rand21;
-        do {
-            rand21 = 5 * (rand5() - 1); // 0, 5, ..., 20.
-            rand21 += rand5(); // 1, 2, ..., 5.
-        } while (rand21 > 21);
-
-        assert rand21 >= 1 && rand21 <= 21;
-        return rand21 % 7 + 1; // 1, 2, ..., 7
-    }
-
-    public static int rand5() {
-        return new Random().nextInt() % 5 + 1;
-    }
-
-    public static void swap(char[] chars, int i, int j) {
-        if (chars[i] != chars[j]) {
-            chars[i] ^= chars[j];
-            chars[j] ^= chars[i];
-            chars[i] ^= chars[j];
-        }
-    }
-
-    public static void swap(int[] ints, int i, int j) {
-        if (ints[i] != ints[j]) {
-            ints[i] ^= ints[j];
-            ints[j] ^= ints[i];
-            ints[i] ^= ints[j];
+        public static void swap(int[] ints, int i, int j) {
+            if (ints[i] != ints[j]) {
+                ints[i] ^= ints[j];
+                ints[j] ^= ints[i];
+                ints[i] ^= ints[j];
+            }
         }
     }
 }
