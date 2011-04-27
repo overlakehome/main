@@ -121,32 +121,153 @@ public class Oyster2 {
        
        //1. Build123() Solution (Java)
        // Build 123 using three pointer variables. 
+       public void build123a(){
+           root = new Node(2);
+           Node leftChild = new Node(1);
+           Node rightChild = new Node(3);
+           
+           root.left = leftChild;
+           root.right = rightChild;
+       }
        // Build 123 using only one pointer variable. 
+       public void build123b(){
+           root = new Node(2);
+           root.left = new Node(1);
+           root.right = new Node(3);
+       }
        // Build 123 by calling insert() three times. 
+       public void build123c(){
+           root = null;
+           root = insert(root, 2);
+           root = insert(root, 1);
+           root = insert(root, 3);
+       }
        
        //2. size() Solution (Java)
        //Returns the number of nodes in the tree. Uses a recursive helper that recurs down the tree and counts the nodes. 
+       public int size(){
+           return size(root);
+       }
+       
+       private int size(Node root){
+           if(root == null) {
+               return 0;
+           }
+           else {
+               return size(root.left) + 1 + size(root.right);
+           }
+       }
        
        //3. maxDepth() Solution (Java)
        //Returns the max root-to-leaf depth of the tree. Uses a recursive helper that recurs down to find the max depth. 
+       public int maxDepth(){
+           return maxDepth(root);
+       }
+       
+       private int maxDepth(Node root){
+           if (root == null) {
+               return 0;
+           }
+           else {
+               int leftDepth = maxDepth(root.left);
+               int rightDepth = maxDepth(root.right);
+               
+               return 1 + Math.min(leftDepth, rightDepth);
+           }
+       }
        
        //4. minValue() Solution 
        //Returns the min value in a non-empty binary search tree. Uses a helper method that iterates to the left to find the min value.
+       public int minValue(){
+           return minValue(root);
+       }
+       
+       private int minValue(Node root){
+           Node current = root;
+           while (current.left != null){
+               current = current.left;
+           }
+           return current.data;
+       }
        
        //5. printTree() Solution (Java)
        //Prints the node values in the "inorder" order. Uses a recursive helper to do the traversal. 
+       public void printInorder(){
+           printInorder(root);
+           System.out.println();
+       }
+       
+       private void printInorder(Node root){
+           if (root == null) return;
+           printInorder(root.left);
+           System.out.print(root.data);
+           printInorder(root.right);
+       }
        
        //6. printPostorder() Solution (Java)
        //Prints the node values in the "postorder" order.Uses a recursive helper to do the traversal. 
+       public void printPostorder(){
+           printPostorder(root);
+           System.out.println();
+       }
+       
+       private void printPostorder(Node root){
+           if (root == null) return;
+           printPostorder(root.left);
+           printPostorder(root.right);
+           System.out.print(root.data);
+       }
        
        //7. hasPathSum() Solution (Java)
        //Given a tree and a sum, returns true if there is a path from the root 
        //down to a leaf, such that adding up all the values along the path equals the given sum.
        // Strategy: subtract the node value from the sum when recurring down,and check to see if the sum is 0 when you run out of tree. 
+       public boolean hasPathSum(int sum){
+           return hasPathSum(root, sum);
+       }
+       
+       private boolean hasPathSum(Node root, int sum){
+           if (root == null) {
+               return (sum == 0);
+           }
+           sum = sum - root.data;
+           return (hasPathSum(root.left, sum) || hasPathSum(root.right, sum));
+           
+       }
        
        //8. printPaths() Solution (Java)
        //Given a binary tree, prints out all of its root-to-leaf paths, one per line. Uses a recursive helper to do the work. 
+       public void printPaths(){
+           int[] path = new int[1000];
+           printPaths(root, path, 0);
+         }
        
+       private void printPaths(Node root, int[] path, int pathLen){
+           if (root==null) return;
+
+           // append this node to the path array
+           path[pathLen] = root.data;
+           pathLen++;
+
+           // it's a leaf, so print the path that led to here
+           if (root.left==null && root.right==null) {
+             printArray(path, pathLen);
+           }
+           else {
+           // otherwise try both subtrees
+             printPaths(root.left, path, pathLen);
+             printPaths(root.right, path, pathLen);
+           }
+         } 
+       // Utility that prints ints from an array on one line.
+      private void printArray(int[] ints, int len) {
+        int i;
+        for (i=0; i<len; i++) {
+         System.out.print(ints[i] + " ");
+        }
+        System.out.println();
+      } 
+       }
        //more problems at http://cslibrary.stanford.edu/110/BinaryTrees.html
       /** Deletion
        There are three possible cases to consider:
