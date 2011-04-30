@@ -25,7 +25,40 @@ public class Oyster2 {
             public DNode<T> next;
             public DNode<T> prev;
         }
+        
+        public static class BNode<T extends Comparable<T>> implements Comparable<BNode<T>> {
+            public T item;
+            public BNode<T> left;
+            public BNode<T> right;
+            public BNode<T> parent;
+
+            public static <T extends Comparable<T>> BNode<T> of(BNode<T> parent) {
+                BNode<T> node = new BNode<T>();
+                node.parent = parent;
+                return node;
+            }
+
+            public static <T extends Comparable<T>> BNode<T> of(T item, BNode<T> left, BNode<T> right) {
+                BNode<T> node = new BNode<T>();
+                node.item = item;
+                node.left = left;
+                node.right = right;
+                return node;
+            }
+
+            @Override
+            public int compareTo(BNode<T> o) {
+                return this.item.compareTo(o.item);
+            }
+
+            @Override
+            public String toString() {
+                return item.toString();
+            }
+        }
     }
+    
+    
 
     public static class Stacks {
         
@@ -253,75 +286,49 @@ public class Oyster2 {
            if (root.left==null && root.right==null) {
              printArray(path, pathLen);
            }
-           else {
-           // otherwise try both subtrees
-             printPaths(root.left, path, pathLen);
-             printPaths(root.right, path, pathLen);
-           }
-         } 
-       // Utility that prints ints from an array on one line.
-      private void printArray(int[] ints, int len) {
-        int i;
-        for (i=0; i<len; i++) {
-         System.out.print(ints[i] + " ");
+ else {
+                // otherwise try both subtrees
+                printPaths(root.left, path, pathLen);
+                printPaths(root.right, path, pathLen);
+            }
         }
-        System.out.println();
-      } 
-       }
-       //more problems at http://cslibrary.stanford.edu/110/BinaryTrees.html
-      /** Deletion
-       There are three possible cases to consider:
-     // Deleting a leaf (node with no children): Deleting a leaf is easy, as we can simply remove it from the tree.
-     // Deleting a node with one child: Remove the node and replace it with its child.
-     // Deleting a node with two children: Call the node to be deleted N. Do not delete N. 
-     //         Instead, choose either its in-order successor node or its in-order predecessor node, 
-     //         R. Replace the value of N with the value of R, then delete R. */
 
-     /** Traversal
-     // Once the binary search tree has been created, 
-     // its elements can be retrieved in-order by recursively traversing the left subtree of the root node, 
-     // accessing the node itself, then recursively traversing the right subtree of the node, 
-     // continuing this pattern with each node in the tree as it's recursively accessed. 
-     // As with all binary trees, one may conduct a pre-order traversal or a post-order traversal, 
-     // but neither are likely to be useful for binary search trees.  */
-     
-     /** Sort
-     // A binary search tree can be used to implement a simple but efficient sorting algorithm. 
-     // Similar to heapsort, we insert all the values we wish to sort into a new ordered data structure—
-     // in this case a binary search tree—and then traverse it in order, building our result:
-        // Returns true if the given target is in the binary tree. Uses a recursive helper.  */
-
+        // Utility that prints ints from an array on one line.
+        private void printArray(int[] ints, int len) {
+            int i;
+            for (i = 0; i < len; i++) {
+                System.out.print(ints[i] + " ");
+            }
+            System.out.println();
+        }
     }
+    // more problems at http://cslibrary.stanford.edu/110/BinaryTrees.html
+    /**
+     * Deletion There are three possible cases to consider: 
+     * Deleting a leaf (node with no children): Deleting a leaf is easy, as we can simply remove it from the tree. 
+     * Deleting a node with one child: Remove the node and replace it with its child. 
+     * Deleting a node with two children: Call the node to be deleted N. Do not delete N. 
+     * Instead, choose either its in-order successor node or its in-order predecessor node, 
+     * R. Replace the value of N with the value of R, then delete R.
+     */
 
-    public static class BNode<T extends Comparable<T>> implements Comparable<BNode<T>> {
-        public T item;
-        public BNode<T> left;
-        public BNode<T> right;
-        public BNode<T> parent;
+    /**
+     * Traversal Once the binary search tree has been created, 
+     * its elements can be retrieved in-order by recursively traversing the left subtree of the root node, 
+     * accessing the node itself, then recursively traversing the right subtree of the node, 
+     * continuing this pattern with each node in the tree as it's recursively accessed. 
+     * As with all binary trees, one may conduct a pre-order traversal or a post-order traversal, 
+     * but neither are likely to be useful for binary search trees.
+     */
 
-        public static <T extends Comparable<T>> BNode<T> of(BNode<T> parent) {
-            BNode<T> node = new BNode<T>();
-            node.parent = parent;
-            return node;
-        }
+    /**
+     * Sort
+     * A binary search tree can be used to implement a simple but efficient sorting algorithm. 
+     * Similar to heapsort, we insert all the values we wish to sort into a new ordered data structure— 
+     * in this case a binary search tree—and then traverse it in order, building our result: 
+     * Returns true if the given target is in the binary tree. Uses a recursive helper.
+     */
 
-        public static <T extends Comparable<T>> BNode<T> of(T item, BNode<T> left, BNode<T> right) {
-            BNode<T> node = new BNode<T>();
-            node.item = item;
-            node.left = left;
-            node.right = right;
-            return node;
-        }
-
-        @Override
-        public int compareTo(BNode<T> o) {
-            return this.item.compareTo(o.item);
-        }
-
-        @Override
-        public String toString() {
-            return item.toString();
-        }
-        
-    }
 }
+
+
