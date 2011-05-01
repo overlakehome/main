@@ -1137,6 +1137,46 @@ public class Oyster {
             }
         }
 
+        public static void PrintHex(int i){
+            if ( i < 0){
+                System.out.print('-');
+                i = -i;
+            }
+            System.out.print("0x");
+            printHex(i);
+        }
+        
+        public static void printHex(int i){
+            if ( i >= 16){
+                printHex(i/16);
+                printHex(i%16);
+            }
+            else{
+                System.out.print(i < 10 ? (char)((int)'0' + i) :(char)((int)'A' + i - 10));
+            }
+        }
+        
+        public static void PrintHexFast(int i){
+            if ( i < 0){
+                System.out.print('-');
+                i = -i;
+            }
+            System.out.print("0x");
+            Stack<Integer> s = new Stack<Integer>();
+            s.push(i);
+            while(s.size() > 0){
+                i = s.pop();
+                if (i >= 16){
+                    s.push(i % 16);
+                    s.push(i / 16);
+                }
+                else{
+                    System.out.print(i < 10 ? (char)((int)'0' + i) : (char)((int)'A'+ i - 10));
+                }
+            }
+            
+        }
+        
         public static int rand7() {
             int rand21;
             do {
