@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -1163,6 +1164,38 @@ public class Oyster {
                 a[i] = save;
                 System.out.print(a[i]);
             }
+        }
+
+        public static List<Integer> reservoirSamples(Iterator<Integer> iterator, int k) {
+            List<Integer> samples = new ArrayList<Integer>();
+            int count = 0;
+            Random random = new Random();
+            while (iterator.hasNext()) {
+                count++;
+                if (samples.size() < k) {
+                    samples.add(iterator.next());
+                } else {
+                    int s = random.nextInt(count);
+                    if (s < k) {
+                        samples.set(s, iterator.next());
+                    }
+                }
+            }
+
+            return samples;
+        }
+
+        public static List<Integer> sampleKOutOfN(int n, int k) {
+            List<Integer> samples = new ArrayList<Integer>();
+            Random random = new Random();
+            while (samples.size() < k) {
+                int x = random.nextInt(n);
+                if (!samples.contains(x)) {
+                    samples.add(x);
+                }
+            }
+
+            return samples;
         }
 
         public static void PrintHex(int i){
