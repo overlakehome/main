@@ -96,6 +96,17 @@ public class TestOyster {
     }
 
     @Test
+    public void testFindReplace() {
+        assertEquals("hi", Oyster.ARRAYS.FindReplace("Hello", "Hello", "hi"));
+        assertEquals("Hello", Oyster.ARRAYS.FindReplace("Hello", "hello", "hi"));
+        assertEquals(" Hello", Oyster.ARRAYS.FindReplace(" Hello", "hello", "hi"));
+        assertEquals("hihi", Oyster.ARRAYS.FindReplace("HelloHello", "Hello", "hi"));
+        assertEquals("hi hi", Oyster.ARRAYS.FindReplace("Hello Hello", "Hello", "hi"));
+        assertEquals("Hello", Oyster.ARRAYS.FindReplace("Hello", "HelloHello", "hi"));
+        assertEquals("Hello Hello Hello ", Oyster.ARRAYS.FindReplace("Hi Hi Hi ", "Hi", "Hello"));
+        assertEquals("Hello, My name is Erin Bae, Your name is Aron Bae", Oyster.ARRAYS.FindReplace("Hello, My name is Erin Lee, Your name is Aron Lee", "Lee", "Bae"));
+    }
+    @Test
     public void testDNodeDelete() {
         // Input: null -> 1 -> 1 -> 2 -> 1 -> 1 -> null
         // Output: null -> 2 -> null

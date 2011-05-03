@@ -415,6 +415,33 @@ public class Oyster {
 
             return null;
         }
+        //1-E Find and Replace a string
+        public static String FindReplace(String input, String find, String replace){
+            if (input.length() < find.length()) {
+                return input;
+            }
+            
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < input.length();){
+                if(!StartAt(input, i, find)){
+                    sb.append(input.charAt(i++));
+                }
+                else{
+                    sb.append(replace);
+                    i += find.length();
+                }
+            }
+            return sb.toString();
+        }
+        
+        public static Boolean StartAt(String input, int offset, String find){
+            for (int i = 0; i < find.length(); i++){
+                if (offset + i < input.length() && input.charAt(offset + i) != find.charAt(i)){
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
     public static class LinkedLists {
@@ -1134,6 +1161,7 @@ public class Oyster {
                 int save = a[j];
                 a[j] = a[i];
                 a[i] = save;
+                System.out.print(a[i]);
             }
         }
 
