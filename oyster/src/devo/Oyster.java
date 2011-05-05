@@ -100,13 +100,14 @@ public class Oyster {
             for (char c : input){
                 if (!set.contains(c)) {
                     set.add(c);
+                    sb.append(c);
                 }
             }
-
+/*
             for (char c : set){
                 sb.append(c);
             }
-
+*/
             return sb.toString().toCharArray();
         }
 
@@ -1189,7 +1190,7 @@ public class Oyster {
             List<Integer> samples = new ArrayList<Integer>();
             Random random = new Random();
             while (samples.size() < k) {
-                int x = random.nextInt(n);
+                int x = random.nextInt(n); // x : 0 ~ n-1
                 if (!samples.contains(x)) {
                     samples.add(x);
                 }
