@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableList;
 import devo.Oyster.ARRAYS;
 import devo.Oyster.LinkedLists.DNode;
 import devo.Oyster.LinkedLists.SNode;
+import devo.Oyster.Mix;
 import devo.Oyster.Recursions;
 import devo.Oyster.Sorting;
 import devo.Oyster.Stacks.MinStack;
@@ -224,6 +225,18 @@ public class TestOyster {
         assertEquals(null, head4.next.next.next.next);
     }
 
+    @Test
+    public void testFindNonRepeated() {
+        assertEquals("a", ARRAYS.findNonRepeated("a"));
+        assertEquals("abc", ARRAYS.findNonRepeated("abc"));
+        assertEquals(" a ", ARRAYS.findNonRepeated(" ab "));
+        assertEquals("", ARRAYS.findNonRepeated("aaabbb"));
+        assertEquals("bd", ARRAYS.findNonRepeated("aabcccd"));
+        assertEquals("", ARRAYS.findNonRepeated("ababab"));
+        assertEquals("Ho,I'JgBa", ARRAYS.findNonRepeated("Hello,I'm Jeongim Bae"));
+
+    }
+    
     /*
      * Positive test cases: 
      * - {1} yields {1}.
@@ -322,5 +335,28 @@ public class TestOyster {
         assertEquals("ABC", Recursions.toExcelColumn(731));
         assertEquals(28, Recursions.fromExcelColumn(Recursions.toExcelColumn(28)));
         assertEquals(731, Recursions.fromExcelColumn(Recursions.toExcelColumn(731)));
+    }
+    
+    @Test
+    public void testReverseInt() {
+        assertEquals(0, Mix.reverseInt(0));
+        assertEquals(1, Mix.reverseInt(1));
+        assertEquals(21, Mix.reverseInt(12));
+        assertEquals(2, Mix.reverseInt(20));
+        assertEquals(321, Mix.reverseInt(123));
+        assertEquals(-321, Mix.reverseInt(-123));
+        assertEquals(-2, Mix.reverseInt(-20));
+
+    }
+    
+    @Test
+    public void testAetAngle() {
+        assertEquals(0, Mix.getAngle(0, 0));
+        assertEquals(90, Mix.getAngle(0, 15));
+        assertEquals(180, Mix.getAngle(0, 30));
+        assertEquals(90, Mix.getAngle(0, 45));
+        assertEquals(180, Mix.getAngle(6, 00));
+        assertEquals(30, Mix.getAngle(1, 00));
+
     }
 }

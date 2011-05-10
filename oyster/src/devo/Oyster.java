@@ -269,6 +269,7 @@ public class Oyster {
         }
 
         // 1-B. Find the modes using a map in Java (also called Dictionary in C#).
+        // modes : the most frequent numbers
         public static List<Integer> findModesUsingMap(int... numbers) {
             // We assert preconditions; arguments according to assumptions (for debug builds).
             assert null != numbers;
@@ -346,7 +347,7 @@ public class Oyster {
                 }
             }
 
-            assert !modes.isEmpty() : modes;
+            // assert !modes.isEmpty() : modes;
             return modes;
         }
 
@@ -368,6 +369,30 @@ public class Oyster {
             }
 
             return output;
+        }
+        
+        // 1 Find all non repeated characters (unique characters)
+        public static String findNonRepeated(String s){
+            Map<Character, Object> map = new HashMap<Character, Object>();
+            Object seenOnce = null;
+            Object seenTwice = null;
+            for (char c : s.toCharArray()){
+                if(map.containsKey(c)){
+                    map.put(c, seenTwice);
+                }
+                else {
+                    map.put(c, seenOnce);
+                }
+            }
+            
+            List<Character> l = new ArrayList<Character>();
+            for (char c : s.toCharArray()){
+                if(map.get(c) == seenOnce){
+                    l.add(c);
+                }
+            }
+            return l.toString();
+            //return Arrays.toString(l.toArray());
         }
 
         // 1-C2. Find a set which sums up to x given integer array using hash set
@@ -1142,6 +1167,22 @@ public class Oyster {
 
 
     public static class Mix {
+        // Find angle between hour and minute
+        public static int getAngle(int hour, int min){
+            int angle = 0;
+            if (hour < 0 || hour > 11){
+                throw new IllegalArgumentException("'hour' should be between 0 ~ 11");
+            }
+            if (min < 0 || min > 59){
+                throw new IllegalArgumentException("'min' should be between 0 ~ 59");
+
+            }
+
+            angle = 360 * hour/12 - 360 * min / 60 ; // (30 * min/60);
+            angle = (angle + 360) % 360 ;
+            return angle > 180 ? angle - 180 : angle;
+        }
+        
         public static int weighedChoice(int... weights) { // new int[] { 20, 30, 50 }, or 20, 30, 50
             int sum = 0;
             for (int i = 0; i < weights.length; i++) {
@@ -1237,6 +1278,15 @@ public class Oyster {
                 }
             }
             
+        }
+        
+        public static int reverseInt(int number){
+            int reverse = 0;
+            while (number != 0 ){
+                reverse = reverse * 10 + number % 10;
+                number = number / 10;
+            }
+            return reverse;
         }
         
         public static int rand7() {
