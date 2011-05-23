@@ -1,4 +1,4 @@
-package com.marakana.yamba6;
+package com.marakana.yamba7;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -58,6 +58,18 @@ public class TimelineActivity extends BaseActivity {
     unregisterReceiver(receiver); 
   }
 
+  // Responsible for fetching data and setting up the list and the adapter
+  private void setupList() { // <5>
+    // Get the data
+    cursor = yamba.getStatusData().getStatusUpdates();
+    startManagingCursor(cursor);
+
+    // Setup Adapter
+    adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO);
+    adapter.setViewBinder(VIEW_BINDER); // <6>
+    listTimeline.setAdapter(adapter);
+  }
+  
   // View binder constant to inject business logic for timestamp to relative
   // time conversion
   static final ViewBinder VIEW_BINDER = new ViewBinder() { 
@@ -75,19 +87,6 @@ public class TimelineActivity extends BaseActivity {
 
   };
   
-  // Responsible for fetching data and setting up the list and the adapter
-  private void setupList() {
-    // Get the data from the database
-    YambaApplication yamba = (YambaApplication) super.getApplication();
-    this.cursor = yamba.getStatusData().getStatusUpdates();
-    startManagingCursor(this.cursor);
-
-    // Setup the adapter
-    adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO);
-    adapter.setViewBinder(VIEW_BINDER); 
-
-    listTimeline.setAdapter(adapter); 
-  }
 
   // Receiver to wake up when UpdaterService gets a new status
   // It refreshes the timeline list by requerying the cursor

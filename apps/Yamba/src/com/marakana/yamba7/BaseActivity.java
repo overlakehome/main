@@ -1,4 +1,4 @@
-package com.marakana.yamba6;
+package com.marakana.yamba7;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,25 +11,25 @@ import android.widget.Toast;
  * The base activity with common features shared by TimelineActivity and
  * StatusActivity
  */
-public class BaseActivity extends Activity { // <1>
-  YambaApplication yamba; // <2>
+public class BaseActivity extends Activity {
+  YambaApplication yamba;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    yamba = (YambaApplication) getApplication(); // <3>
+    yamba = (YambaApplication) getApplication();
   }
 
   // Called only once first time menu is clicked on
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) { // <4>
+  public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu, menu);
     return true;
   }
 
   // Called every time user clicks on a menu item
   @Override
-  public boolean onOptionsItemSelected(MenuItem item) { // <5>
+  public boolean onOptionsItemSelected(MenuItem item) {
 
     switch (item.getItemId()) {
     case R.id.itemPrefs:
@@ -47,7 +47,7 @@ public class BaseActivity extends Activity { // <1>
       ((YambaApplication) getApplication()).getStatusData().delete();
       Toast.makeText(this, R.string.msgAllDataPurged, Toast.LENGTH_LONG).show();
       // Let the world know status has changed - Timeline cares
-      sendBroadcast( new Intent(UpdaterService.NEW_STATUS_INTENT) );
+      sendBroadcast(new Intent(UpdaterService.NEW_STATUS_INTENT));
       break;
     case R.id.itemTimeline:
       startActivity(new Intent(this, TimelineActivity.class).addFlags(
@@ -64,12 +64,12 @@ public class BaseActivity extends Activity { // <1>
 
   // Called every time menu is opened
   @Override
-  public boolean onMenuOpened(int featureId, Menu menu) { // <6>
-    MenuItem toggleItem = menu.findItem(R.id.itemToggleService); // <7>
-    if (yamba.isServiceRunning()) { // <8>
+  public boolean onMenuOpened(int featureId, Menu menu) {
+    MenuItem toggleItem = menu.findItem(R.id.itemToggleService);
+    if (yamba.isServiceRunning()) {
       toggleItem.setTitle(R.string.titleServiceStop);
       toggleItem.setIcon(android.R.drawable.ic_media_pause);
-    } else { // <9>
+    } else {
       toggleItem.setTitle(R.string.titleServiceStart);
       toggleItem.setIcon(android.R.drawable.ic_media_play);
     }

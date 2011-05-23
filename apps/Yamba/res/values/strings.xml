@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">Yamba 6</string>
-  <string name="titleYamba">Yamba 6</string>
+  <string name="app_name">Yamba 7</string>
+  <string name="titleYamba">Yamba 7</string>
 
   <string name="hintText">Please enter your 140-character status</string>
   <string name="buttonUpdate">Update</string>
@@ -26,6 +26,8 @@
   <string name="msgAllDataPurged">All data has been purged</string>
   <string name="msgSetupPrefs">Please enter your username, password and server to
     use</string>
+  <string name="msgLastTimelineUpdate">Yamba Widget</string>
+
 
   <string name="send_timeline_notifications_permission_label">Sends Timeline Notifications</string>
   <string name="send_timeline_notifications_permission_description">Allow this application to send timeline

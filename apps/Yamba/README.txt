@@ -1,1 +1,1 @@
-Corresponds to Chapter 11 - Broadcast Receivers
+Corresponds to Chapter 12 - Content Providers

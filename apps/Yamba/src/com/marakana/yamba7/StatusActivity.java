@@ -1,4 +1,4 @@
-package com.marakana.yamba6;
+package com.marakana.yamba7;
 
 import winterwell.jtwitter.Twitter;
 import android.graphics.Color;
@@ -51,8 +51,7 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
     @Override
     protected String doInBackground(String... statuses) {
       try {
-        Twitter.Status status = ((YambaApplication) getApplication())
-            .getTwitter().updateStatus(statuses[0]);
+        Twitter.Status status = yamba.getTwitter().updateStatus(statuses[0]);
         return status.text;
       } catch (RuntimeException e) {
         Log.e(TAG, "Failed to connect to twitter service", e);

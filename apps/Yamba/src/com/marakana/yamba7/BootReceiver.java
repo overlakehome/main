@@ -1,4 +1,4 @@
-package com.marakana.yamba6;
+package com.marakana.yamba7;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

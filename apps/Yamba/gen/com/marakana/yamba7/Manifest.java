@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.marakana.yamba6;
+package com.marakana.yamba7;
 
 public final class Manifest {
     public static final class permission {

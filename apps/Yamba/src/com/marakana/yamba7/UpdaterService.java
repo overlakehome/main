@@ -1,5 +1,4 @@
-package com.marakana.yamba6;
-
+package com.marakana.yamba7;
 
 import android.app.Service;
 import android.content.Intent;
@@ -23,7 +22,7 @@ public class UpdaterService extends Service {
   @Override
   public void onCreate() {
     super.onCreate();
-    
+
     this.updater = new Updater();
 
     Log.d(TAG, "onCreated");
@@ -58,6 +57,7 @@ public class UpdaterService extends Service {
    */
   private class Updater extends Thread {
     static final String RECEIVE_TIMELINE_NOTIFICATIONS = "com.marakana.yamba.RECEIVE_TIMELINE_NOTIFICATIONS";
+
     Intent intent;
 
     public Updater() {
@@ -77,7 +77,8 @@ public class UpdaterService extends Service {
             Log.d(TAG, "We have a new status");
             intent = new Intent(NEW_STATUS_INTENT);
             intent.putExtra(NEW_STATUS_EXTRA_COUNT, newUpdates);
-            updaterService.sendBroadcast(intent, RECEIVE_TIMELINE_NOTIFICATIONS);
+            updaterService
+                .sendBroadcast(intent, RECEIVE_TIMELINE_NOTIFICATIONS);
           }
           Thread.sleep(DELAY);
         } catch (InterruptedException e) {

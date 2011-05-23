@@ -1,4 +1,4 @@
-package com.marakana.yamba6;
+package com.marakana.yamba7;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,9 +10,9 @@ import android.util.Log;
 public class StatusData {
   private static final String TAG = StatusData.class.getSimpleName();
 
-  private static final int VERSION = 1;
-  private static final String DATABASE = "timeline.db";
-  private static final String TABLE = "timeline";
+  static final int VERSION = 1;
+  static final String DATABASE = "timeline.db";
+  static final String TABLE = "timeline";
 
   public static final String C_ID = "_id";
   public static final String C_CREATED_AT = "created_at";
@@ -26,7 +26,8 @@ public class StatusData {
 
   private static final String[] DB_TEXT_COLUMNS = { C_TEXT };
 
-  private class DbHelper extends SQLiteOpenHelper {
+  // DbHelper implementations
+  class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
       super(context, DATABASE, null, VERSION);
@@ -46,7 +47,7 @@ public class StatusData {
     }
   }
 
-  private final DbHelper dbHelper;
+  final DbHelper dbHelper;
 
   public StatusData(Context context) {
     this.dbHelper = new DbHelper(context);
@@ -120,5 +121,7 @@ public class StatusData {
     // Close Database
     db.close();
   }
+
+
 
 }
