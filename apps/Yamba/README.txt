@@ -1,1 +1,1 @@
-Corresponds to Chapter 10 - Lists and Adapters
+Corresponds to Chapter 11 - Broadcast Receivers

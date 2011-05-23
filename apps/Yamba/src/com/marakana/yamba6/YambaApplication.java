@@ -1,4 +1,4 @@
-package com.marakana.yamba5;
+package com.marakana.yamba6;
 
 import java.util.List;
 
@@ -12,13 +12,14 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-public class YambaApplication extends Application implements OnSharedPreferenceChangeListener {
+public class YambaApplication extends Application implements
+    OnSharedPreferenceChangeListener {
   private static final String TAG = YambaApplication.class.getSimpleName();
-  public Twitter twitter; 
+  public Twitter twitter;
   private SharedPreferences prefs;
-  private boolean serviceRunning;
   private StatusData statusData;
-
+  private boolean serviceRunning;
+  private boolean inTimeline;
 
   @Override
   public void onCreate() {
@@ -26,54 +27,32 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
     this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
     this.prefs.registerOnSharedPreferenceChangeListener(this);
     this.statusData = new StatusData(this);
-    Log.i(TAG, "onCreated");
+    Log.i(TAG, "Application started");
   }
 
-  @Override
-  public void onTerminate() {
-    super.onTerminate();
-    Log.i(TAG, "onTerminated");
-  }
-  
-  // Returns the Twitter object
-  public synchronized Twitter getTwitter() { 
+  public synchronized Twitter getTwitter() {
     if (this.twitter == null) {
       String username = this.prefs.getString("username", null);
       String password = this.prefs.getString("password", null);
-      String apiRoot = prefs.getString("apiRoot", "http://yamba.marakana.com/api");
+      String url = this.prefs.getString("url", "http://yamba.marakana.com/api");
       if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)
-          && !TextUtils.isEmpty(apiRoot)) {
+          && !TextUtils.isEmpty(url)) {
         this.twitter = new Twitter(username, password);
-        this.twitter.setAPIRootUrl(apiRoot);
+        this.twitter.setAPIRootUrl(url);
       }
     }
     return this.twitter;
   }
 
-  // Part of being OnSharedPreferenceChangeListener
-  public synchronized void onSharedPreferenceChanged( 
-      SharedPreferences sharedPreferences, String key) {
-    this.twitter = null;
-  }
-  
-  public boolean isServiceRunning() {
-    return serviceRunning;
-  }
+  public boolean startOnBoot() {
+    return this.prefs.getBoolean("startOnBoot", false);
 
-  public void setServiceRunning(boolean serviceRunning) {
-    this.serviceRunning = serviceRunning;
   }
 
   public StatusData getStatusData() {
     return statusData;
   }
-  
-  public SharedPreferences getPrefs() {
-    return prefs;
-  }
 
-  // Connects to the online service and puts the latest statuses into DB.
-  // Returns the count of new statuses
   public synchronized int fetchStatusUpdates() {
     Log.d(TAG, "Fetching status updates");
     Twitter twitter = this.getTwitter();
@@ -108,5 +87,31 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
     }
   }
 
+  public synchronized void onSharedPreferenceChanged(
+      SharedPreferences sharedPreferences, String key) {
+    this.twitter = null;
+  }
 
+  public boolean isServiceRunning() {
+    return serviceRunning;
+  }
+
+  public void setServiceRunning(boolean serviceRunning) {
+    this.serviceRunning = serviceRunning;
+  }
+
+  public boolean isInTimeline() {
+    return inTimeline;
+  }
+
+  public void setInTimeline(boolean inTimeline) {
+    this.inTimeline = inTimeline;
+  }
+
+  @Override
+  public void onTerminate() {
+    super.onTerminate();
+    this.statusData.close();
+    Log.i(TAG, "Application terminated");
+  }
 }

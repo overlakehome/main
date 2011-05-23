@@ -1,4 +1,4 @@
-package com.marakana.yamba5;
+package com.marakana.yamba6;
 
 import winterwell.jtwitter.Twitter;
 import android.graphics.Color;

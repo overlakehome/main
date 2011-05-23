@@ -1,4 +1,4 @@
-package com.marakana.yamba5;
+package com.marakana.yamba6;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -46,6 +46,8 @@ public class BaseActivity extends Activity { // <1>
     case R.id.itemPurge:
       ((YambaApplication) getApplication()).getStatusData().delete();
       Toast.makeText(this, R.string.msgAllDataPurged, Toast.LENGTH_LONG).show();
+      // Let the world know status has changed - Timeline cares
+      sendBroadcast( new Intent(UpdaterService.NEW_STATUS_INTENT) );
       break;
     case R.id.itemTimeline:
       startActivity(new Intent(this, TimelineActivity.class).addFlags(

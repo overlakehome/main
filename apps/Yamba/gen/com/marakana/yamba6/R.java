@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.marakana.yamba5;
+package com.marakana.yamba6;
 
 public final class R {
     public static final class attr {
@@ -51,7 +51,11 @@ public final class R {
         public static final int msgSetupPrefs=0x7f050014;
         public static final int msgStatusUpdateFailed=0x7f050011;
         public static final int msgStatusUpdatedSuccessfully=0x7f050010;
-        public static final int sql1=0x7f050015;
+        public static final int receive_timeline_notifications_permission_description=0x7f050018;
+        public static final int receive_timeline_notifications_permission_label=0x7f050017;
+        public static final int send_timeline_notifications_permission_description=0x7f050016;
+        public static final int send_timeline_notifications_permission_label=0x7f050015;
+        public static final int sql1=0x7f050019;
         public static final int summaryApiRoot=0x7f05000f;
         public static final int summaryPassword=0x7f05000e;
         public static final int summaryUsername=0x7f05000d;

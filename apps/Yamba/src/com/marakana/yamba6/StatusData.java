@@ -1,4 +1,4 @@
-package com.marakana.yamba5;
+package com.marakana.yamba6;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,9 +10,9 @@ import android.util.Log;
 public class StatusData {
   private static final String TAG = StatusData.class.getSimpleName();
 
-  static final int VERSION = 1;
-  static final String DATABASE = "timeline.db";
-  static final String TABLE = "timeline";
+  private static final int VERSION = 1;
+  private static final String DATABASE = "timeline.db";
+  private static final String TABLE = "timeline";
 
   public static final String C_ID = "_id";
   public static final String C_CREATED_AT = "created_at";
@@ -26,8 +26,7 @@ public class StatusData {
 
   private static final String[] DB_TEXT_COLUMNS = { C_TEXT };
 
-  // DbHelper implementations
-  class DbHelper extends SQLiteOpenHelper {
+  private class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
       super(context, DATABASE, null, VERSION);
@@ -63,7 +62,7 @@ public class StatusData {
     SQLiteDatabase db = this.dbHelper.getWritableDatabase();
     try {
       db.insertWithOnConflict(TABLE, null, values,
-          SQLiteDatabase.CONFLICT_IGNORE); 
+          SQLiteDatabase.CONFLICT_IGNORE);
     } finally {
       db.close();
     }
@@ -71,17 +70,13 @@ public class StatusData {
 
   /**
    * 
-   * @return Cursor where the columns are _id, created_at, user, txt
+   * @return Cursor where the columns are going to be id, created_at, user, txt
    */
   public Cursor getStatusUpdates() {
     SQLiteDatabase db = this.dbHelper.getReadableDatabase();
     return db.query(TABLE, null, null, null, null, null, GET_ALL_ORDER_BY);
   }
 
-  /**
-   * 
-   * @return Timestamp of the latest status we ahve it the database
-   */
   public long getLatestStatusCreatedAtTime() {
     SQLiteDatabase db = this.dbHelper.getReadableDatabase();
     try {
@@ -97,11 +92,6 @@ public class StatusData {
     }
   }
 
-  /**
-   * 
-   * @param id of the status we are looking for
-   * @return Text of the status
-   */
   public String getStatusTextById(long id) {
     SQLiteDatabase db = this.dbHelper.getReadableDatabase();
     try {
@@ -130,7 +120,5 @@ public class StatusData {
     // Close Database
     db.close();
   }
-
-
 
 }
