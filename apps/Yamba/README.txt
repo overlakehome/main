@@ -1,1 +1,1 @@
-Corresponds to Chapter 06 - Android User Interface
+Corresponds to Chapter 07 - Preferences

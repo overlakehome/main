@@ -1,14 +1,21 @@
-package com.marakana.yamba1;
+package com.marakana.yamba2;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,12 +24,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class StatusActivity extends Activity implements OnClickListener,
-    TextWatcher { // <1>
+    TextWatcher, OnSharedPreferenceChangeListener { // <1>
   private static final String TAG = "StatusActivity";
   EditText editText;
   Button updateButton;
+  TextView textCount;
   Twitter twitter;
-  TextView textCount; // <2>
+  SharedPreferences prefs;
 
   /** Called when the activity is first created. */
   @Override
@@ -35,13 +43,15 @@ public class StatusActivity extends Activity implements OnClickListener,
     updateButton = (Button) findViewById(R.id.buttonUpdate);
     updateButton.setOnClickListener(this);
 
-    textCount = (TextView) findViewById(R.id.textCount); // <3>
-    textCount.setText(Integer.toString(140)); // <4>
-    textCount.setTextColor(Color.GREEN); // <5>
-    editText.addTextChangedListener(this); // <6>
+    textCount = (TextView) findViewById(R.id.textCount);
+    textCount.setText(Integer.toString(140));
+    textCount.setTextColor(Color.GREEN);
+    editText.addTextChangedListener(this);
 
-    twitter = new Twitter("student", "password");
-    twitter.setAPIRootUrl("http://yamba.marakana.com/api");
+    // Setup preferences
+    prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    prefs.registerOnSharedPreferenceChangeListener(this);
+
   }
 
   // Called when button is clicked
@@ -51,13 +61,33 @@ public class StatusActivity extends Activity implements OnClickListener,
     Log.d(TAG, "onClicked");
   }
 
+  // Called first time user clicks on the menu button
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater(); // <1>
+    inflater.inflate(R.menu.menu, menu); // <2>
+    return true; // <3>
+  }
+
+  // Called when an options item is clicked
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) { // <1>
+    case R.id.itemPrefs:
+      startActivity(new Intent(this, PrefsActivity.class)); // <2>
+      break;
+    }
+
+    return true; // <3>
+  }
+
   // Asynchronously posts to twitter
   class PostToTwitter extends AsyncTask<String, Integer, String> {
     // Called to initiate the background activity
     @Override
     protected String doInBackground(String... statuses) {
       try {
-        Twitter.Status status = twitter.updateStatus(statuses[0]);
+        Twitter.Status status = getTwitter().updateStatus(statuses[0]);
         return status.text;
       } catch (TwitterException e) {
         Log.e(TAG, e.toString());
@@ -81,20 +111,39 @@ public class StatusActivity extends Activity implements OnClickListener,
   }
 
   // TextWatcher methods
-  public void afterTextChanged(Editable statusText) { // <7>
-    int count = 140 - statusText.length(); // <8>
+  public void afterTextChanged(Editable statusText) {
+    int count = 140 - statusText.length();
     textCount.setText(Integer.toString(count));
-    textCount.setTextColor(Color.GREEN); // <9>
+    textCount.setTextColor(Color.GREEN);
     if (count < 10)
       textCount.setTextColor(Color.YELLOW);
     if (count < 0)
       textCount.setTextColor(Color.RED);
   }
 
-  public void beforeTextChanged(CharSequence s, int start, int count, int after) { // <10>
+  public void beforeTextChanged(CharSequence s, int start, int count, int after) {
   }
 
-  public void onTextChanged(CharSequence s, int start, int before, int count) { // <11>
+  public void onTextChanged(CharSequence s, int start, int before, int count) {
+  }
+
+  private Twitter getTwitter() {
+    if (twitter == null) {
+      String username, password, apiRoot;
+      username = prefs.getString("username", "");
+      password = prefs.getString("password", "");
+      apiRoot = prefs.getString("apiRoot", "http://yamba.marakana.com/api");
+
+      // Connect to twitter service
+      twitter = new Twitter(username, password);
+      twitter.setAPIRootUrl(apiRoot);
+    }
+    return twitter;
+  }
+
+  public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+    // invalidate twitter object
+    twitter = null;
   }
 
 }
