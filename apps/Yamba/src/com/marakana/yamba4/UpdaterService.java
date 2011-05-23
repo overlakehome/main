@@ -1,20 +1,17 @@
-package com.marakana.yamba3;
+package com.marakana.yamba4;
 
-import java.util.List;
-import winterwell.jtwitter.Twitter;
-import winterwell.jtwitter.TwitterException;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
 public class UpdaterService extends Service {
+  public static final String NEW_STATUS_INTENT = "com.marakana.yamba.NEW_STATUS";
+  public static final String NEW_STATUS_EXTRA_COUNT = "NEW_STATUS_EXTRA_COUNT";
   private static final String TAG = "UpdaterService";
-
-  static final int DELAY = 60000; // wait a minute
+  static final int DELAY = 60000; // a minute
   private boolean runFlag = false;
   private Updater updater;
-  private YambaApplication yamba; // <1>
 
   @Override
   public IBinder onBind(Intent intent) {
@@ -24,22 +21,22 @@ public class UpdaterService extends Service {
   @Override
   public void onCreate() {
     super.onCreate();
-    this.yamba = (YambaApplication) getApplication(); // <2>
+    
     this.updater = new Updater();
 
     Log.d(TAG, "onCreated");
   }
 
   @Override
-  public int onStartCommand(Intent intent, int flags, int startId) {
-    super.onStartCommand(intent, flags, startId);
+  public int onStartCommand(Intent intent, int flag, int startId) {
+    if (!runFlag) {
+      this.runFlag = true;
+      this.updater.start();
+      ((YambaApplication) super.getApplication()).setServiceRunning(true);
 
-    this.runFlag = true;
-    this.updater.start();
-    this.yamba.setServiceRunning(true); // <3>
-
-    Log.d(TAG, "onStarted");
-    return START_STICKY;
+      Log.d(TAG, "onStarted");
+    }
+    return Service.START_STICKY;
   }
 
   @Override
@@ -49,7 +46,7 @@ public class UpdaterService extends Service {
     this.runFlag = false;
     this.updater.interrupt();
     this.updater = null;
-    this.yamba.setServiceRunning(false); // <4>
+    ((YambaApplication) super.getApplication()).setServiceRunning(false);
 
     Log.d(TAG, "onDestroyed");
   }
@@ -58,7 +55,6 @@ public class UpdaterService extends Service {
    * Thread that performs the actual update from the online service
    */
   private class Updater extends Thread {
-    List<Twitter.Status> timeline; // <5>
 
     public Updater() {
       super("UpdaterService-Updater");
@@ -68,21 +64,14 @@ public class UpdaterService extends Service {
     public void run() {
       UpdaterService updaterService = UpdaterService.this;
       while (updaterService.runFlag) {
-        Log.d(TAG, "Updater running");
+        Log.d(TAG, "Running background thread");
         try {
-          // Get the timeline from the cloud
-          try {
-            timeline = yamba.getTwitter().getFriendsTimeline(); // <6>
-          } catch (TwitterException e) {
-            Log.e(TAG, "Failed to connect to twitter service", e);  // <7>
+          YambaApplication yamba = (YambaApplication) updaterService
+              .getApplication();
+          int newUpdates = yamba.fetchStatusUpdates();
+          if (newUpdates > 0) {
+            Log.d(TAG, "We have a new status");
           }
-
-          // Loop over the timeline and print it out
-          for (Twitter.Status status : timeline) { // <8>
-            Log.d(TAG, String.format("%s: %s", status.user.name, status.text)); // <9>
-          }
-
-          Log.d(TAG, "Updater ran");
           Thread.sleep(DELAY);
         } catch (InterruptedException e) {
           updaterService.runFlag = false;

@@ -1,4 +1,4 @@
-package com.marakana.yamba3;
+package com.marakana.yamba4;
 
 import winterwell.jtwitter.Twitter;
 import android.app.Activity;
@@ -22,6 +22,7 @@ import android.widget.Toast;
 public class StatusActivity extends Activity implements OnClickListener,
     TextWatcher {
   private static final String TAG = "StatusActivity";
+  YambaApplication yamba;
   EditText editText;
   Button updateButton;
   TextView textCount;
@@ -31,6 +32,8 @@ public class StatusActivity extends Activity implements OnClickListener,
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.status);
+
+    yamba = (YambaApplication) getApplication();
 
     // Find views
     editText = (EditText) findViewById(R.id.editText);
@@ -82,12 +85,11 @@ public class StatusActivity extends Activity implements OnClickListener,
     @Override
     protected String doInBackground(String... statuses) {
       try {
-        YambaApplication yamba = ((YambaApplication) getApplication());
         Twitter.Status status = yamba.getTwitter().updateStatus(statuses[0]);
         return status.text;
-      } catch (Exception e) {
+      } catch (RuntimeException e) {
         Log.e(TAG, "Failed to connect to twitter service", e);
-        return "Failed to post - check Preferences";
+        return "Failed to post";
       }
     }
 
