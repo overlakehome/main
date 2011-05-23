@@ -1,17 +1,12 @@
-package com.marakana.yamba4;
+package com.marakana.yamba5;
 
 import winterwell.jtwitter.Twitter;
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,10 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class StatusActivity extends Activity implements OnClickListener,
+public class StatusActivity extends BaseActivity implements OnClickListener,
     TextWatcher {
   private static final String TAG = "StatusActivity";
-  YambaApplication yamba;
   EditText editText;
   Button updateButton;
   TextView textCount;
@@ -32,8 +26,6 @@ public class StatusActivity extends Activity implements OnClickListener,
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.status);
-
-    yamba = (YambaApplication) getApplication();
 
     // Find views
     editText = (EditText) findViewById(R.id.editText);
@@ -53,39 +45,14 @@ public class StatusActivity extends Activity implements OnClickListener,
     Log.d(TAG, "onClicked");
   }
 
-  // Called first time user clicks on the menu button
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.menu, menu);
-    return true;
-  }
-
-  // Called when an options item is clicked
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-    case R.id.itemServiceStart:
-      startService(new Intent(this, UpdaterService.class));
-      break;
-    case R.id.itemServiceStop:
-      stopService(new Intent(this, UpdaterService.class));
-      break;
-    case R.id.itemPrefs:
-      startActivity(new Intent(this, PrefsActivity.class));
-      break;
-    }
-
-    return true;
-  }
-
   // Asynchronously posts to twitter
   class PostToTwitter extends AsyncTask<String, Integer, String> {
     // Called to initiate the background activity
     @Override
     protected String doInBackground(String... statuses) {
       try {
-        Twitter.Status status = yamba.getTwitter().updateStatus(statuses[0]);
+        Twitter.Status status = ((YambaApplication) getApplication())
+            .getTwitter().updateStatus(statuses[0]);
         return status.text;
       } catch (RuntimeException e) {
         Log.e(TAG, "Failed to connect to twitter service", e);

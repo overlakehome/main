@@ -1,4 +1,4 @@
-package com.marakana.yamba4;
+package com.marakana.yamba5;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class StatusData { // <1>
+public class StatusData {
   private static final String TAG = StatusData.class.getSimpleName();
 
   static final int VERSION = 1;
@@ -47,25 +47,25 @@ public class StatusData { // <1>
     }
   }
 
-  private final DbHelper dbHelper; // <2>
+  private final DbHelper dbHelper;
 
-  public StatusData(Context context) {  // <3>
+  public StatusData(Context context) {
     this.dbHelper = new DbHelper(context);
     Log.i(TAG, "Initialized data");
   }
 
-  public void close() { // <4>
+  public void close() {
     this.dbHelper.close();
   }
 
-  public void insertOrIgnore(ContentValues values) {  // <5>
+  public void insertOrIgnore(ContentValues values) {
     Log.d(TAG, "insertOrIgnore on " + values);
-    SQLiteDatabase db = this.dbHelper.getWritableDatabase();  // <6>
+    SQLiteDatabase db = this.dbHelper.getWritableDatabase();
     try {
       db.insertWithOnConflict(TABLE, null, values,
-          SQLiteDatabase.CONFLICT_IGNORE);  // <7>
+          SQLiteDatabase.CONFLICT_IGNORE); 
     } finally {
-      db.close(); // <8>
+      db.close();
     }
   }
 
@@ -73,7 +73,7 @@ public class StatusData { // <1>
    * 
    * @return Cursor where the columns are _id, created_at, user, txt
    */
-  public Cursor getStatusUpdates() {  // <9>
+  public Cursor getStatusUpdates() {
     SQLiteDatabase db = this.dbHelper.getReadableDatabase();
     return db.query(TABLE, null, null, null, null, null, GET_ALL_ORDER_BY);
   }
@@ -82,7 +82,7 @@ public class StatusData { // <1>
    * 
    * @return Timestamp of the latest status we ahve it the database
    */
-  public long getLatestStatusCreatedAtTime() {  // <10>
+  public long getLatestStatusCreatedAtTime() {
     SQLiteDatabase db = this.dbHelper.getReadableDatabase();
     try {
       Cursor cursor = db.query(TABLE, MAX_CREATED_AT_COLUMNS, null, null, null,
@@ -102,7 +102,7 @@ public class StatusData { // <1>
    * @param id of the status we are looking for
    * @return Text of the status
    */
-  public String getStatusTextById(long id) {  // <11>
+  public String getStatusTextById(long id) {
     SQLiteDatabase db = this.dbHelper.getReadableDatabase();
     try {
       Cursor cursor = db.query(TABLE, DB_TEXT_COLUMNS, C_ID + "=" + id, null,
@@ -116,6 +116,21 @@ public class StatusData { // <1>
       db.close();
     }
   }
+  
+  /**
+   * Deletes ALL the data
+   */
+  public void delete() {
+    // Open Database
+    SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+    // Delete the data
+    db.delete(TABLE, null, null);
+
+    // Close Database
+    db.close();
+  }
+
 
 
 }

@@ -1,1 +1,1 @@
-Corresponds to Chapter 09 - Databases
+Corresponds to Chapter 10 - Lists and Adapters
