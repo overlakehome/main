@@ -1,4 +1,4 @@
-package com.marakana.yamba7;
+package com.marakana.yamba8;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,12 +36,8 @@ public class BaseActivity extends Activity {
       startActivity(new Intent(this, PrefsActivity.class)
           .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
       break;
-    case R.id.itemToggleService:
-      if (yamba.isServiceRunning()) {
-        stopService(new Intent(this, UpdaterService.class));
-      } else {
-        startService(new Intent(this, UpdaterService.class));
-      }
+    case R.id.itemRefresh:
+      startService(new Intent(this, UpdaterService.class));
       break;
     case R.id.itemPurge:
       ((YambaApplication) getApplication()).getStatusData().delete();
@@ -62,18 +58,18 @@ public class BaseActivity extends Activity {
     return true;
   }
 
-  // Called every time menu is opened
-  @Override
-  public boolean onMenuOpened(int featureId, Menu menu) {
-    MenuItem toggleItem = menu.findItem(R.id.itemToggleService);
-    if (yamba.isServiceRunning()) {
-      toggleItem.setTitle(R.string.titleServiceStop);
-      toggleItem.setIcon(android.R.drawable.ic_media_pause);
-    } else {
-      toggleItem.setTitle(R.string.titleServiceStart);
-      toggleItem.setIcon(android.R.drawable.ic_media_play);
-    }
-    return true;
-  }
+  // // Called every time menu is opened
+  // @Override
+  // public boolean onMenuOpened(int featureId, Menu menu) {
+  // MenuItem toggleItem = menu.findItem(R.id.itemToggleService);
+  // if (yamba.isServiceRunning()) {
+  // toggleItem.setTitle(R.string.titleServiceStop);
+  // toggleItem.setIcon(android.R.drawable.ic_media_pause);
+  // } else {
+  // toggleItem.setTitle(R.string.titleServiceStart);
+  // toggleItem.setIcon(android.R.drawable.ic_media_play);
+  // }
+  // return true;
+  // }
 
 }

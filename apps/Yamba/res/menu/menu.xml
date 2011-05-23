@@ -9,8 +9,6 @@
     android:icon="@android:drawable/ic_menu_preferences"></item>
   <item android:icon="@android:drawable/ic_menu_delete"
     android:title="@string/titlePurge" android:id="@+id/itemPurge"></item>
-    
-  <item android:id="@+id/itemToggleService" android:title="@string/titleServiceStart"
-    android:icon="@android:drawable/ic_media_play"></item>
-
+  <item android:title="@string/titleRefresh" android:id="@+id/itemRefresh"
+    android:icon="@android:drawable/ic_menu_rotate"></item>
 </menu>

@@ -1,4 +1,4 @@
-package com.marakana.yamba7;
+package com.marakana.yamba8;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -1,7 +1,10 @@
-package com.marakana.yamba7;
+package com.marakana.yamba8;
 
 import winterwell.jtwitter.Twitter;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,11 +18,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class StatusActivity extends BaseActivity implements OnClickListener,
-    TextWatcher {
+    TextWatcher, LocationListener { // <1>
   private static final String TAG = "StatusActivity";
+  private static final long LOCATION_MIN_TIME = 3600000; // One hour
+  private static final float LOCATION_MIN_DISTANCE = 1000; // One kilometer
   EditText editText;
   Button updateButton;
   TextView textCount;
+  LocationManager locationManager; // <2>
+  Location location;
+  String provider;
 
   /** Called when the activity is first created. */
   @Override
@@ -38,6 +46,32 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
     editText.addTextChangedListener(this);
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    // Setup location information
+    provider = yamba.getProvider(); // <3>
+    if (!YambaApplication.LOCATION_PROVIDER_NONE.equals(provider)) { // <4>
+      locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); // <5>
+    }
+    if (locationManager != null) {
+      location = locationManager.getLastKnownLocation(provider); // <6>
+      locationManager.requestLocationUpdates(provider, LOCATION_MIN_TIME,
+          LOCATION_MIN_DISTANCE, this); // <7>
+    }
+
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+
+    if (locationManager != null) {
+      locationManager.removeUpdates(this);  // <8>
+    }
+  }
+
   // Called when button is clicked
   public void onClick(View v) {
     String status = editText.getText().toString();
@@ -51,6 +85,11 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
     @Override
     protected String doInBackground(String... statuses) {
       try {
+        // Check if we have the location
+        if (location != null) { // <9>
+          double latlong[] = {location.getLatitude(), location.getLongitude()};
+          yamba.getTwitter().setMyLocation(latlong);
+        }
         Twitter.Status status = yamba.getTwitter().updateStatus(statuses[0]);
         return status.text;
       } catch (RuntimeException e) {
@@ -81,6 +120,25 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
   }
 
   public void onTextChanged(CharSequence s, int start, int before, int count) {
+  }
+
+  // LocationListener methods
+  public void onLocationChanged(Location location) { // <10>
+    this.location = location;
+  }
+
+  public void onProviderDisabled(String provider) { // <11>
+    if (this.provider.equals(provider))
+      locationManager.removeUpdates(this);
+  }
+
+  public void onProviderEnabled(String provider) { // <12>
+    if (this.provider.equals(provider))
+      locationManager.requestLocationUpdates(this.provider, LOCATION_MIN_TIME,
+          LOCATION_MIN_DISTANCE, this);
+  }
+
+  public void onStatusChanged(String provider, int status, Bundle extras) { // <13>
   }
 
 }

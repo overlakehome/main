@@ -1,4 +1,4 @@
-package com.marakana.yamba7;
+package com.marakana.yamba8;
 
 import java.util.List;
 
@@ -15,6 +15,8 @@ import android.util.Log;
 public class YambaApplication extends Application implements
     OnSharedPreferenceChangeListener {
   private static final String TAG = YambaApplication.class.getSimpleName();
+  public static final String LOCATION_PROVIDER_NONE = "NONE";
+  public static final long INTERVAL_NEVER = 0;
   public Twitter twitter;
   private SharedPreferences prefs;
   private StatusData statusData;
@@ -34,7 +36,8 @@ public class YambaApplication extends Application implements
     if (this.twitter == null) {
       String username = this.prefs.getString("username", null);
       String password = this.prefs.getString("password", null);
-      String url = this.prefs.getString("url", "http://yamba.marakana.com/api");
+      String url = this.prefs.getString("url",
+          "http://yamba.marakana.com/api");
       if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)
           && !TextUtils.isEmpty(url)) {
         this.twitter = new Twitter(username, password);
@@ -46,7 +49,6 @@ public class YambaApplication extends Application implements
 
   public boolean startOnBoot() {
     return this.prefs.getBoolean("startOnBoot", false);
-
   }
 
   public StatusData getStatusData() {
@@ -81,7 +83,7 @@ public class YambaApplication extends Application implements
       Log.d(TAG, count > 0 ? "Got " + count + " status updates"
           : "No new status updates");
       return count;
-    } catch (RuntimeException e) {
+    } catch (Exception e) {
       Log.e(TAG, "Failed to fetch status updates", e);
       return 0;
     }
@@ -106,6 +108,15 @@ public class YambaApplication extends Application implements
 
   public void setInTimeline(boolean inTimeline) {
     this.inTimeline = inTimeline;
+  }
+
+  public String getProvider() {
+    return prefs.getString("provider", LOCATION_PROVIDER_NONE);
+  }
+
+  public long getInterval() {
+    // For some reason storing interval as long doesn't work
+    return Long.parseLong(prefs.getString("interval", "0"));
   }
 
   @Override

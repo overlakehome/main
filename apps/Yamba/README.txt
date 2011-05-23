@@ -1,1 +1,1 @@
-Corresponds to Chapter 12 - Content Providers
+Corresponds to Chapter 13 - System Services

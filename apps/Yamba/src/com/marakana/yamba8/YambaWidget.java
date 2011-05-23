@@ -1,4 +1,4 @@
-package com.marakana.yamba7;
+package com.marakana.yamba8;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -25,7 +25,6 @@ public class YambaWidget extends AppWidgetProvider { // <1>
         CharSequence createdAt = DateUtils.getRelativeTimeSpanString(context, c
             .getLong(c.getColumnIndex(StatusData.C_CREATED_AT)));
         CharSequence message = c.getString(c.getColumnIndex(StatusData.C_TEXT));
-
         // Loop through all instances of this widget
         for (int appWidgetId : appWidgetIds) { // <6>
           Log.d(TAG, "Updating widget " + appWidgetId);

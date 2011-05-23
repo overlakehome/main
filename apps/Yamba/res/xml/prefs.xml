@@ -7,4 +7,11 @@
     android:key="password"></EditTextPreference>
   <EditTextPreference android:title="@string/titleApiRoot"
     android:summary="@string/summaryApiRoot" android:key="apiRoot"></EditTextPreference>
+  <ListPreference android:title="@string/titleProvider"
+    android:summary="@string/summaryProvider" android:key="provider"
+    android:entryValues="@array/providerValues" android:entries="@array/providers" />
+  <!-- <1> -->
+  <ListPreference android:entryValues="@array/intervalValues"
+    android:summary="@string/summaryUpdaterInterval" android:title="@string/titleUpdaterInterval"
+    android:entries="@array/interval" android:key="interval"></ListPreference>
 </PreferenceScreen>

@@ -1,4 +1,4 @@
-package com.marakana.yamba7;
+package com.marakana.yamba8;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -12,7 +12,7 @@ public class StatusProvider extends ContentProvider {
   private static final String TAG = StatusProvider.class.getSimpleName();
 
   public static final Uri CONTENT_URI = Uri
-      .parse("content://com.marakana.yamba7.statusprovider");
+      .parse("content://com.marakana.yamba8.statusprovider");
   public static final String SINGLE_RECORD_MIME_TYPE = "vnd.android.cursor.item/vnd.marakana.yamba.status";
   public static final String MULTIPLE_RECORDS_MIME_TYPE = "vnd.android.cursor.dir/vnd.marakana.yamba.status";
 
