@@ -1,1 +1,1 @@
-Corresponds to Chapter 07 - Preferences
+Corresponds to Chapter 08 - Services

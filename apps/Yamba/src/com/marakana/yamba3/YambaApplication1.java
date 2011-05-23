@@ -1,4 +1,4 @@
-package com.marakana.yamba2;
+package com.marakana.yamba3;
 
 import winterwell.jtwitter.Twitter;
 import android.app.Application;
@@ -8,9 +8,9 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-public class YambaApplication extends Application implements
+public class YambaApplication1 extends Application implements
     OnSharedPreferenceChangeListener { // <1>
-  private static final String TAG = YambaApplication.class.getSimpleName();
+  private static final String TAG = YambaApplication1.class.getSimpleName();
   public Twitter twitter; // <2>
   private SharedPreferences prefs;
 
@@ -30,8 +30,8 @@ public class YambaApplication extends Application implements
 
   public synchronized Twitter getTwitter() { // <5>
     if (this.twitter == null) {
-      String username = this.prefs.getString("username", null);
-      String password = this.prefs.getString("password", null);
+      String username = this.prefs.getString("username", "");
+      String password = this.prefs.getString("password", "");
       String apiRoot = prefs.getString("apiRoot",
           "http://yamba.marakana.com/api");
       if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)
