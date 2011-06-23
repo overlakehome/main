@@ -13,7 +13,7 @@ public class Main extends Activity {
         TextView tv = (TextView)findViewById(R.id.textView1);
         Place[] places;
         try {
-            places = Places.findNearby(0, 0, "query", 0, 0);
+            places = Places.Foursquare.findNearby(47.59755, -122.32775, null, 50, 50);
             tv.setText(places[0].getName());
         } catch (Exception e) {
             tv.setText(e.toString());
