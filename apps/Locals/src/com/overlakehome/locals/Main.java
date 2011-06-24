@@ -8,10 +8,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class Main extends Activity {
+public class Main extends Activity implements LocationListener {
     private TextView locals01;
     private TextView locals02;
-    private LocationManager locmgr = null;
+    private LocationManager locationManager = null;
     private LocationListener locationListener;
     double lat = 47.59755;
     double lng = -122.32775;
@@ -24,10 +24,15 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         locals01 = (TextView)findViewById(R.id.locals01);
-        
-        locmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener();
-        locmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener); 
+
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (null != location) {
+            onLocationChanged(location);
+        }
+
         try {
             places = Places.Foursquare.findNearby(lat, lng, null, 50, 50);
             locals01.setText(places[0].getName());
@@ -36,34 +41,29 @@ public class Main extends Activity {
         }
     }
 
-    public class MyLocationListener implements LocationListener 
-    {
-       public void onLocationChanged(Location loc) {
-           lat = loc.getLatitude();
-           lng = loc.getLongitude();
-           locals02 = (TextView)findViewById(R.id.locals01);
-           try {
-               places = Places.Foursquare.findNearby(lat, lng, null, 50, 50);
-               locals02.setText(places[1].getName());
-           } catch (Exception e) {
-               locals02.setText(e.toString());
-           }
+    // https://sites.google.com/site/androidhowto/how-to-1/using-the-gps
+    @Override
+    public void onLocationChanged(Location location) {
+        lat = location.getLatitude();
+        lng = location.getLongitude();
+        locals02 = (TextView)findViewById(R.id.locals01);
+        try {
+            places = Places.Foursquare.findNearby(lat, lng, null, 50, 50);
+            locals02.setText(places[1].getName());
+        } catch (Exception e) {
+            locals02.setText(e.toString());
         }
+    }
 
-        @Override
-        public void onProviderDisabled(String provider) {
-            // TODO Auto-generated method stub
-        }
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
 
-        @Override
-        public void onProviderEnabled(String provider) {
-            // TODO Auto-generated method stub
-        }
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
 
-        @Override
-        public void onStatusChanged(String provider, int status, 
-            Bundle extras) {
-            // TODO Auto-generated method stub
-        }
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 }
