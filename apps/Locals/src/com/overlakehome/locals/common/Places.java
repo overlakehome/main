@@ -1,4 +1,4 @@
-package com.overlakehome.locals;
+package com.overlakehome.locals.common;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class Places {
     public static class Foursquare {
         private final static String FOURSQUARE_PLACES_SEARCH_URL = "https://api.foursquare.com/v2/venues/search?";
-        private final static String FOURSQUARE_PLACES_TRENDING_URL = "https://api.foursquare.com/v2/venues/trending?";
+     // private final static String FOURSQUARE_PLACES_TRENDING_URL = "https://api.foursquare.com/v2/venues/trending?";
 
         private static DefaultHttpClient client = null;
 
@@ -116,11 +116,11 @@ public class Places {
         }
     }
 
-    public static class Gowalla {
-        private final static String GOWALLA_API_KEY = "fa574894bddc43aa96c556eb457b4009";
-        private final static String GOWALLA_PLACES_SEARCH_URL = "https://api.gowalla.com/spots?";
-
-        private final static int GOWALLA_FOOD = 7; // Food
-        private final static int GOWALLA_THEATRE = 103; // Theatre
-    }
+//    public static class Gowalla {
+//        private final static String GOWALLA_API_KEY = "fa574894bddc43aa96c556eb457b4009";
+//        private final static String GOWALLA_PLACES_SEARCH_URL = "https://api.gowalla.com/spots?";
+//
+//        private final static int GOWALLA_FOOD = 7; // Food
+//        private final static int GOWALLA_THEATRE = 103; // Theatre
+//    }
 }

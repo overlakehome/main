@@ -14,6 +14,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.overlakehome.locals.common.Place;
+import com.overlakehome.locals.common.Places;
+
 public class HotPlacesActivity extends ListActivity implements LocationListener{
 
     private LocationManager locationManager = null;
@@ -38,7 +41,7 @@ public class HotPlacesActivity extends ListActivity implements LocationListener{
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
-        
+
         setListAdapter(new ArrayAdapter<String>(this, R.layout.hotplacesactivity, hotplacelist));
 
         ListView lv = getListView();
@@ -54,7 +57,6 @@ public class HotPlacesActivity extends ListActivity implements LocationListener{
 
     @Override
     public void onLocationChanged(Location location) {
-
     }
 
     @Override

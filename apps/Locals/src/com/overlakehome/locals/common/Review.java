@@ -1,4 +1,4 @@
-package com.overlakehome.locals;
+package com.overlakehome.locals.common;
 
 import java.util.Date;
 

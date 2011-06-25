@@ -1,4 +1,4 @@
-package com.overlakehome.locals;
+package com.overlakehome.locals.common;
 
 public class Place {
     private final Source source;

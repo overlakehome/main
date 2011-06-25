@@ -8,6 +8,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.overlakehome.locals.common.Place;
+import com.overlakehome.locals.common.Places;
+
 public class PlacesActivity extends Activity implements LocationListener {
     
     private TextView locals01;
