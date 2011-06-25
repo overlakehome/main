@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class HotPlacesActivity extends Activity {
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        TextView textview = new TextView(this);
-        textview.setText("This is the Hot places tab");
-        setContentView(textview);
-
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		TextView textview = new TextView(this);
+		textview.setText("This is the HotPlaces tab");
+		setContentView(textview);
+	}
 }

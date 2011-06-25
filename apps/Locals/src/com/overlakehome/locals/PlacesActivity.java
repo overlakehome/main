@@ -8,27 +8,22 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class PlacesActivity extends Activity { // implements LocationListener{
+public class PlacesActivity extends Activity implements LocationListener {
+    
     private TextView locals01;
     private TextView locals02;
     private LocationManager locationManager = null;
     private double lat = 47.59755;
     private double lng = -122.32775;
     private Place[] places;
-    
+
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        TextView textview = new TextView(this);
-        textview.setText("This is the Artists tab");
-        setContentView(textview);
-    }
-
-        /*
         setContentView(R.layout.placesactivity);
-
         locals01 = (TextView)findViewById(R.id.locals01);
-
+        
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
@@ -44,7 +39,6 @@ public class PlacesActivity extends Activity { // implements LocationListener{
             locals01.setText(e.toString());
         }
     }
-
     // https://sites.google.com/site/androidhowto/how-to-1/using-the-gps
     @Override
     public void onLocationChanged(Location location) {
@@ -70,5 +64,4 @@ public class PlacesActivity extends Activity { // implements LocationListener{
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
-    */
 }
