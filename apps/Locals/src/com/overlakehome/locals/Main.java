@@ -1,69 +1,55 @@
 package com.overlakehome.locals;
 
-import android.app.Activity;
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.app.TabActivity;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.TabHost;
 
-public class Main extends Activity implements LocationListener {
-    private TextView locals01;
-    private TextView locals02;
-    private LocationManager locationManager = null;
-    private LocationListener locationListener;
-    double lat = 47.59755;
-    double lng = -122.32775;
-    //private double lat = 47.59755;
-    //private double lng = -122.32775;
-    private Place[] places;
 
-    @Override
+public class Main extends TabActivity {
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        locals01 = (TextView)findViewById(R.id.locals01);
 
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        Resources res = getResources(); // Resource object to get Drawables
+        TabHost tabHost = getTabHost();  // The activity TabHost
+        TabHost.TabSpec spec;  // Resusable TabSpec for each tab
+        Intent intent;  // Reusable Intent for each tab
 
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (null != location) {
-            onLocationChanged(location);
-        }
+        // Create an Intent to launch an Activity for the tab (to be reused)
+        intent = new Intent().setClass(this, PlacesActivity.class);
 
-        try {
-            places = Places.Foursquare.findNearby(lat, lng, null, 50, 50);
-            locals01.setText(places[0].getName());
-        } catch (Exception e) {
-            locals01.setText(e.toString());
-        }
+        // Initialize a TabSpec for each tab and add it to the TabHost
+        spec = tabHost.newTabSpec("places").setIndicator("Places",
+                          res.getDrawable(R.drawable.ic_tab_places))
+                      .setContent(intent);
+        tabHost.addTab(spec);
+
+        // Do the same for the other tabs
+        intent = new Intent().setClass(this, DealsActivity.class);
+        spec = tabHost.newTabSpec("deals").setIndicator("Deals",
+                          res.getDrawable(R.drawable.ic_tab_deals))
+                      .setContent(intent);
+        tabHost.addTab(spec);
+
+        intent = new Intent().setClass(this, HotPlacesActivity.class);
+        spec = tabHost.newTabSpec("hotplaces").setIndicator("HotPlaces",
+                          res.getDrawable(R.drawable.ic_tab_hotplaces))
+                      .setContent(intent);
+        tabHost.addTab(spec);
+
+        tabHost.setCurrentTab(2);
+    
+/*
+        intent = new Intent().setClass(this, BookmarksActivity.class);
+        spec = tabHost.newTabSpec("bookmarks").setIndicator("Bookmarks",
+                          res.getDrawable(R.drawable.ic_tab_bookmarks))
+                      .setContent(intent);
+        tabHost.addTab(spec);
+        
+        tabHost.setCurrentTab(0);*/
     }
 
-    // https://sites.google.com/site/androidhowto/how-to-1/using-the-gps
-    @Override
-    public void onLocationChanged(Location location) {
-        lat = location.getLatitude();
-        lng = location.getLongitude();
-        locals02 = (TextView)findViewById(R.id.locals01);
-        try {
-            places = Places.Foursquare.findNearby(lat, lng, null, 50, 50);
-            locals02.setText(places[1].getName());
-        } catch (Exception e) {
-            locals02.setText(e.toString());
-        }
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
 }

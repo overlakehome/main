@@ -5,11 +5,19 @@
       android:versionName="1.0">
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".Main"
-                  android:label="@string/app_name">
+        <activity android:name=".PlacesActivity"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".TabView"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
     </application>
