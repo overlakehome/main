@@ -31,7 +31,7 @@ public final class R {
     }
     public static final class layout {
         public static final int hotplacesactivity=0x7f030000;
-        public static final int mainactivity=0x7f030001;
+        public static final int mainlayout=0x7f030001;
         public static final int placesactivity=0x7f030002;
     }
     public static final class string {
