@@ -28,7 +28,7 @@ public class PlacesActivity extends Activity implements LocationListener {
         locals01 = (TextView)findViewById(R.id.locals01);
         
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
 
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (null != location) {

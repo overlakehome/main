@@ -29,7 +29,7 @@ public class HotPlacesActivity extends ListActivity implements LocationListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
 
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
