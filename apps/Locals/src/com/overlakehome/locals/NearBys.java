@@ -1,30 +1,41 @@
 package com.overlakehome.locals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.location.Location;
 
 import com.overlakehome.locals.common.Place;
 import com.overlakehome.locals.common.Places;
 
 public class NearBys {
+    private static Map<String, String> map = new HashMap<String, String>();
+
     private static NearBys nearBys = new NearBys();
-    private Place[] places = null;
-    private Location location;
+    private Place[] places;
+    private Location base;
+
+    static {
+        map.put("4Square/XXX/YYYY", "Food");
+        map.put("4Square/XXX/ZZZZ", "Food");
+        map.put("Gowalla/XXX/YYYY", "Food");
+    }
 
     public static NearBys getInstance() {
         return nearBys;
     }
 
     public void setLocation(Location location) {
-        this.location = location;
+        this.base = location;
     }
 
     public Location getLocation() {
-        return location;
+        return base;
     }
 
     public void findNearBys() {
         try {
-            Place[] places = Places.Foursquare.findNearby(location.getLatitude(), location.getLongitude(), null, 100, 50);
+            Place[] places = Places.Foursquare.findNearby(base.getLatitude(), base.getLongitude(), null, 100, 50);
             if (null != places && places.length > 0) {
                 this.places = places;
             }
@@ -39,8 +50,8 @@ public class NearBys {
     private double distanceTo(double latitude, double longitude) {
         double pk = (180/3.14169);
 
-        double a1 = location.getLatitude() / pk;
-        double a2 = location.getLongitude() / pk;
+        double a1 = base.getLatitude() / pk;
+        double a2 = base.getLongitude() / pk;
         double b1 = latitude / pk;
         double b2 = longitude / pk;
 
