@@ -11,13 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.overlakehome.locals.common.Place;
-import com.overlakehome.locals.common.Places;
 
 public class HotPlacesActivity extends ListActivity {
-
-    private Place[] places;
-    private double lat = 47.59755;
-    private double lng = -122.32775;
     private String[] hotplacelist = new String[20];
 
     @Override
@@ -25,7 +20,8 @@ public class HotPlacesActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         try {
-            places = Places.Foursquare.findNearby(lat, lng, null, 50, 50);
+            Place[] places = NearBys.getInstance().getPlaces();
+            Place[] hotPlacesSortedByCheckins = null;
             for (int i = 0; i < 20; i++) {
                 hotplacelist[i] = places[i].getName();
                 // Address = places[i].getAddress();

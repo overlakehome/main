@@ -1,8 +1,5 @@
 package com.overlakehome.locals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.location.Location;
 
 import com.overlakehome.locals.common.Place;
@@ -10,15 +7,11 @@ import com.overlakehome.locals.common.Places;
 
 public class NearBys {
     private static NearBys nearBys = new NearBys();
-    private List<Place> places = new ArrayList<Place>();
+    private Place[] places = null;
     private Location location;
 
     public static NearBys getInstance() {
         return nearBys;
-    }
-
-    public List<Place> getPlaces() {
-        return places;
     }
 
     public void setLocation(Location location) {
@@ -33,10 +26,7 @@ public class NearBys {
         try {
             Place[] places = Places.Foursquare.findNearby(location.getLatitude(), location.getLongitude(), null, 100, 50);
             if (null != places && places.length > 0) {
-                this.places.clear();
-                for (Place place : places) {
-                    this.places.add(place);
-                }
+                this.places = places;
             }
         } catch (Exception e) { // TODO: get right exception handling.
         }
@@ -60,6 +50,10 @@ public class NearBys {
         double tt = Math.acos(t1 + t2 + t3);
        
         return 3963167*tt;
+    }
+
+    public Place[] getPlaces() {
+        return places;
     }
 
 }
