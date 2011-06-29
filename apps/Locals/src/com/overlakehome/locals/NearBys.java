@@ -9,16 +9,20 @@ import com.overlakehome.locals.common.Place;
 import com.overlakehome.locals.common.Places;
 
 public class NearBys {
-    private static Map<String, String> map = new HashMap<String, String>();
+    public static enum XXXType {
+        Food, Entertainment, Park;
+    }
+
+    private static Map<String, XXXType> map = new HashMap<String, XXXType>();
 
     private static NearBys nearBys = new NearBys();
     private Place[] places;
     private Location base;
 
     static {
-        map.put("4Square/XXX/YYYY", "Food");
-        map.put("4Square/XXX/ZZZZ", "Food");
-        map.put("Gowalla/XXX/YYYY", "Food");
+        map.put("4Square/XXX/YYYY", XXXType.Food); // XXXX, YYYY
+        map.put("4Square/XXX/ZZZZ", XXXType.Entertainment);
+        map.put("Gowalla/XXX/YYYY", XXXType.Park);
     }
 
     public static NearBys getInstance() {
