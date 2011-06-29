@@ -37,8 +37,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.deals_row_view, null);
             holder = new ViewHolder();
             holder.txtName = (TextView) convertView.findViewById(R.id.name);
-            holder.txtCityState = (TextView) convertView.findViewById(R.id.cityState);
-            holder.txtPhone = (TextView) convertView.findViewById(R.id.phone);
+            holder.txtAdress = (TextView) convertView.findViewById(R.id.address);
+            holder.txtDistance = (TextView) convertView.findViewById(R.id.distance);
             holder.Icon = (ImageView) convertView.findViewById(R.id.categoryicon);
             convertView.setTag(holder);
         } else {
@@ -46,8 +46,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         }
 
         holder.txtName.setText(searchArrayList.get(position).getName());
-        holder.txtCityState.setText(searchArrayList.get(position).getCityState());
-        holder.txtPhone.setText(searchArrayList.get(position).getPhone());
+        holder.txtAdress.setText(searchArrayList.get(position).getAddress());
+        holder.txtDistance.setText(searchArrayList.get(position).getDistance());
         holder.Icon.setImageResource((Integer)searchArrayList.get(position).getCategoryIcon());
 
         return convertView;
@@ -55,8 +55,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView txtName;
-        TextView txtCityState;
-        TextView txtPhone;
+        TextView txtAdress;
+        TextView txtDistance;
         ImageView Icon;
     }
 }

@@ -2,8 +2,8 @@ package com.overlakehome.locals;
 
 public class SearchResults {
     private String name = "";
-    private String cityState = "";
-    private String phone = "";
+    private String address = "";
+    private String distance = "";
     private int categoryIcon = 1;
 
     public void setName(String name) {
@@ -14,20 +14,20 @@ public class SearchResults {
      return name;
     }
 
-    public void setCityState(String cityState) {
-     this.cityState = cityState;
+    public void setAddress(String address) {
+     this.address = address;
     }
 
-    public String getCityState() {
-     return cityState;
+    public String getAddress() {
+     return address;
     }
 
-    public void setPhone(String phone) {
-     this.phone = phone;
+    public void setDistance(String distance) {
+     this.distance = distance;
     }
 
-    public String getPhone() {
-     return phone;
+    public String getDistance() {
+     return distance;
     }
 
     public void setCategoryIcon(int categoryIcon) {
