@@ -1,11 +1,9 @@
 package com.overlakehome.locals;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,19 +16,11 @@ import android.widget.Toast;
 
 import com.overlakehome.locals.common.Place;
 
-public class TrendsActivity extends ListActivity {
+public class TrendsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        List<Place> places = new ArrayList<Place>();
-//        Collections.addAll(places, NearBys.getInstance().getPlaces());
-//        Collections.sort(places, new Comparator<Place>() {
-//            @Override
-//            public int compare(Place lhs, Place rhs) {
-//                return rhs.getCheckins() - lhs.getCheckins();
-//            }
-//        });
+        setContentView(R.layout.places);
 
         Place[] places = NearBys.getInstance().getPlaces();
         Arrays.sort(places, new Comparator<Place>() {
@@ -45,9 +35,8 @@ public class TrendsActivity extends ListActivity {
             placeNames[i] = String.format("%s (%d checkins)", places[i].getName(), places[i].getCheckins());
         }
 
-        setListAdapter(new ArrayAdapter<String>(this, R.layout.trends, placeNames));
-
-        ListView lv = getListView();
+        ListView lv = (ListView)findViewById(R.id.trendsListView);
+//        lv.setAdapter(new ArrayAdapter<String>(this, R.id.trendsListView, placeNames));
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
