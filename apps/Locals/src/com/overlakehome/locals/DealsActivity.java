@@ -71,7 +71,7 @@ public class DealsActivity extends Activity {
             tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
-            tag.tv3.setText(Double.toString(NearBys.toDistance(places[position])));
+            tag.tv3.setText(Double.toString(NearBys.toDistance(places[position]))); // String.format("42.22 miles", ...);
             return view;
         }
 

@@ -2,6 +2,7 @@ package com.overlakehome.locals.common;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -19,6 +20,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Places {
+    public static final Comparator<Place> ORDER_BY_CHECKINS_DESC = new Comparator<Place>() {
+        @Override
+        public int compare(Place lhs, Place rhs) {
+            return rhs.getCheckins() - lhs.getCheckins();
+        }
+    };
+
     public static class Foursquare {
         private final static String FOURSQUARE_PLACES_SEARCH_URL = "https://api.foursquare.com/v2/venues/search?";
      // private final static String FOURSQUARE_PLACES_TRENDING_URL = "https://api.foursquare.com/v2/venues/trending?";

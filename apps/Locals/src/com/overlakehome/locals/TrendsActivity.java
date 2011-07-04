@@ -1,7 +1,6 @@
 package com.overlakehome.locals;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,28 +13,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.overlakehome.locals.common.Place;
+import com.overlakehome.locals.common.Places;
 
 public class TrendsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.trends);
+
         Place[] places = NearBys.getInstance().getPlaces();
-        Arrays.sort(places, new Comparator<Place>() {
-            @Override
-            public int compare(Place lhs, Place rhs) {
-                return rhs.getCheckins() - lhs.getCheckins();
-            }
-        });
+        Arrays.sort(places, Places.ORDER_BY_CHECKINS_DESC);
 
         String[] placeNames = new String[Math.max(20, places.length)];
         for (int i = 0; i < placeNames.length; i++) {
             placeNames[i] = String.format("%s (%d checkins)", places[i].getName(), places[i].getCheckins());
         }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.trends);
-
         try {
-            ListView lv = (ListView) findViewById(R.id.trendsListView1);
+            ListView lv = (ListView)findViewById(R.id.trendsListView1);
             lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, placeNames));
             lv.setTextFilterEnabled(true);
             lv.setOnItemClickListener(new OnItemClickListener() {
