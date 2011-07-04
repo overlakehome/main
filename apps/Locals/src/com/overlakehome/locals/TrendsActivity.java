@@ -34,16 +34,16 @@ public class TrendsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trends);
 
-        ListView lv = (ListView)findViewById(R.id.trendsListView1);
         try {
-          lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, placeNames));
-          lv.setTextFilterEnabled(true);
-          lv.setOnItemClickListener(new OnItemClickListener() {
-              @Override
-              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                  Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-              }
-          });
+            ListView lv = (ListView) findViewById(R.id.trendsListView1);
+            lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, placeNames));
+            lv.setTextFilterEnabled(true);
+            lv.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                }
+            });
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
