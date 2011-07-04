@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 public class MainActivity extends TabActivity implements LocationListener {
+    private static final int PLACES_TAB_INDEX = 0;
     private static final Location DENNY_PARK_SEATTLE_WA = new Location(LocationManager.GPS_PROVIDER) {{
         setLatitude(47.6192649);
         setLongitude(-122.3404047);
@@ -20,7 +21,7 @@ public class MainActivity extends TabActivity implements LocationListener {
 
     public void onCreate(Bundle savedInstanceState) {
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this); // TODO: get right minDistance.
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 5, this); // 60 seconds & 5 meters
 
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         onLocationChanged(location != null ? location : DENNY_PARK_SEATTLE_WA);
@@ -28,32 +29,26 @@ public class MainActivity extends TabActivity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        Resources res = getResources(); // Resource object to get Drawables
-        TabHost tabHost = getTabHost(); // The activity TabHost
-        TabHost.TabSpec spec; // Resusable TabSpec for each tab
-        Intent intent; // Reusable Intent for each tab
+        Resources res = getResources();
+        TabHost tabHost = getTabHost();
 
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, PlacesActivity.class);
+        tabHost.addTab(tabHost.newTabSpec("places")
+                .setIndicator("Places", res.getDrawable(R.drawable.ic_tab_places))
+                .setContent(new Intent().setClass(this, PlacesActivity.class)));
 
-        // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("places").setIndicator("Places", res.getDrawable(R.drawable.ic_tab_places)).setContent(intent);
-        tabHost.addTab(spec);
+        tabHost.addTab(tabHost.newTabSpec("deals")
+                .setIndicator("Deals", res.getDrawable(R.drawable.ic_tab_deals))
+                .setContent(new Intent().setClass(this, DealsActivity.class)));
 
-        // Do the same for the other tabs
-        intent = new Intent().setClass(this, DealsActivity.class);
-        spec = tabHost.newTabSpec("deals").setIndicator("Deals", res.getDrawable(R.drawable.ic_tab_deals)).setContent(intent);
-        tabHost.addTab(spec);
+        tabHost.addTab(tabHost.newTabSpec("trends")
+                .setIndicator("Trends", res.getDrawable(R.drawable.ic_tab_places))
+                .setContent(new Intent().setClass(this, HotPlacesActivity.class)));
 
-        intent = new Intent().setClass(this, HotPlacesActivity.class);
-        spec = tabHost.newTabSpec("hotplaces").setIndicator("HotPlaces", res.getDrawable(R.drawable.ic_tab_hotplaces)).setContent(intent);
-        tabHost.addTab(spec);
+        tabHost.addTab(tabHost.newTabSpec("bookmarks")
+                .setIndicator("Bookmarks", res.getDrawable(R.drawable.ic_tab_bookmarks))
+                .setContent(new Intent().setClass(this, BookmarksActivity.class)));
 
-        intent = new Intent().setClass(this, BookmarksActivity.class);
-        spec = tabHost.newTabSpec("bookmarks").setIndicator("Bookmarks", res.getDrawable(R.drawable.ic_tab_bookmarks)).setContent(intent);
-        tabHost.addTab(spec);
-
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(PLACES_TAB_INDEX);
     }
 
     @Override

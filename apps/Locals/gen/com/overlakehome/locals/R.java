@@ -22,12 +22,12 @@ public final class R {
         public static final int ic_tab_deals=0x7f020008;
         public static final int ic_tab_deals_selected=0x7f020009;
         public static final int ic_tab_deals_unselected=0x7f02000a;
-        public static final int ic_tab_hotplaces=0x7f02000b;
-        public static final int ic_tab_hotplaces_selected=0x7f02000c;
-        public static final int ic_tab_hotplaces_unselected=0x7f02000d;
-        public static final int ic_tab_places=0x7f02000e;
-        public static final int ic_tab_places_selected=0x7f02000f;
-        public static final int ic_tab_places_unselected=0x7f020010;
+        public static final int ic_tab_places=0x7f02000b;
+        public static final int ic_tab_places_selected=0x7f02000c;
+        public static final int ic_tab_places_unselected=0x7f02000d;
+        public static final int ic_tab_trends=0x7f02000e;
+        public static final int ic_tab_trends_selected=0x7f02000f;
+        public static final int ic_tab_trends_unselected=0x7f020010;
         public static final int icon=0x7f020011;
     }
     public static final class id {
@@ -44,7 +44,8 @@ public final class R {
         public static final int dealsactivity=0x7f030001;
         public static final int hotplacesactivity=0x7f030002;
         public static final int main=0x7f030003;
-        public static final int placesactivity=0x7f030004;
+        public static final int mainlayout=0x7f030004;
+        public static final int placesactivity=0x7f030005;
     }
     public static final class string {
         public static final int app_name=0x7f040001;
