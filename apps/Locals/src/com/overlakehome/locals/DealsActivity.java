@@ -25,10 +25,8 @@ public class DealsActivity extends Activity {
 
         ListView lv = (ListView)findViewById(R.id.dealsListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
-        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+     // lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE); // TODO: code cleanup
         lv.setTextFilterEnabled(true);
-
-        lv = null; // BUG to kill
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
@@ -64,13 +62,12 @@ public class DealsActivity extends Activity {
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
-            Tag tag;
             if (view == null) {
                 view = inflater.inflate(R.layout.deals_row, null);
                 view.setTag(new Tag(view));
             }
 
-            tag = (Tag)view.getTag();
+            Tag tag = (Tag)view.getTag();
             tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
@@ -79,16 +76,16 @@ public class DealsActivity extends Activity {
         }
 
         private static class Tag {
-            ImageView iv;
-            TextView tv1;
-            TextView tv2;
-            TextView tv3;
+            final ImageView iv;
+            final TextView tv1;
+            final TextView tv2;
+            final TextView tv3;
 
-            public Tag(View convertView) {
-                iv = (ImageView)convertView.findViewById(R.id.image);
-                tv1 = (TextView)convertView.findViewById(R.id.text1);
-                tv2 = (TextView)convertView.findViewById(R.id.text2);
-                tv3 = (TextView)convertView.findViewById(R.id.text3);
+            public Tag(View view) {
+                iv = (ImageView)view.findViewById(R.id.image);
+                tv1 = (TextView)view.findViewById(R.id.text1);
+                tv2 = (TextView)view.findViewById(R.id.text2);
+                tv3 = (TextView)view.findViewById(R.id.text3);
             }
         }
     }
