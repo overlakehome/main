@@ -21,12 +21,13 @@
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content" 
             android:id="@+id/text2" 
-            android:textSize="25dip" 
+            android:textSize="16dip" 
             android:text="This is text2" />
         <TextView 
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content" 
             android:id="@+id/text3" 
+            android:textSize="14dip" 
             android:text="This is text3" />
     </LinearLayout>
 </LinearLayout>

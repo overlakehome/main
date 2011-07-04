@@ -135,12 +135,11 @@ public class Place {
     }
 
     public String getAddress() {
-    	return "";
-//        if (Strings.isNullOrEmpty(streetAddress)) {
-//            return String.format("%s, %s, %s", city, state, country);
-//        } else {
-//            return String.format("%s, %s, %s, %s", streetAddress, city, state, country);
-//        }
+        if (null == streetAddress || 0 == streetAddress.length()) {
+           return String.format("%s, %s, %s", city, state, country);
+        } else {
+            return String.format("%s, %s, %s, %s", streetAddress, city, state, country);
+        }
     }
 
     public String getStressAddress() {
