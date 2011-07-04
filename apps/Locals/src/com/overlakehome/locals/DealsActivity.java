@@ -23,7 +23,7 @@ public class DealsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deals);
 
-        TextView tv = (TextView)findViewById(R.id.placesTextView1);
+        TextView tv = (TextView)findViewById(R.id.dealsTextView1);
         tv.setText("Nearby 14008 NE 63RD CT, Redmond, WA\n(42.333, -122.303)");
 
         ListView lv = (ListView)findViewById(R.id.dealsListView1);
