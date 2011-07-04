@@ -23,8 +23,10 @@ public class PlacesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.places);
 
-        TextView tv = (TextView)findViewById(R.id.placesTextView1);
-        tv.setText("Nearby 14008 NE 63RD CT, Redmond, WA\n(42.333, -122.303)");
+        TextView tv = (TextView)findViewById(R.id.placesNearby);
+        tv.setText("Nearby ");
+        TextView tv2 = (TextView)findViewById(R.id.placesNearbyAddress);
+        tv2.setText(NearBys.getInstance().getPlaces()[0].getAddress());
 
         ListView lv = (ListView)findViewById(R.id.placesListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
