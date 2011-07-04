@@ -69,7 +69,8 @@ public class NearBys {
 
     private static Clazz toClazz(Place place) {
         return place.getClassifiers().length > 0 && map.containsKey(place.getClassifiers()[0])
-            ? map.get(place.getClassifiers()[0]) : Clazz.Other;
+               ? map.get(place.getClassifiers()[0]) 
+               : Clazz.Other;
     }
 
     public static int toDrawableId(Place place) {

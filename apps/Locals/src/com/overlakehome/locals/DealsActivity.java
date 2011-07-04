@@ -23,6 +23,9 @@ public class DealsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deals);
 
+        TextView tv = (TextView)findViewById(R.id.placesTextView1);
+        tv.setText("Nearby 14008 NE 63RD CT, Redmond, WA\n(42.333, -122.303)");
+
         ListView lv = (ListView)findViewById(R.id.dealsListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
         lv.setTextFilterEnabled(true);
