@@ -48,7 +48,7 @@ public class MainActivity extends TabActivity implements LocationListener {
                 .setIndicator("Bookmarks", res.getDrawable(R.drawable.ic_tab_bookmarks))
                 .setContent(new Intent().setClass(this, BookmarksActivity.class)));
 
-        tabHost.setCurrentTab(1);
+        tabHost.setCurrentTab(0);
     }
 
     @Override
