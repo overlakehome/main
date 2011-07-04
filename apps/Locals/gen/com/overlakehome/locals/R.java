@@ -43,7 +43,7 @@ public final class R {
         public static final int deals_row_view=0x7f030000;
         public static final int dealsactivity=0x7f030001;
         public static final int hotplacesactivity=0x7f030002;
-        public static final int mainlayout=0x7f030003;
+        public static final int main=0x7f030003;
         public static final int placesactivity=0x7f030004;
     }
     public static final class string {

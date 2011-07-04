@@ -11,6 +11,11 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 public class MainActivity extends TabActivity implements LocationListener {
+    private static final Location DENNY_PARK_SEATTLE_WA = new Location(LocationManager.GPS_PROVIDER) {{
+        setLatitude(47.6192649);
+        setLongitude(-122.3404047);
+    }};
+
     private LocationManager locationManager = null;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -18,17 +23,10 @@ public class MainActivity extends TabActivity implements LocationListener {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this); // TODO: get right minDistance.
 
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (null != location) {
-            onLocationChanged(location);
-        } else {
-            Location l = new Location(LocationManager.GPS_PROVIDER);
-            l.setLatitude(47.59755);
-            l.setLongitude(-122.32775);
-            onLocationChanged(l);
-        }
+        onLocationChanged(location != null ? location : DENNY_PARK_SEATTLE_WA);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mainlayout);
+        setContentView(R.layout.main);
 
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost(); // The activity TabHost
@@ -77,5 +75,4 @@ public class MainActivity extends TabActivity implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
-
 }
