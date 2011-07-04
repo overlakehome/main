@@ -5,7 +5,7 @@
     android:layout_height="fill_parent">
     <ListView 
         android:text="ListView" 
-        android:id="@+id/trendsListView" 
+        android:id="@+id/trendsListView1" 
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"></ListView>
 </LinearLayout>

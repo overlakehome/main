@@ -37,7 +37,7 @@ public final class R {
         public static final int distance=0x7f050004;
         public static final int name=0x7f050002;
         public static final int textView1=0x7f050005;
-        public static final int trendsListView=0x7f050006;
+        public static final int trendsListView1=0x7f050006;
     }
     public static final class layout {
         public static final int deals=0x7f030000;

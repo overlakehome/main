@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,9 +18,6 @@ import com.overlakehome.locals.common.Place;
 public class TrendsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.places);
-
         Place[] places = NearBys.getInstance().getPlaces();
         Arrays.sort(places, new Comparator<Place>() {
             @Override
@@ -35,14 +31,21 @@ public class TrendsActivity extends Activity {
             placeNames[i] = String.format("%s (%d checkins)", places[i].getName(), places[i].getCheckins());
         }
 
-        ListView lv = (ListView)findViewById(R.id.trendsListView);
-//        lv.setAdapter(new ArrayAdapter<String>(this, R.id.trendsListView, placeNames));
-        lv.setTextFilterEnabled(true);
-        lv.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.trends);
+
+        ListView lv = (ListView)findViewById(R.id.trendsListView1);
+        try {
+          lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, placeNames));
+          lv.setTextFilterEnabled(true);
+          lv.setOnItemClickListener(new OnItemClickListener() {
+              @Override
+              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                  Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+              }
+          });
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
