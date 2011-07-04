@@ -31,21 +31,20 @@ public final class R {
         public static final int icon=0x7f020011;
     }
     public static final class id {
-        public static final int ListView01=0x7f050004;
-        public static final int address=0x7f050002;
-        public static final int categoryicon=0x7f050000;
-        public static final int distance=0x7f050003;
+        public static final int ListView01=0x7f050000;
+        public static final int address=0x7f050003;
+        public static final int categoryicon=0x7f050001;
+        public static final int distance=0x7f050004;
         public static final int locals01=0x7f050005;
         public static final int locals02=0x7f050006;
-        public static final int name=0x7f050001;
+        public static final int name=0x7f050002;
     }
     public static final class layout {
-        public static final int deals_row_view=0x7f030000;
-        public static final int dealsactivity=0x7f030001;
-        public static final int hotplacesactivity=0x7f030002;
-        public static final int main=0x7f030003;
-        public static final int mainlayout=0x7f030004;
-        public static final int placesactivity=0x7f030005;
+        public static final int deals=0x7f030000;
+        public static final int deals_row_view=0x7f030001;
+        public static final int main=0x7f030002;
+        public static final int places=0x7f030003;
+        public static final int trends=0x7f030004;
     }
     public static final class string {
         public static final int app_name=0x7f040001;

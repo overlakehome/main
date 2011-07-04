@@ -36,7 +36,7 @@ public class TrendsActivity extends ListActivity {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
 
-        setListAdapter(new ArrayAdapter<String>(this, R.layout.hotplacesactivity, hotplacelist));
+        setListAdapter(new ArrayAdapter<String>(this, R.layout.trends, hotplacelist));
 
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);

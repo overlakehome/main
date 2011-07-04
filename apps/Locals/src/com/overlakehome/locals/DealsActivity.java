@@ -15,7 +15,7 @@ public class DealsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dealsactivity);
+		setContentView(R.layout.deals);
 
 //Create a custom multi line listview : dealsactivity.java, MyCustomBaseAdapter,SearchResult.java, deals_row_view, dealsactivity.xml
 //http://geekswithblogs.net/bosuch/archive/2011/01/31/android---create-a-custom-multi-line-listview-bound-to-an.aspx
