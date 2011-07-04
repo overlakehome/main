@@ -5,7 +5,7 @@
     android:layout_height="fill_parent">
     <TextView 
         android:text="TextView" 
-        android:id="@+id/locals01" 
+        android:id="@+id/textView1" 
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"></TextView>
 </LinearLayout>
