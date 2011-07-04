@@ -25,12 +25,11 @@ public class DealsActivity extends Activity {
 
         ListView lv = (ListView)findViewById(R.id.dealsListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
-     // lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE); // TODO: code cleanup
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Toast.makeText(DealsActivity.this, "Selected: " + NearBys.getInstance().getPlaces()[position].getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(DealsActivity.this, "Selected " + NearBys.getInstance().getPlaces()[position].getName(), Toast.LENGTH_LONG).show();
             }
         });
     }
