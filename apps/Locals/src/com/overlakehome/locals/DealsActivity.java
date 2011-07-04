@@ -16,7 +16,11 @@ public class DealsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deals);
 
-// Create a custom multi line listview : dealsactivity.java, MyCustomBaseAdapter,SearchResult.java, deals_row_view, dealsactivity.xml
+// Create a custom multi line listview : 
+//        dealsactivity.java, 
+//        MyCustomBaseAdapter,
+//        SearchResult.java, 
+//        deals_row_view, dealsactivity.xml
 //http://geekswithblogs.net/bosuch/archive/2011/01/31/android---create-a-custom-multi-line-listview-bound-to-an.aspx
 //http://devblogs.net/2011/01/04/multicolumn-listview-with-image-icon/  
        
