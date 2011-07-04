@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.maps.GeoPoint;
 import com.overlakehome.locals.common.Place;
 
 public class PlacesActivity extends Activity {
@@ -33,25 +34,8 @@ public class PlacesActivity extends Activity {
         TextView tv = (TextView)findViewById(R.id.placesNearby);
         tv.setText("Nearby ");
         TextView tv2 = (TextView)findViewById(R.id.placesNearbyAddress);
-        Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
-        try {
-            List<Address> addresses = geocoder.getFromLocation(47.6192649, -122.3404047, 1);
-
-            if (addresses != null) {
-                Address returnedAddress = addresses.get(0);
-                StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
-                }
-                tv2.setText(strReturnedAddress.toString());
-            } else {
-                tv2.setText("No Address returned!");
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            tv2.setText("Canont get Address!");
-        }
+        String address = ConvertPointToLocation
+        tv2.setText();
 
         ListView lv = (ListView)findViewById(R.id.placesListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
@@ -63,7 +47,28 @@ public class PlacesActivity extends Activity {
             }
         });
     }
-
+    public String ConvertPointToLocation(GeoPoint point) {   
+        String address = "";
+        Geocoder geoCoder = new Geocoder(
+            getBaseContext(), Locale.getDefault());
+        try {
+          List<Address> addresses = geoCoder.getFromLocation(
+            point.getLatitudeE6()  / 1E6, 
+            point.getLongitudeE6() / 1E6, 1);
+     
+          if (addresses.size() > 0) {
+            for (int index = 0; 
+        index < addresses.get(0).getMaxAddressLineIndex(); index++)
+              address += addresses.get(0).getAddressLine(index) + " ";
+          }
+        }
+        catch (IOException e) {        
+          e.printStackTrace();
+        }   
+        
+        return address;
+      } 
+    
     // Resource: http://devblogs.net/2011/01/04/multicolumn-listview-with-image-icon/
     private static class DealsListAdapter extends BaseAdapter {
         private LayoutInflater inflater;
