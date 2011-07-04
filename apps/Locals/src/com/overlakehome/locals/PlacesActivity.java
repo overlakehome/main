@@ -1,7 +1,14 @@
 package com.overlakehome.locals;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import android.app.Activity;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +33,25 @@ public class PlacesActivity extends Activity {
         TextView tv = (TextView)findViewById(R.id.placesNearby);
         tv.setText("Nearby ");
         TextView tv2 = (TextView)findViewById(R.id.placesNearbyAddress);
-        tv2.setText(NearBys.getInstance().getPlaces()[0].getAddress());
+        Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
+        try {
+            List<Address> addresses = geocoder.getFromLocation(47.6192649, -122.3404047, 1);
+
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                tv2.setText(strReturnedAddress.toString());
+            } else {
+                tv2.setText("No Address returned!");
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            tv2.setText("Canont get Address!");
+        }
 
         ListView lv = (ListView)findViewById(R.id.placesListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
