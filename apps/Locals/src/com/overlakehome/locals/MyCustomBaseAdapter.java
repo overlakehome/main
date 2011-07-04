@@ -1,6 +1,5 @@
 package com.overlakehome.locals;
 
-import java.util.ArrayList;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,20 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MyCustomBaseAdapter extends BaseAdapter {
-    private static ArrayList<SearchResults> searchArrayList;
     private LayoutInflater mInflater;
 
-    public MyCustomBaseAdapter(Context context, ArrayList<SearchResults> results) {
-        searchArrayList = results;
+    public MyCustomBaseAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
     public int getCount() {
-        return searchArrayList.size();
+        return NearBys.getInstance().getPlaces().length;
     }
 
     public Object getItem(int position) {
-        return searchArrayList.get(position);
+        return NearBys.getInstance().getPlaces()[position];
     }
 
     public long getItemId(int position) {
@@ -45,10 +42,13 @@ public class MyCustomBaseAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.txtName.setText(searchArrayList.get(position).getName());
-        holder.txtAdress.setText(searchArrayList.get(position).getAddress());
-        holder.txtDistance.setText(searchArrayList.get(position).getDistance());
-        holder.Icon.setImageResource((Integer)searchArrayList.get(position).getCategoryIcon());
+        
+        holder.txtName.setText(NearBys.getInstance().getPlaces()[0].getName());
+        holder.txtAdress.setText(NearBys.getInstance().getPlaces()[0].getName());
+        holder.txtDistance.setText(NearBys.getInstance().getPlaces()[0].getAddress());
+        NearBys.toClazz(NearBys.getInstance().getPlaces()[0]).getDrawableId();
+        holder.Icon.setImageResource(NearBys.toClazz(NearBys.getInstance().getPlaces()[0]).getDrawableId()); // arts;
+     
 
         return convertView;
     }

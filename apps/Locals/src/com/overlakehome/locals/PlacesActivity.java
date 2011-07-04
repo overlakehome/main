@@ -10,7 +10,6 @@ import com.overlakehome.locals.common.Places;
 public class PlacesActivity extends Activity {
     
     private TextView locals01;
-    private TextView locals02;
     private double lat = 47.59755;
     private double lng = -122.32775;
     private Place[] places;

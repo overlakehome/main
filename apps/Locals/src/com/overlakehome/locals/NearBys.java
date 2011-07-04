@@ -9,20 +9,40 @@ import com.overlakehome.locals.common.Place;
 import com.overlakehome.locals.common.Places;
 
 public class NearBys {
-    public static enum XXXType {
-        Food, Entertainment, Park;
+    public static enum Clazz {
+        Food(R.drawable.ic_categ_arts),
+        Nightlife(R.drawable.ic_categ_nightlife), 
+        Shopping(R.drawable.ic_categ_shopping), 
+        Entertainment(R.drawable.ic_categ_nightlife), 
+        Travel(R.drawable.ic_categ_shopping), 
+        Other(R.drawable.ic_categ_shopping);
+
+        private final int drawableId;
+
+        Clazz(int drawableId) {
+            this.drawableId = drawableId;
+        }
+
+        public int getDrawableId() {
+            return this.drawableId;
+        }
     }
 
-    private static Map<String, XXXType> map = new HashMap<String, XXXType>();
+    private static Map<String, Clazz> map = new HashMap<String, Clazz>();
 
     private static NearBys nearBys = new NearBys();
     private Place[] places;
     private Location base;
 
     static {
-        map.put("4Square/XXX/YYYY", XXXType.Food); // XXXX, YYYY
-        map.put("4Square/XXX/ZZZZ", XXXType.Entertainment);
-        map.put("Gowalla/XXX/YYYY", XXXType.Park);
+        map.put("Food", Clazz.Food); 
+        map.put("Arts & Entertainment", Clazz.Entertainment);
+        map.put("College & Education", Clazz.Other);
+        map.put("Home / Work / Other", Clazz.Other);
+        map.put("Nightlife Spots", Clazz.Nightlife);
+        map.put("Great Outdoors", Clazz.Other);
+        map.put("Shops", Clazz.Shopping);
+        map.put("Travel Spots", Clazz.Travel);
     }
 
     public static NearBys getInstance() {
@@ -47,15 +67,19 @@ public class NearBys {
         }
     }
 
-    public double distanceTo(Place place) {
+    public static Clazz toClazz(Place place) {
+        return map.get(place.getClassifiers()[0]);
+    }
+
+    public static double distanceTo(Place place) {
         return distanceTo(place.getLatitude(), place.getLongitude());
     }
 
-    private double distanceTo(double latitude, double longitude) {
+    private static double distanceTo(double latitude, double longitude) {
         double pk = (180/3.14169);
 
-        double a1 = base.getLatitude() / pk;
-        double a2 = base.getLongitude() / pk;
+        double a1 = nearBys.base.getLatitude() / pk;
+        double a2 = nearBys.base.getLongitude() / pk;
         double b1 = latitude / pk;
         double b2 = longitude / pk;
 
