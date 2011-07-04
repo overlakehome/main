@@ -1,1 +1,0 @@
-SearchResult consists of name, address, distance (a number), and category (an icon index, or an enum).

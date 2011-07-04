@@ -68,7 +68,7 @@ public class NearBys {
     }
 
     public static Clazz toClazz(Place place) {
-        return map.get(place.getClassifiers()[0]);
+        return map.containsKey(place.getClassifiers()[0]) ? map.get(place.getClassifiers()[0]) : Clazz.Other;
     }
 
     public static double distanceTo(Place place) {

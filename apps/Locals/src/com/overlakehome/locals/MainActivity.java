@@ -37,9 +37,9 @@ public class MainActivity extends TabActivity implements LocationListener {
                 .setIndicator("Places", res.getDrawable(R.drawable.ic_tab_places))
                 .setContent(new Intent().setClass(this, PlacesActivity.class)));
 
-        tabHost.addTab(tabHost.newTabSpec("deals")
-                .setIndicator("Deals", res.getDrawable(R.drawable.ic_tab_deals))
-                .setContent(new Intent().setClass(this, DealsActivity.class)));
+//        tabHost.addTab(tabHost.newTabSpec("deals")
+//                .setIndicator("Deals", res.getDrawable(R.drawable.ic_tab_deals))
+//                .setContent(new Intent().setClass(this, DealsActivity.class)));
 
         tabHost.addTab(tabHost.newTabSpec("trends")
                 .setIndicator("Trends", res.getDrawable(R.drawable.ic_tab_places))
