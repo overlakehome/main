@@ -67,11 +67,15 @@ public class NearBys {
         }
     }
 
-    public static Clazz toClazz(Place place) {
+    private static Clazz toClazz(Place place) {
         return map.containsKey(place.getClassifiers()[0]) ? map.get(place.getClassifiers()[0]) : Clazz.Other;
     }
 
-    public static double distanceTo(Place place) {
+    public static int toDrawableId(Place place) {
+        return NearBys.toClazz(place).getDrawableId();
+    }
+
+    public static double toDistance(Place place) {
         return distanceTo(place.getLatitude(), place.getLongitude());
     }
 

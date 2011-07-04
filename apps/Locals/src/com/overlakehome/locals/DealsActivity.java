@@ -70,10 +70,10 @@ public class DealsActivity extends Activity {
             }
 
             tag = (Tag)convertView.getTag();
-            tag.iv.setImageResource(NearBys.toClazz(places[position]).getDrawableId());
+            tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
-            tag.tv3.setText(Double.toString(NearBys.distanceTo(places[position])));
+            tag.tv3.setText(Double.toString(NearBys.toDistance(places[position])));
             return convertView;
         }
 
