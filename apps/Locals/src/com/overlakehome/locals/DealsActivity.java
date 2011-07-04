@@ -23,25 +23,26 @@ public class DealsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deals);
 
-        ListView lv = (ListView) findViewById(R.id.dealsListView1);
+        ListView lv = (ListView)findViewById(R.id.dealsListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
         lv.setTextFilterEnabled(true);
+
+        lv = null; // BUG to kill
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Toast.makeText(DealsActivity.this, "You have chosen: " + " " + NearBys.getInstance().getPlaces()[position].getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(DealsActivity.this, "Selected: " + NearBys.getInstance().getPlaces()[position].getName(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     // Resource: http://devblogs.net/2011/01/04/multicolumn-listview-with-image-icon/
-    private static class DealsListAdapter extends BaseAdapter{
+    private static class DealsListAdapter extends BaseAdapter {
         private LayoutInflater inflater;
         private Place[] places;
 
-        public DealsListAdapter(Context context, Place[] places){
+        public DealsListAdapter(Context context, Place[] places) {
             this.inflater = LayoutInflater.from(context);
             this.places = places;
         }
@@ -62,19 +63,19 @@ public class DealsActivity extends Activity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View view, ViewGroup parent) {
             Tag tag;
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.deals_row, null);
-                convertView.setTag(new Tag(convertView));
+            if (view == null) {
+                view = inflater.inflate(R.layout.deals_row, null);
+                view.setTag(new Tag(view));
             }
 
-            tag = (Tag)convertView.getTag();
+            tag = (Tag)view.getTag();
             tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
             tag.tv3.setText(Double.toString(NearBys.toDistance(places[position])));
-            return convertView;
+            return view;
         }
 
         private static class Tag {
@@ -84,10 +85,10 @@ public class DealsActivity extends Activity {
             TextView tv3;
 
             public Tag(View convertView) {
-                iv = (ImageView) convertView.findViewById(R.id.image);
-                tv1 = (TextView) convertView.findViewById(R.id.text1);
-                tv2 = (TextView) convertView.findViewById(R.id.text2);
-                tv3 = (TextView) convertView.findViewById(R.id.text3);
+                iv = (ImageView)convertView.findViewById(R.id.image);
+                tv1 = (TextView)convertView.findViewById(R.id.text1);
+                tv2 = (TextView)convertView.findViewById(R.id.text2);
+                tv3 = (TextView)convertView.findViewById(R.id.text3);
             }
         }
     }
