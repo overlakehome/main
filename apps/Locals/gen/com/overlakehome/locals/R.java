@@ -36,7 +36,6 @@ public final class R {
         public static final int categoryicon=0x7f050001;
         public static final int distance=0x7f050004;
         public static final int locals01=0x7f050005;
-        public static final int locals02=0x7f050006;
         public static final int name=0x7f050002;
     }
     public static final class layout {
