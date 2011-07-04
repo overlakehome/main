@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.overlakehome.locals.common.Place;
 
-public class HotPlacesActivity extends ListActivity {
+public class TrendsActivity extends ListActivity {
     private String[] hotplacelist = new String[20];
 
     @Override

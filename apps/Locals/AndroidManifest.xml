@@ -20,7 +20,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
           </activity>
-          <activity android:name=".HotPlacesActivity"
+          <activity android:name=".TrendsActivity"
                   android:label="HotPlaces Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

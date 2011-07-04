@@ -29,6 +29,7 @@ public class MainActivity extends TabActivity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        // Reference: http://developer.android.com/resources/tutorials/views/hello-tabwidget.html
         Resources res = getResources();
         TabHost tabHost = getTabHost();
 
@@ -42,7 +43,7 @@ public class MainActivity extends TabActivity implements LocationListener {
 
         tabHost.addTab(tabHost.newTabSpec("trends")
                 .setIndicator("Trends", res.getDrawable(R.drawable.ic_tab_places))
-                .setContent(new Intent().setClass(this, HotPlacesActivity.class)));
+                .setContent(new Intent().setClass(this, TrendsActivity.class)));
 
         tabHost.addTab(tabHost.newTabSpec("bookmarks")
                 .setIndicator("Bookmarks", res.getDrawable(R.drawable.ic_tab_bookmarks))
