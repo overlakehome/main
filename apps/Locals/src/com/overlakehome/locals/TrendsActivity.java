@@ -73,11 +73,15 @@ public class TrendsActivity extends Activity {
                 view.setTag(new Tag(view));
             }
 
+            Place place = places[position];
             Tag tag = (Tag)view.getTag();
             tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
-            tag.tv3.setText(String.format("%s checkins", places[position].getCheckins())); // String.format("42.22 miles", ...);
+            tag.tv3.setText(String.format(
+                "%s checkins, %d hear nows, %d users", 
+                place.getCheckins(), place.getHereNows(), place.getHereNows()));
+
             return view;
         }
 
