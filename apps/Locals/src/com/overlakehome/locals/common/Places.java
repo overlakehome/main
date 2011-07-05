@@ -19,6 +19,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+
 public class Places {
     public static final Comparator<Place> ORDER_BY_CHECKINS_DESC = new Comparator<Place>() {
         @Override
@@ -26,6 +31,24 @@ public class Places {
             return rhs.getCheckins() - lhs.getCheckins();
         }
     };
+
+    public static String toString(Context context, Location location) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            Geocoder geocoder = new Geocoder(context);
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            if (addresses.size() > 0) {
+                sb.append(addresses.get(0).getAddressLine(0));
+                for (int i = 1; i < addresses.get(0).getMaxAddressLineIndex(); i++) {
+                    sb.append(", ").append(addresses.get(0).getAddressLine(i));
+                }
+            }
+        } catch (IOException e) {
+        }
+
+        sb.append(String.format(" (%7.4f\u00B0, %7.4f\u00B0)", location.getLatitude(), location.getLongitude()));
+        return sb.toString();
+    }
 
     public static class Foursquare {
         private final static String FOURSQUARE_PLACES_SEARCH_URL = "https://api.foursquare.com/v2/venues/search?";

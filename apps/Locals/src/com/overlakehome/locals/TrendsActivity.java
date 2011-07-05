@@ -27,7 +27,7 @@ public class TrendsActivity extends Activity {
         setContentView(R.layout.trends);
 
         TextView tv = (TextView)findViewById(R.id.trendsTextView1);
-        tv.setText("Nearby 14008 NE 63RD CT, Redmond, WA\n(42.333, -122.303)");
+        tv.setText("Nearby " + Places.toString(getBaseContext(), NearBys.getInstance().getLocation()));
 
         ListView lv = (ListView)findViewById(R.id.trendsListView1);
         lv.setAdapter(new TrendsListAdapter(this, NearBys.getInstance().getPlaces()));

@@ -1,13 +1,7 @@
 package com.overlakehome.locals;
 
-import java.io.IOException;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.overlakehome.locals.common.Place;
+import com.overlakehome.locals.common.Places;
 
 public class PlacesActivity extends Activity {
 
@@ -29,8 +24,8 @@ public class PlacesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.places);
 
-        TextView tv2 = (TextView)findViewById(R.id.placesNearbyAddress);
-        tv2.setText("Nearby " + toString(NearBys.getInstance().getLocation()));
+        TextView tv = (TextView)findViewById(R.id.placesTextView1);
+        tv.setText("Nearby " + Places.toString(getBaseContext(), NearBys.getInstance().getLocation()));
 
         ListView lv = (ListView)findViewById(R.id.placesListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
@@ -96,23 +91,5 @@ public class PlacesActivity extends Activity {
                 tv3 = (TextView)view.findViewById(R.id.placesText3);
             }
         }
-    }
-
-    private String toString(Location location) {
-        StringBuilder sb = new StringBuilder();
-        try {
-            Geocoder geocoder = new Geocoder(getBaseContext());
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            if (addresses.size() > 0) {
-                sb.append(addresses.get(0).getAddressLine(0));
-                for (int i = 1; i < addresses.get(0).getMaxAddressLineIndex(); i++) {
-                    sb.append(", ").append(addresses.get(0).getAddressLine(i));
-                }
-            }
-        } catch (IOException e) {
-        }
-
-        sb.append(String.format(" (lat %7.4f\u00B0, lon %7.4f\u00B0)", location.getLatitude(), location.getLongitude()));
-        return sb.toString();
     }
 }

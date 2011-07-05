@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.overlakehome.locals.common.Place;
+import com.overlakehome.locals.common.Places;
 
 public class DealsActivity extends Activity {
 
@@ -24,7 +25,7 @@ public class DealsActivity extends Activity {
         setContentView(R.layout.deals);
 
         TextView tv = (TextView)findViewById(R.id.dealsTextView1);
-        tv.setText("Nearby 14008 NE 63RD CT, Redmond, WA\n(42.333, -122.303)");
+        tv.setText("Nearby " + Places.toString(getBaseContext(), NearBys.getInstance().getLocation()));
 
         ListView lv = (ListView)findViewById(R.id.dealsListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
