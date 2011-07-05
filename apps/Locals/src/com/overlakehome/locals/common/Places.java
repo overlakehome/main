@@ -44,9 +44,9 @@ public class Places {
                 }
             }
         } catch (IOException e) {
+            sb.append(String.format("%7.4f\u00B0, %7.4f\u00B0", location.getLatitude(), location.getLongitude()));
         }
 
-        sb.append(String.format(" (%7.4f\u00B0, %7.4f\u00B0)", location.getLatitude(), location.getLongitude()));
         return sb.toString();
     }
 
