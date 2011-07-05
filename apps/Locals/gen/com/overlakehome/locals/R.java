@@ -39,7 +39,12 @@ public final class R {
         public static final int text1=0x7f050003;
         public static final int text2=0x7f050004;
         public static final int text3=0x7f050005;
-        public static final int trendsListView1=0x7f050008;
+        public static final int trendsImage=0x7f05000a;
+        public static final int trendsListView1=0x7f050009;
+        public static final int trendsText1=0x7f05000b;
+        public static final int trendsText2=0x7f05000c;
+        public static final int trendsText3=0x7f05000d;
+        public static final int trendsTextView1=0x7f050008;
     }
     public static final class layout {
         public static final int deals=0x7f030000;
@@ -48,6 +53,7 @@ public final class R {
         public static final int places=0x7f030003;
         public static final int places_row=0x7f030004;
         public static final int trends=0x7f030005;
+        public static final int trends_row=0x7f030006;
     }
     public static final class string {
         public static final int app_name=0x7f040001;
