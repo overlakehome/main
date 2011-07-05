@@ -101,6 +101,7 @@ public class PlacesActivity extends Activity {
     private String toStreeAddress(Location location) {
         String address = "";
         try {
+            // MOCK OUT this as it seemts to be working only on a physical device.
             Geocoder geoCoder = new Geocoder(getBaseContext());
             List<Address> addresses = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (addresses.size() > 0) {
