@@ -34,17 +34,21 @@ public final class R {
         public static final int dealsListView1=0x7f050001;
         public static final int dealsTextView1=0x7f050000;
         public static final int image=0x7f050002;
+        public static final int placesImage=0x7f050008;
         public static final int placesListView1=0x7f050007;
         public static final int placesNearbyAddress=0x7f050006;
+        public static final int placesText1=0x7f050009;
+        public static final int placesText2=0x7f05000a;
+        public static final int placesText3=0x7f05000b;
         public static final int text1=0x7f050003;
         public static final int text2=0x7f050004;
         public static final int text3=0x7f050005;
-        public static final int trendsImage=0x7f05000a;
-        public static final int trendsListView1=0x7f050009;
-        public static final int trendsText1=0x7f05000b;
-        public static final int trendsText2=0x7f05000c;
-        public static final int trendsText3=0x7f05000d;
-        public static final int trendsTextView1=0x7f050008;
+        public static final int trendsImage=0x7f05000e;
+        public static final int trendsListView1=0x7f05000d;
+        public static final int trendsText1=0x7f05000f;
+        public static final int trendsText2=0x7f050010;
+        public static final int trendsText3=0x7f050011;
+        public static final int trendsTextView1=0x7f05000c;
     }
     public static final class layout {
         public static final int deals=0x7f030000;

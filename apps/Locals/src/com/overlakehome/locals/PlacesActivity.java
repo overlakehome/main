@@ -30,7 +30,7 @@ public class PlacesActivity extends Activity {
         setContentView(R.layout.places);
 
         TextView tv2 = (TextView)findViewById(R.id.placesNearbyAddress);
-        tv2.setText(toStreeAddress(NearBys.getInstance().getLocation()));
+        tv2.setText("Nearby " + toString(NearBys.getInstance().getLocation()));
 
         ListView lv = (ListView)findViewById(R.id.placesListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
@@ -90,28 +90,29 @@ public class PlacesActivity extends Activity {
             final TextView tv3;
 
             public Tag(View view) {
-                iv = (ImageView)view.findViewById(R.id.image);
-                tv1 = (TextView)view.findViewById(R.id.text1);
-                tv2 = (TextView)view.findViewById(R.id.text2);
-                tv3 = (TextView)view.findViewById(R.id.text3);
+                iv = (ImageView)view.findViewById(R.id.placesImage);
+                tv1 = (TextView)view.findViewById(R.id.placesText1);
+                tv2 = (TextView)view.findViewById(R.id.placesText2);
+                tv3 = (TextView)view.findViewById(R.id.placesText3);
             }
         }
     }
 
-    private String toStreeAddress(Location location) {
-        String address = "";
+    private String toString(Location location) {
+        StringBuilder sb = new StringBuilder();
         try {
-            // MOCK OUT this as it seemts to be working only on a physical device.
-            Geocoder geoCoder = new Geocoder(getBaseContext());
-            List<Address> addresses = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            Geocoder geocoder = new Geocoder(getBaseContext());
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (addresses.size() > 0) {
-                for (int index = 0; index < addresses.get(0).getMaxAddressLineIndex(); index++)
-                    address += addresses.get(0).getAddressLine(index) + " ";
+                sb.append(addresses.get(0).getAddressLine(0));
+                for (int i = 1; i < addresses.get(0).getMaxAddressLineIndex(); i++) {
+                    sb.append(", ").append(addresses.get(0).getAddressLine(i));
+                }
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
-        return address;
+        sb.append(String.format(" (lat %7.4f\u00B0, lon %7.4f\u00B0)", location.getLatitude(), location.getLongitude()));
+        return sb.toString();
     }
 }
