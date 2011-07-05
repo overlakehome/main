@@ -1,17 +1,9 @@
 package com.overlakehome.locals;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
-import com.google.android.maps.GeoPoint;
-
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -77,22 +69,5 @@ public class MainActivity extends TabActivity implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    public String ConvertPointToLocation(GeoPoint point) {
-        String address = "";
-        Geocoder geoCoder = new Geocoder(getBaseContext(), Locale.getDefault());
-        try {
-            List<Address> addresses = geoCoder.getFromLocation(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6, 1);
-
-            if (addresses.size() > 0) {
-                for (int index = 0; index < addresses.get(0).getMaxAddressLineIndex(); index++)
-                    address += addresses.get(0).getAddressLine(index) + " ";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return address;
     }
 }

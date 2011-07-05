@@ -2,7 +2,6 @@ package com.overlakehome.locals;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,7 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.maps.GeoPoint;
 import com.overlakehome.locals.common.Place;
 
 public class PlacesActivity extends Activity {
@@ -31,11 +29,8 @@ public class PlacesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.places);
 
-        Location location = NearBys.getInstance().getLocation();
-        GeoPoint point = new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6));
-
         TextView tv2 = (TextView)findViewById(R.id.placesNearbyAddress);
-        tv2.setText(toStreeAddress(point));
+        tv2.setText(toStreeAddress(NearBys.getInstance().getLocation()));
 
         ListView lv = (ListView)findViewById(R.id.placesListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
@@ -103,12 +98,11 @@ public class PlacesActivity extends Activity {
         }
     }
 
-    private String toStreeAddress(GeoPoint point) {
+    private String toStreeAddress(Location location) {
         String address = "";
-        Geocoder geoCoder = new Geocoder(getBaseContext(), Locale.getDefault());
         try {
-            List<Address> addresses = geoCoder.getFromLocation(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6, 1);
-
+            Geocoder geoCoder = new Geocoder(getBaseContext());
+            List<Address> addresses = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (addresses.size() > 0) {
                 for (int index = 0; index < addresses.get(0).getMaxAddressLineIndex(); index++)
                     address += addresses.get(0).getAddressLine(index) + " ";
