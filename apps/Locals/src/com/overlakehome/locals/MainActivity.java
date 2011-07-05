@@ -64,33 +64,9 @@ public class MainActivity extends TabActivity implements LocationListener {
         if (null != location) {
             NearBys.getInstance().setLocation(location);
             NearBys.getInstance().findNearBys();
-          
-            GeoPoint point = new GeoPoint(
-                    (int) (location.getLatitude() * 1E6), 
-                    (int) (location.getLongitude() * 1E6));
-            }
         }
-    public String ConvertPointToLocation(GeoPoint point) {   
-        String address = "";
-        Geocoder geoCoder = new Geocoder(
-            getBaseContext(), Locale.getDefault());
-        try {
-          List<Address> addresses = geoCoder.getFromLocation(
-            point.getLatitudeE6()  / 1E6, 
-            point.getLongitudeE6() / 1E6, 1);
-     
-          if (addresses.size() > 0) {
-            for (int index = 0; 
-        index < addresses.get(0).getMaxAddressLineIndex(); index++)
-              address += addresses.get(0).getAddressLine(index) + " ";
-          }
-        }
-        catch (IOException e) {        
-          e.printStackTrace();
-        }   
-        
-        return address;
-      } 
+    }
+
     @Override
     public void onProviderDisabled(String provider) {
     }
@@ -102,6 +78,21 @@ public class MainActivity extends TabActivity implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
-    
 
+    public String ConvertPointToLocation(GeoPoint point) {
+        String address = "";
+        Geocoder geoCoder = new Geocoder(getBaseContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geoCoder.getFromLocation(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6, 1);
+
+            if (addresses.size() > 0) {
+                for (int index = 0; index < addresses.get(0).getMaxAddressLineIndex(); index++)
+                    address += addresses.get(0).getAddressLine(index) + " ";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return address;
+    }
 }

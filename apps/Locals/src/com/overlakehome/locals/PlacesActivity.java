@@ -31,11 +31,11 @@ public class PlacesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.places);
 
-        TextView tv = (TextView)findViewById(R.id.placesNearby);
-        tv.setText("Nearby ");
+        Location location = NearBys.getInstance().getLocation();
+        GeoPoint point = new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6));
+
         TextView tv2 = (TextView)findViewById(R.id.placesNearbyAddress);
-        String address = ConvertPointToLocation
-        tv2.setText();
+        tv2.setText(toStreeAddress(point));
 
         ListView lv = (ListView)findViewById(R.id.placesListView1);
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
@@ -47,28 +47,7 @@ public class PlacesActivity extends Activity {
             }
         });
     }
-    public String ConvertPointToLocation(GeoPoint point) {   
-        String address = "";
-        Geocoder geoCoder = new Geocoder(
-            getBaseContext(), Locale.getDefault());
-        try {
-          List<Address> addresses = geoCoder.getFromLocation(
-            point.getLatitudeE6()  / 1E6, 
-            point.getLongitudeE6() / 1E6, 1);
-     
-          if (addresses.size() > 0) {
-            for (int index = 0; 
-        index < addresses.get(0).getMaxAddressLineIndex(); index++)
-              address += addresses.get(0).getAddressLine(index) + " ";
-          }
-        }
-        catch (IOException e) {        
-          e.printStackTrace();
-        }   
-        
-        return address;
-      } 
-    
+
     // Resource: http://devblogs.net/2011/01/04/multicolumn-listview-with-image-icon/
     private static class DealsListAdapter extends BaseAdapter {
         private LayoutInflater inflater;
@@ -122,5 +101,22 @@ public class PlacesActivity extends Activity {
                 tv3 = (TextView)view.findViewById(R.id.text3);
             }
         }
+    }
+
+    private String toStreeAddress(GeoPoint point) {
+        String address = "";
+        Geocoder geoCoder = new Geocoder(getBaseContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geoCoder.getFromLocation(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6, 1);
+
+            if (addresses.size() > 0) {
+                for (int index = 0; index < addresses.get(0).getMaxAddressLineIndex(); index++)
+                    address += addresses.get(0).getAddressLine(index) + " ";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return address;
     }
 }
