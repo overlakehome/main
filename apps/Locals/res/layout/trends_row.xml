@@ -15,7 +15,9 @@
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content" 
             android:id="@+id/trendsText1" 
-            android:textSize="25dip"/>
+            android:textColor="#669900"
+            android:textStyle="bold"
+            android:textSize="17dip"/>
         <TextView 
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content" 

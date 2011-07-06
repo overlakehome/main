@@ -79,7 +79,7 @@ public class TrendsActivity extends Activity {
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
             tag.tv3.setText(String.format(
-                "%s checkins, %d hear nows, %d users", 
+                "%s checkins, %d here nows, %d users", 
                 place.getCheckins(), place.getHereNows(), place.getHereNows()));
 
             return view;

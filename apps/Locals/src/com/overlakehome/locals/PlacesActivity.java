@@ -74,7 +74,7 @@ public class PlacesActivity extends Activity {
             tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
-            tag.tv3.setText(Double.toString(NearBys.toDistance(places[position]))); // String.format("42.22 miles", ...);
+            tag.tv3.setText(String.format("%-7.2f miles", NearBys.toDistance(places[position]))); 
             return view;
         }
 
