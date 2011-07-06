@@ -35,12 +35,12 @@ public class NearBys {
     private Location base;
 
     static {
+        map.put("Great Outdoors", Clazz.Entertainment);
         map.put("Food", Clazz.Food); 
         map.put("Arts & Entertainment", Clazz.Entertainment);
         map.put("College & Education", Clazz.Other);
-        map.put("Home / Work / Other", Clazz.Other);
+        map.put("Home, Work, Other", Clazz.Other);
         map.put("Nightlife Spots", Clazz.Nightlife);
-        map.put("Great Outdoors", Clazz.Other);
         map.put("Shops", Clazz.Shopping);
         map.put("Travel Spots", Clazz.Travel);
     }

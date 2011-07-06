@@ -127,7 +127,7 @@ public class Places {
         private static String[] toClassifiers(JSONArray categories) throws JSONException {
             String[] classifiers = new String[categories.length()];
             for (int i = 0; i < categories.length(); i++) {
-                classifiers[i] = categories.getJSONObject(i).getString("name");
+                classifiers[i] = categories.getJSONObject(i).getJSONArray("parents").getString(0);
             }
 
             return classifiers;
