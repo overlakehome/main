@@ -10,12 +10,7 @@ import com.overlakehome.locals.common.Places;
 
 public class NearBys {
     public static enum Clazz {
-        Food(R.drawable.ic_categ_arts),
-        Nightlife(R.drawable.ic_categ_nightlife), 
-        Shopping(R.drawable.ic_categ_shopping), 
-        Entertainment(R.drawable.ic_categ_nightlife), 
-        Travel(R.drawable.ic_categ_shopping), 
-        Other(R.drawable.ic_categ_shopping);
+        Food(R.drawable.ic_categ_food), Nightlife(R.drawable.ic_categ_nightlife), Shopping(R.drawable.ic_categ_shopping), Entertainment(R.drawable.ic_categ_entertainment), Education(R.drawable.ic_categ_edu), Travel(R.drawable.ic_categ_travel), Outdoor(R.drawable.ic_categ_outdoor), Other(R.drawable.ic_categ_other);
 
         private final int drawableId;
 
@@ -35,10 +30,10 @@ public class NearBys {
     private Location base;
 
     static {
-        map.put("Great Outdoors", Clazz.Entertainment);
-        map.put("Food", Clazz.Food); 
+        map.put("Great Outdoors", Clazz.Outdoor);
+        map.put("Food", Clazz.Food);
         map.put("Arts & Entertainment", Clazz.Entertainment);
-        map.put("College & Education", Clazz.Other);
+        map.put("College & Education", Clazz.Education);
         map.put("Home, Work, Other", Clazz.Other);
         map.put("Nightlife Spots", Clazz.Nightlife);
         map.put("Shops", Clazz.Shopping);
@@ -68,9 +63,7 @@ public class NearBys {
     }
 
     private static Clazz toClazz(Place place) {
-        return place.getClassifiers().length > 0 && map.containsKey(place.getClassifiers()[0])
-               ? map.get(place.getClassifiers()[0]) 
-               : Clazz.Other;
+        return place.getClassifiers().length > 0 && map.containsKey(place.getClassifiers()[0]) ? map.get(place.getClassifiers()[0]) : Clazz.Other;
     }
 
     public static int toDrawableId(Place place) {
@@ -82,19 +75,19 @@ public class NearBys {
     }
 
     private static double distanceTo(double latitude, double longitude) {
-        double pk = (180/3.14169);
+        double pk = (180 / 3.14169);
 
         double a1 = nearBys.base.getLatitude() / pk;
         double a2 = nearBys.base.getLongitude() / pk;
         double b1 = latitude / pk;
         double b2 = longitude / pk;
 
-        double t1 = Math.cos(a1)*Math.cos(a2)*Math.cos(b1)*Math.cos(b2);
-        double t2 = Math.cos(a1)*Math.sin(a2)*Math.cos(b1)*Math.sin(b2);
-        double t3 = Math.sin(a1)*Math.sin(b1);
+        double t1 = Math.cos(a1) * Math.cos(a2) * Math.cos(b1) * Math.cos(b2);
+        double t2 = Math.cos(a1) * Math.sin(a2) * Math.cos(b1) * Math.sin(b2);
+        double t3 = Math.sin(a1) * Math.sin(b1);
         double tt = Math.acos(t1 + t2 + t3);
-       
-        return 3963167*tt;
+
+        return 3963167 * tt;
     }
 
     public Place[] getPlaces() {
