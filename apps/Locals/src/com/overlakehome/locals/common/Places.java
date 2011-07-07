@@ -31,7 +31,7 @@ public class Places {
             return rhs.getCheckins() - lhs.getCheckins();
         }
     };
-
+    
     public static String toString(Context context, Location location) {
         StringBuilder sb = new StringBuilder();
         try {
@@ -115,13 +115,28 @@ public class Places {
                     String address = firstNonNull(location.optString("address"), location.optString("crossStreet"));
 
                     // FIXME: See if it is a good idea to add 'specials', 'photos', and 'tips' into the place model.
-                    places[i] = new Place(Source.Foursquare, UUID.randomUUID().toString(), item.getString("id"), item.getString("name"), toClassifiers(item.getJSONArray("categories")), location.getDouble("lat"), location.getDouble("lng"), address, location.optString("city"), location.optString("state"), "US", location.optString("postalCode"), null, contact.optString("phone"), null, stats.getInt("checkinsCount"), stats.getInt("usersCount"), item.getJSONObject("hereNow").getInt("count"));
+                    places[i] = new Place(Source.Foursquare, UUID.randomUUID().toString(), item.getString("id"), item.getString("name"),
+                            toClassifiers(item.getJSONArray("categories")), toSpecials(item.optJSONArray("specials")),
+                            location.getDouble("lat"), location.getDouble("lng"), address, location.optString("city"),
+                            location.optString("state"), "US", location.optString("postalCode"), null, 
+                            contact.optString("phone"), null, stats.getInt("checkinsCount"), 
+                            stats.getInt("usersCount"), item.getJSONObject("hereNow").getInt("count"));
                 } catch (JSONException e) {
                     throw new IllegalStateException("UNCHECKED: this bug should go unhandled; the businesses: " + items, e);
                 }
             }
-
             return places;
+        }
+
+        private static String[] toSpecials(JSONArray jsons) throws JSONException {
+            if (null == jsons) return null;
+
+            String[] specials = new String[jsons.length()];
+            for (int i = 0; i < jsons.length(); i++) {
+                specials[i] = jsons.getJSONObject(i).getString("message");
+            }
+
+            return specials;
         }
 
         private static String[] toClassifiers(JSONArray categories) throws JSONException {

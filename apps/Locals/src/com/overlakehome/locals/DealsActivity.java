@@ -1,5 +1,8 @@
 package com.overlakehome.locals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -28,7 +31,17 @@ public class DealsActivity extends Activity {
         tv.setText("Nearby " + Places.toString(getBaseContext(), NearBys.getInstance().getLocation()));
 
         ListView lv = (ListView)findViewById(R.id.dealsListView1);
-        lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
+
+        List<Place> places = new ArrayList<Place>();
+        for (Place place : NearBys.getInstance().getPlaces()) {
+            if (null != place.getSpecials()) {
+                places.add(place);
+            }
+        }
+
+        Place[] places2 = new Place[places.size()];
+        places.toArray(places2);
+        lv.setAdapter(new DealsListAdapter(this, places2));
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -74,7 +87,7 @@ public class DealsActivity extends Activity {
             tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
-            tag.tv3.setText(String.format("%-7.2f miles", NearBys.toDistance(places[position]))); 
+            tag.tv3.setText(null == places[position].getSpecials() ? "(n/a)" : places[position].getSpecials()[0]);
             return view;
         }
 
