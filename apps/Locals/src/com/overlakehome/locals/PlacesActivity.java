@@ -28,7 +28,7 @@ public class PlacesActivity extends Activity {
         tv.setText("Nearby " + Places.toString(getBaseContext(), NearBys.getInstance().getLocation()));
 
         ListView lv = (ListView)findViewById(R.id.placesListView1);
-        lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getPlaces()));
+        lv.setAdapter(new PlacesListAdapter(this, NearBys.getInstance().getPlaces()));
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -39,11 +39,11 @@ public class PlacesActivity extends Activity {
     }
 
     // Resource: http://devblogs.net/2011/01/04/multicolumn-listview-with-image-icon/
-    private static class DealsListAdapter extends BaseAdapter {
+    private static class PlacesListAdapter extends BaseAdapter {
         private LayoutInflater inflater;
         private Place[] places;
 
-        public DealsListAdapter(Context context, Place[] places) {
+        public PlacesListAdapter(Context context, Place[] places) {
             this.inflater = LayoutInflater.from(context);
             this.places = places;
         }
