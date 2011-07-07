@@ -7,6 +7,7 @@ import android.location.Location;
 
 import com.overlakehome.locals.common.Place;
 import com.overlakehome.locals.common.Places;
+import com.overlakehome.locals.common.Special;
 
 public class NearBys {
     public static enum Clazz {
@@ -27,6 +28,7 @@ public class NearBys {
 
     private static NearBys nearBys = new NearBys();
     private Place[] places;
+    private Special[] specials;
     private Location base;
 
     static {
@@ -58,6 +60,9 @@ public class NearBys {
             if (null != places && places.length > 0) {
                 this.places = places;
             }
+
+            // TODO:
+            Places.Foursquare.findSpecials(base.getLatitude(), base.getLongitude(), 50);
         } catch (Exception e) { // TODO: get right exception handling.
         }
     }

@@ -52,7 +52,7 @@ public class Places {
 
     public static class Foursquare {
         private final static String FOURSQUARE_PLACES_SEARCH_URL = "https://api.foursquare.com/v2/venues/search?";
-     // private final static String FOURSQUARE_PLACES_TRENDING_URL = "https://api.foursquare.com/v2/venues/trending?";
+        private final static String FOURSQUARE_SPECIALS_SEARCH_URL = "https://api.foursquare.com/v2/specials/search?";
 
         private static DefaultHttpClient client = null;
 
@@ -60,8 +60,20 @@ public class Places {
             client = new DefaultHttpClient();
         }
 
-        public static Place[] findNearby(double latitude, double longitude, String query, int meters, int limit) throws InterruptedException, ExecutionException, ClientProtocolException, IOException, JSONException {
+        public static Object findSpecials(double latitude, double longitude, int limit) throws ClientProtocolException, IOException {
+            String search = FOURSQUARE_SPECIALS_SEARCH_URL.concat(queryOfSpecials(latitude, longitude, limit));
+            HttpResponse response = client.execute(new HttpGet(search));
+            if (null == response) {
+                return new Place[0];
+            } else {
+                // https://api.foursquare.com/v2/specials/search?ll=40.7,-73.9&oauth_token=BTXXZ04L2S3DB2S2HULMH2QQRNXO1O45JEU2FOMFWKZIYGKH&v=20110706
+                // Name, Address, Message;
+                JSONObject o = toJSONObject(response);
+                return o; // toSpecials(response);
+            }
+        }
 
+        public static Place[] findNearby(double latitude, double longitude, String query, int meters, int limit) throws InterruptedException, ExecutionException, ClientProtocolException, IOException, JSONException {
             String search = FOURSQUARE_PLACES_SEARCH_URL.concat(queryOf(latitude, longitude, query, meters, limit));
             HttpResponse response = client.execute(new HttpGet(search));
             if (null == response) {
@@ -157,6 +169,15 @@ public class Places {
             if (null != query && 0 != query.length()) {
                 qparams.add(new BasicNameValuePair("query", query));
             }
+
+            return URLEncodedUtils.format(qparams, "UTF-8");
+        }
+
+        private static String queryOfSpecials(double latitude, double longitude, int limit) {
+            List<BasicNameValuePair> qparams = new ArrayList<BasicNameValuePair>();
+            qparams.add(new BasicNameValuePair("oauth_token", "LTPEYPHEF3UHHIXNIHT2WGSTPXSXVI41MEJYQTWUGRNOLGM5"));
+            qparams.add(new BasicNameValuePair("ll", latitude + "," + longitude));
+            qparams.add(new BasicNameValuePair("limit", Integer.toString(limit)));
 
             return URLEncodedUtils.format(qparams, "UTF-8");
         }
