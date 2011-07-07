@@ -87,7 +87,7 @@ public class DealsActivity extends Activity {
             tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
             tag.tv1.setText(places[position].getName());
             tag.tv2.setText(places[position].getAddress());
-            tag.tv3.setText(null == places[position].getSpecials() ? "(n/a)" : places[position].getSpecials()[0]);
+            tag.tv3.setText(places[position].getSpecials()[0]);
             return view;
         }
 
