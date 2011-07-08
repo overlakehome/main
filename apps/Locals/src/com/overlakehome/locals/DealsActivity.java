@@ -1,8 +1,5 @@
 package com.overlakehome.locals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -17,8 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.overlakehome.locals.common.Place;
 import com.overlakehome.locals.common.Places;
+import com.overlakehome.locals.common.Special;
 
 public class DealsActivity extends Activity {
 
@@ -31,17 +28,7 @@ public class DealsActivity extends Activity {
         tv.setText("Nearby " + Places.toString(getBaseContext(), NearBys.getInstance().getLocation()));
 
         ListView lv = (ListView)findViewById(R.id.dealsListView1);
-
-        List<Place> places = new ArrayList<Place>();
-        for (Place place : NearBys.getInstance().getPlaces()) {
-            if (null != place.getSpecials()) {
-                places.add(place);
-            }
-        }
-
-        Place[] places2 = new Place[places.size()];
-        places.toArray(places2);
-        lv.setAdapter(new DealsListAdapter(this, places2));
+        lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getSpecials()));
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -54,21 +41,21 @@ public class DealsActivity extends Activity {
     // Resource: http://devblogs.net/2011/01/04/multicolumn-listview-with-image-icon/
     private static class DealsListAdapter extends BaseAdapter {
         private LayoutInflater inflater;
-        private Place[] places;
+        private Special[] specials;
 
-        public DealsListAdapter(Context context, Place[] places) {
+        public DealsListAdapter(Context context, Special[] specials) {
             this.inflater = LayoutInflater.from(context);
-            this.places = places;
+            this.specials = specials;
         }
 
         @Override
         public int getCount() {
-            return places.length;
+            return specials.length;
         }
 
         @Override
         public Object getItem(int position) {
-            return places[position];
+            return specials[position];
         }
 
         @Override
@@ -84,10 +71,10 @@ public class DealsActivity extends Activity {
             }
 
             Tag tag = (Tag)view.getTag();
-            tag.iv.setImageResource(NearBys.toDrawableId(places[position]));
-            tag.tv1.setText(places[position].getName());
-            tag.tv2.setText(places[position].getAddress());
-            tag.tv3.setText(places[position].getSpecials()[0]);
+            tag.iv.setImageResource(NearBys.toDrawableId(specials[position]));
+            tag.tv1.setText(specials[position].getName());
+            tag.tv2.setText(specials[position].getAddress());
+            tag.tv3.setText(specials[position].getMessage());
             return view;
         }
 

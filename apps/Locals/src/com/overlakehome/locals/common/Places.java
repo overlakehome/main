@@ -60,16 +60,15 @@ public class Places {
             client = new DefaultHttpClient();
         }
 
-        public static Object findSpecials(double latitude, double longitude, int limit) throws ClientProtocolException, IOException {
+        public static Special[] findSpecials(double latitude, double longitude, int limit) throws ClientProtocolException, IOException, ParseException, InterruptedException, ExecutionException, JSONException {
             String search = FOURSQUARE_SPECIALS_SEARCH_URL.concat(queryOfSpecials(latitude, longitude, limit));
             HttpResponse response = client.execute(new HttpGet(search));
             if (null == response) {
-                return new Place[0];
+                return new Special[0];
             } else {
                 // https://api.foursquare.com/v2/specials/search?ll=40.7,-73.9&oauth_token=BTXXZ04L2S3DB2S2HULMH2QQRNXO1O45JEU2FOMFWKZIYGKH&v=20110706
                 // Name, Address, Message;
-                JSONObject o = toJSONObject(response);
-                return o; // toSpecials(response);
+                return toSpecials(response); 
             }
         }
 
@@ -90,6 +89,20 @@ public class Places {
                 String type = group.getString("type");
                 if ("nearby".equals(type) || "matches".equals(type) || "places".equals(type)) {
                     return toPlaces(group.getJSONArray("items"));
+                }
+            }
+
+            throw new IllegalStateException("UNCHECKED: this bug should go unhandled.");
+        }
+        
+        private static Special[] toSpecials(HttpResponse response) throws InterruptedException, ExecutionException, JSONException, ParseException, IOException {
+            JSONArray groups = toJSONObject(response).getJSONObject("response").getJSONArray("groups");
+            for (int i = 0; i < groups.length(); i++) {
+                JSONObject group = groups.getJSONObject(i);
+                String type = group.getString("type");
+                //Need to check...
+                if ("nearby".equals(type) || "matches".equals(type) || "specials".equals(type)) {
+                    return toSpecials(group.getJSONArray("items"));
                 }
             }
 
@@ -128,7 +141,7 @@ public class Places {
 
                     // FIXME: See if it is a good idea to add 'specials', 'photos', and 'tips' into the place model.
                     places[i] = new Place(Source.Foursquare, UUID.randomUUID().toString(), item.getString("id"), item.getString("name"),
-                            toClassifiers(item.getJSONArray("categories")), toSpecials(item.optJSONArray("specials")),
+                            toClassifiers(item.getJSONArray("categories")),
                             location.getDouble("lat"), location.getDouble("lng"), address, location.optString("city"),
                             location.optString("state"), "US", location.optString("postalCode"), null, 
                             contact.optString("phone"), null, stats.getInt("checkinsCount"), 
@@ -139,8 +152,29 @@ public class Places {
             }
             return places;
         }
+        
+        private static Special[] toSpecials(JSONArray items) throws InterruptedException, ExecutionException {
+            Special[] specials = new Special[items.length()];
+            for (int i = 0; i < items.length(); i++) {
+                try {
+                    JSONObject item = items.getJSONObject(i);
+                    JSONObject location = item.getJSONObject("location");
+                    JSONObject contact = item.getJSONObject("contact");
+                    String address = firstNonNull(location.optString("address"), location.optString("crossStreet"));
 
-        private static String[] toSpecials(JSONArray jsons) throws JSONException {
+                    specials[i] = new Special(Source.Foursquare, UUID.randomUUID().toString(), item.getString("id"), 
+                            item.getString("message"), item.optString("finePrint"),item.getString("title"),  
+                            item.getString("provider"), address, location.optString("city"),location.optString("state"), 
+                            "US", location.optString("postalCode"), location.getDouble("lat"), location.getDouble("lng"), 
+                            item.getString("name"), contact.optString("phone"), item.getString("url"), toClassifiers(item.getJSONArray("categories")));
+                } catch (JSONException e) {
+                    throw new IllegalStateException("UNCHECKED: this bug should go unhandled; the businesses: " + items, e);
+                }
+            }
+            return specials;
+        }
+
+/*        private static String[] toSpecials(JSONArray jsons) throws JSONException {
             if (null == jsons) return null;
 
             String[] specials = new String[jsons.length()];
@@ -149,7 +183,7 @@ public class Places {
             }
 
             return specials;
-        }
+        }*/
 
         private static String[] toClassifiers(JSONArray categories) throws JSONException {
             String[] classifiers = new String[categories.length()];

@@ -62,7 +62,10 @@ public class NearBys {
             }
 
             // TODO:
-            Places.Foursquare.findSpecials(base.getLatitude(), base.getLongitude(), 50);
+            Special[] specials = Places.Foursquare.findSpecials(base.getLatitude(), base.getLongitude(), 50);
+            if (null != specials && specials.length > 0) {
+                this.specials = specials;
+            }
         } catch (Exception e) { // TODO: get right exception handling.
         }
     }
@@ -71,8 +74,16 @@ public class NearBys {
         return place.getClassifiers().length > 0 && map.containsKey(place.getClassifiers()[0]) ? map.get(place.getClassifiers()[0]) : Clazz.Other;
     }
 
+    private static Clazz toClazz(Special special) {
+        return special.getClassifiers().length > 0 && map.containsKey(special.getClassifiers()[0]) ? map.get(special.getClassifiers()[0]) : Clazz.Other;
+    }
+    
     public static int toDrawableId(Place place) {
         return NearBys.toClazz(place).getDrawableId();
+    }
+    
+    public static int toDrawableId(Special special) {
+        return NearBys.toClazz(special).getDrawableId();
     }
 
     public static double toDistance(Place place) {
@@ -97,6 +108,10 @@ public class NearBys {
 
     public Place[] getPlaces() {
         return places;
+    }
+    
+    public Special[] getSpecials() {
+        return specials;
     }
 
 }

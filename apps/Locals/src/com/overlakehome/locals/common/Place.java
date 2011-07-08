@@ -24,10 +24,9 @@ public class Place {
     private final int checkins;
     private final int users;
     private final int hereNows;
-    private final String[] specials;
 
     public Place(
-            Source source, String id, String remoteId, String name, String[] classifiers, String[] specials,
+            Source source, String id, String remoteId, String name, String[] classifiers,
             double latitude, double longitude, 
             String streetAddress, String city, String state, String country, String postcode,
             String website, String phone, String fax) {
@@ -55,11 +54,10 @@ public class Place {
         this.checkins = 0;
         this.users = 0;
         this.hereNows = 0;
-        this.specials = specials;
     }
 
     public Place(
-            Source source, String id, String remoteId, String name, String[] classifiers, String[] specials,
+            Source source, String id, String remoteId, String name, String[] classifiers,
             double latitude, double longitude, 
             String streetAddress, String city, String state, String country, String postcode,
             String website, String phone, String fax, int checkins, int users, int hereNows) {
@@ -87,7 +85,6 @@ public class Place {
         this.checkins = checkins;
         this.users = users;
         this.hereNows = hereNows;
-        this.specials = specials;
 
     }
 
@@ -121,7 +118,6 @@ public class Place {
         this.checkins = 0;
         this.users = 0;
         this.hereNows = 0;
-        this.specials=null;
     }
 
     public String toString() {
@@ -233,9 +229,5 @@ public class Place {
 
     public int getHereNows() {
         return hereNows;
-    }
-
-    public String[] getSpecials(){
-        return specials;
     }
 }
