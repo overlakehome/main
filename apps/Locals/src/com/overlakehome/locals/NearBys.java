@@ -55,18 +55,15 @@ public class NearBys {
     }
 
     public void findNearBys() {
-        try {
-            Place[] places = Places.Foursquare.findNearby(base.getLatitude(), base.getLongitude(), null, 100, 50);
-            if (null != places && places.length > 0) {
-                this.places = places;
-            }
+        Place[] places = Places.Foursquare.findNearby(base.getLatitude(), base.getLongitude(), null, 100, 50);
+        if (null != places && places.length > 0) {
+            this.places = places;
+        }
 
-            // TODO:
-            Special[] specials = Places.Foursquare.findSpecials(base.getLatitude(), base.getLongitude(), 50);
-            if (null != specials && specials.length > 0) {
-                this.specials = specials;
-            }
-        } catch (Exception e) { // TODO: get right exception handling.
+        // TODO:
+        Special[] specials = Places.Foursquare.findSpecials(base.getLatitude(), base.getLongitude(), 50);
+        if (null != specials && specials.length > 0) {
+            this.specials = specials;
         }
     }
 

@@ -9,7 +9,6 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -60,25 +59,60 @@ public class Places {
             client = new DefaultHttpClient();
         }
 
-        public static Special[] findSpecials(double latitude, double longitude, int limit) throws ClientProtocolException, IOException, ParseException, InterruptedException, ExecutionException, JSONException {
+        public static Special[] findSpecials(double latitude, double longitude, int limit) {
             String search = FOURSQUARE_SPECIALS_SEARCH_URL.concat(queryOfSpecials(latitude, longitude, limit));
-            HttpResponse response = client.execute(new HttpGet(search));
+            HttpResponse response;
+            try {
+                response = client.execute(new HttpGet(search));
+            } catch (IOException e) {
+                throw new RuntimeException("BUG: ");
+            }
+
             if (null == response) {
                 return new Special[0];
             } else {
                 // https://api.foursquare.com/v2/specials/search?ll=40.7,-73.9&oauth_token=BTXXZ04L2S3DB2S2HULMH2QQRNXO1O45JEU2FOMFWKZIYGKH&v=20110706
-                // Name, Address, Message;
-                return toSpecials(response); 
+                try {
+                    return toSpecials(response);
+                } catch (ParseException e) {
+                    throw new RuntimeException("BUG: ");
+                } catch (InterruptedException e) {
+                    throw new RuntimeException("BUG: ");
+                } catch (ExecutionException e) {
+                    throw new RuntimeException("BUG: ");
+                } catch (JSONException e) {
+                    throw new RuntimeException("BUG: ");
+                } catch (IOException e) {
+                    throw new RuntimeException("BUG: ");
+                } 
             }
         }
 
-        public static Place[] findNearby(double latitude, double longitude, String query, int meters, int limit) throws InterruptedException, ExecutionException, ClientProtocolException, IOException, JSONException {
+        public static Place[] findNearby(double latitude, double longitude, String query, int meters, int limit) {
             String search = FOURSQUARE_PLACES_SEARCH_URL.concat(queryOf(latitude, longitude, query, meters, limit));
-            HttpResponse response = client.execute(new HttpGet(search));
+            HttpResponse response;
+            try {
+                response = client.execute(new HttpGet(search));
+            } catch (IOException e) {
+                throw new RuntimeException("BUG: ");
+            }
+
             if (null == response) {
                 return new Place[0];
             } else {
-                return toPlaces(response);
+                try {
+                    return toPlaces(response);
+                } catch (ParseException e) {
+                    throw new RuntimeException("BUG: ");
+                } catch (InterruptedException e) {
+                    throw new RuntimeException("BUG: ");
+                } catch (ExecutionException e) {
+                    throw new RuntimeException("BUG: ");
+                } catch (JSONException e) {
+                    throw new RuntimeException("BUG: ");
+                } catch (IOException e) {
+                    throw new RuntimeException("BUG: ");
+                }
             }
         }
 
@@ -94,19 +128,10 @@ public class Places {
 
             throw new IllegalStateException("UNCHECKED: this bug should go unhandled.");
         }
-        
-        private static Special[] toSpecials(HttpResponse response) throws InterruptedException, ExecutionException, JSONException, ParseException, IOException {
-            JSONArray groups = toJSONObject(response).getJSONObject("response").getJSONArray("groups");
-            for (int i = 0; i < groups.length(); i++) {
-                JSONObject group = groups.getJSONObject(i);
-                String type = group.getString("type");
-                //Need to check...
-                if ("nearby".equals(type) || "matches".equals(type) || "specials".equals(type)) {
-                    return toSpecials(group.getJSONArray("items"));
-                }
-            }
 
-            throw new IllegalStateException("UNCHECKED: this bug should go unhandled.");
+        private static Special[] toSpecials(HttpResponse response) throws InterruptedException, ExecutionException, JSONException, ParseException, IOException {
+            JSONArray items = toJSONObject(response).getJSONObject("response").getJSONObject("specials").getJSONArray("items");
+            return toSpecials(items);
         }
 
         private static JSONObject toJSONObject(HttpResponse response) throws ParseException, IOException {
@@ -152,38 +177,30 @@ public class Places {
             }
             return places;
         }
-        
+
         private static Special[] toSpecials(JSONArray items) throws InterruptedException, ExecutionException {
             Special[] specials = new Special[items.length()];
             for (int i = 0; i < items.length(); i++) {
                 try {
                     JSONObject item = items.getJSONObject(i);
-                    JSONObject location = item.getJSONObject("location");
-                    JSONObject contact = item.getJSONObject("contact");
+                    JSONObject venue = item.getJSONObject("venue");
+                    JSONObject location = venue.getJSONObject("location");
+                    JSONObject contact = venue.getJSONObject("contact");
+                    JSONArray categories = venue.getJSONArray("categories");
+                    String url = venue.optString("url");
                     String address = firstNonNull(location.optString("address"), location.optString("crossStreet"));
 
                     specials[i] = new Special(Source.Foursquare, UUID.randomUUID().toString(), item.getString("id"), 
-                            item.getString("message"), item.optString("finePrint"),item.getString("title"),  
+                            item.getString("message"), item.optString("finePrint"), item.getString("title"),  
                             item.getString("provider"), address, location.optString("city"),location.optString("state"), 
                             "US", location.optString("postalCode"), location.getDouble("lat"), location.getDouble("lng"), 
-                            item.getString("name"), contact.optString("phone"), item.getString("url"), toClassifiers(item.getJSONArray("categories")));
+                            venue.getString("name"), contact.optString("phone"), url, toClassifiers(categories));
                 } catch (JSONException e) {
                     throw new IllegalStateException("UNCHECKED: this bug should go unhandled; the businesses: " + items, e);
                 }
             }
             return specials;
         }
-
-/*        private static String[] toSpecials(JSONArray jsons) throws JSONException {
-            if (null == jsons) return null;
-
-            String[] specials = new String[jsons.length()];
-            for (int i = 0; i < jsons.length(); i++) {
-                specials[i] = jsons.getJSONObject(i).getString("message");
-            }
-
-            return specials;
-        }*/
 
         private static String[] toClassifiers(JSONArray categories) throws JSONException {
             String[] classifiers = new String[categories.length()];
