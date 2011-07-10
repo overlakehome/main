@@ -6,4 +6,6 @@ bin/
 temp/
 test-results/
 *.suo
-obj/
+obj/bin
+bin
+bin/
