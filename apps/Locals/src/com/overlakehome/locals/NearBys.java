@@ -60,7 +60,6 @@ public class NearBys {
             this.places = places;
         }
 
-        // TODO:
         Special[] specials = Places.Foursquare.findSpecials(base.getLatitude(), base.getLongitude(), 50);
         if (null != specials && specials.length > 0) {
             this.specials = specials;
