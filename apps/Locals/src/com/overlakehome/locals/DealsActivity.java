@@ -2,6 +2,7 @@ package com.overlakehome.locals;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +32,25 @@ public class DealsActivity extends Activity {
         lv.setAdapter(new DealsListAdapter(this, NearBys.getInstance().getSpecials()));
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new OnItemClickListener() {
+
             @Override
+            public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+                // TODO Auto-generated method stub
+                Intent detailsIntent = new Intent(DealsActivity.this, DealsDetails.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("param_position", position);
+                detailsIntent.putExtras(bundle);
+                DealsActivity.this.startActivity(detailsIntent);
+                
+            }
+           
+/*            @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Toast.makeText(DealsActivity.this, "Selected " + NearBys.getInstance().getPlaces()[position].getName(), Toast.LENGTH_LONG).show();
-            }
-        });
+            }*/
+    } );
+       
     }
-
     // Resource: http://devblogs.net/2011/01/04/multicolumn-listview-with-image-icon/
     private static class DealsListAdapter extends BaseAdapter {
         private LayoutInflater inflater;

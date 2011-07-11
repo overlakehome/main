@@ -7,5 +7,3 @@ temp/
 test-results/
 *.suo
 obj/bin
-bin
-bin/

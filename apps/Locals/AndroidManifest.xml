@@ -38,6 +38,12 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
           </activity>
+          <activity android:name=".DealsDetails"
+                  android:label="Deals Details">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+          </activity>
          </application>
 
     <uses-sdk android:minSdkVersion="8" />
