@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+        android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <ImageView android:id="@+id/detailsImage" android:layout_width="35dip" android:layout_height="wrap_content"></ImageView>
+        <TextView android:id="@+id/detailsName" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+    </LinearLayout>
+    <TextView android:id="@+id/detailsMessage"  android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+    <TextView android:id="@+id/detailsFinePrint" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+    <TextView android:id="@+id/detailsAddress" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+    <TextView android:id="@+id/detailsDistance" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+    <TextView android:id="@+id/detailsPhone" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+    <TextView android:id="@+id/detailsWebsite" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+</LinearLayout>

@@ -38,7 +38,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
           </activity>
-          <activity android:name=".DealsDetails"
+          <activity android:name=".DealsDetailsActivity"
                   android:label="Deals Details">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
