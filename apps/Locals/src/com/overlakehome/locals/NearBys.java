@@ -85,6 +85,10 @@ public class NearBys {
     public static double toDistance(Place place) {
         return distanceTo(place.getLatitude(), place.getLongitude());
     }
+    
+    public static double toDistance(Special special) {
+        return distanceTo(special.getLatitude(), special.getLongitude());
+    }
 
     private static double distanceTo(double latitude, double longitude) {
         double pk = (180 / 3.14169);

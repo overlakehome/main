@@ -163,7 +163,16 @@ public class Special {
     }
 
     public String getPhone() {
-        return phone;
+        if (phone.length() < 10) {
+            return phone;
+        } else {
+        String phoneArea = phone.substring(0, 3);
+        String phoneExch = phone.substring(3, 6);
+        String phoneNum = phone.substring(6);
+        String phoneNumber = "("+phoneArea+") "+phoneExch +"-" + phoneNum;
+        return phoneNumber;
+        }
+
     }
 
     public String getUrl() {

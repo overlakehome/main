@@ -33,6 +33,7 @@
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content" 
             android:id="@+id/text3" 
-            android:textSize="12dip"/>
+            android:textSize="13dip"
+            android:lines="3"/>
     </LinearLayout>
 </LinearLayout>
