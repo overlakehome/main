@@ -9,6 +9,7 @@ import static org.apache.commons.lang.StringUtils.isNumeric;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -34,6 +35,89 @@ public class CommonsTest {
         Assert.assertTrue(isAllUpperCase("ABCDEF"));
     }
 
+    // Builders and Fluent APIs http://en.wikipedia.org/wiki/Fluent_interface
+    public void testFluent() {
+        Order order = new Order();
+        order.setItemName("lattes");
+        order.setQuantity(2);
+        order.pay(Currency.getInstance("USD"));
+
+        new FluentOrder()
+                .withItem("lattes")
+                .withQuantity(2)
+                .pay(Currency.getInstance("USD"));
+
+        new OrderBuilder()
+                .withItem("lattes")
+                .withQuantity(2)
+                .pay(Currency.getInstance("USD"));
+    }
+
+    class Order {
+        public void setItemName(String item) {
+        }
+
+        public void setQuantity(int quantity) {
+        }
+
+        public boolean pay(Currency currenty) {
+            return true;
+        }
+    }
+
+    class FluentOrder {
+        private String item;
+        private int quantity;
+
+        public FluentOrder withItem(String item) {
+            this.item = item;
+            return this;
+        }
+
+        public FluentOrder withQuantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        boolean pay(Currency currency) {
+            // pay order
+            return true;
+        }
+    }
+
+    class OrderBuilder {
+        QuantityHolder withItem(String item) {
+            return new QuantityHolder(item);
+        }
+    }
+
+    class QuantityHolder {
+        private final String item;
+
+        public QuantityHolder(String item) {
+            this.item = item;
+        }
+
+        OrderFiller withQuantity(int quantity) {
+            return new OrderFiller(item, quantity);
+        }
+    }
+
+    class OrderFiller {
+        private final String item;
+        private final int quantity;
+
+        OrderFiller(String item, int quantity) {
+            this.item = item;
+            this.quantity = quantity;
+        }
+
+        boolean pay(Currency currency) {
+            /* pay order... */return true;
+        }
+    }
+        
+    // Function objects
     public class ResourceProvider {
         private final ReadWriteLock lock = new ReentrantReadWriteLock();
         private final Map<String, String> data = new HashMap<String, String>();
