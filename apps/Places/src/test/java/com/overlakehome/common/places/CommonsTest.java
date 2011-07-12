@@ -36,6 +36,8 @@ public class CommonsTest {
     }
 
     // Builders and Fluent APIs http://en.wikipedia.org/wiki/Fluent_interface
+    // +More expressive, type-safer, and easier to use.
+    // -Harder to write, and some code formatters choke.
     public void testFluent() {
         Order order = new Order();
         order.setItemName("lattes");
@@ -117,7 +119,9 @@ public class CommonsTest {
         }
     }
         
-    // Function objects
+    // Function objects http://en.wikipedia.org/wiki/Function_object
+    // +Safe, Easier in Java 8 and Groovy
+    // -Verbose
     public class ResourceProvider {
         private final ReadWriteLock lock = new ReentrantReadWriteLock();
         private final Map<String, String> data = new HashMap<String, String>();
@@ -186,6 +190,8 @@ public class CommonsTest {
     }
 
     // Java 7 has general availability 2011/07/28 http://openjdk.java.net/projects/jdk7/
+    // +Soon to be widely used; Succinct code
+    // -No Lambdas
     public void testJava6() throws IOException {
         // Traditional error handling
         try {
