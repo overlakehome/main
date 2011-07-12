@@ -6,12 +6,14 @@ import java.util.concurrent.ExecutionException;
 import net.oauth.OAuthException;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.overlakehome.common.places.Place.Source;
 
 public class PlacesTest {
     @Test
+    @Ignore
     public void testFindNearbyPlacesByGowalla() throws InterruptedException, ExecutionException {
         double latitude = 47.59755;
         double longitude = -122.327752;
@@ -39,6 +41,7 @@ public class PlacesTest {
     }
 
     @Test
+    @Ignore
     public void testFindNearbyPlacesByFoursquare() throws InterruptedException, ExecutionException {
         double latitude = 47.59755;
         double longitude = -122.327752;
@@ -67,6 +70,7 @@ public class PlacesTest {
     }
 
     @Test
+    @Ignore
     public void testFindNearbyRestaurantsByCitiGrid() throws IOException, OAuthException, InterruptedException, ExecutionException {
         double latitude = 47.59755;
         double longitude = -122.327752;
@@ -88,6 +92,7 @@ public class PlacesTest {
     }
 
     @Test
+    @Ignore
     public void testFindNearbyRestaurantAndMovieTheaterReviewsByYelpV1() throws IOException, OAuthException, InterruptedException, ExecutionException {
         // NOTE on limitation: this interface returns up to 20 businesses within a max radius of 25 miles.
 
