@@ -1,9 +1,10 @@
 *.class
 *.pidb
 *.sln
+*.suo
 *.userprefs
 bin/
+obj/bin
+target/
 temp/
 test-results/
-*.suo
-obj/bin
