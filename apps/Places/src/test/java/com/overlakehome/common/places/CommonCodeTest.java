@@ -333,9 +333,9 @@ public class CommonCodeTest {
                 }
             };
 
-            assert "Alice" == getName.apply(alice);
+            assertEquals("Alice", getName.apply(alice));
             Collection<String> names = Collections2.transform(people, getName);
-            assert names.containsAll(Lists.newArrayList("Alice", "Bob", "Carol"));
+            assertTrue(names.containsAll(Lists.newArrayList("Alice", "Bob", "Carol")));
         }
     }
 
@@ -424,73 +424,75 @@ public class CommonCodeTest {
             }
         }
     }
-            
-    // Function objects http://en.wikipedia.org/wiki/Function_object
-    // +Safe, Easier in Java 8 and Groovy
-    // -Verbose
-    public class ResourceProvider {
-        private final ReadWriteLock lock = new ReentrantReadWriteLock();
-        private final Map<String, String> data = new HashMap<String, String>();
 
-        public String getResource(String key) throws Exception {
-            lock.readLock().lock();
-            try {
-                return data.get(key);
-            } finally {
-                lock.readLock().unlock();
-            }
-        }
+    public class Disposal {
+        // Function objects http://en.wikipedia.org/wiki/Function_object
+        // +Safe, Easier in Java 8 and Groovy
+        // -Verbose
+        public class OldResourceProvider {
+            private final ReadWriteLock lock = new ReentrantReadWriteLock();
+            private final Map<String, String> data = new HashMap<String, String>();
 
-        public void refresh() throws Exception {
-            lock.writeLock().lock();
-            try {
-                // reload settings...
-            } finally {
-                lock.writeLock().unlock();
-            }
-        }
-    }
-
-    public class ResourceProviderV2 {
-        private final ResourceController controller = new ResourceController();
-        private final Map<String, String> data = new HashMap<String, String>();
-
-        public String getResource(final String key) throws Exception {
-            return controller.invokeReader(new Callable<String>() {
-                public String call() throws Exception {
+            public String getResource(String key) throws Exception {
+                lock.readLock().lock();
+                try {
                     return data.get(key);
+                } finally {
+                    lock.readLock().unlock();
                 }
-            });
-        }
+            }
 
-        public void refresh() throws Exception {
-            controller.invokeWriter(new Callable<Void>() {
-                public Void call() throws Exception {
-                    // reload settings
-                    return null;
+            public void refresh() throws Exception {
+                lock.writeLock().lock();
+                try {
+                    // reload settings...
+                } finally {
+                    lock.writeLock().unlock();
                 }
-            });
-        }
-    }
-
-    public class ResourceController {
-        private final ReadWriteLock lock = new ReentrantReadWriteLock();
-
-        public <T> T invokeReader(Callable<T> reader) throws Exception {
-            lock.readLock().lock();
-            try {
-                return reader.call();
-            } finally {
-                lock.readLock().unlock();
             }
         }
 
-        public <T> T invokeWriter(Callable<T> writer) throws Exception {
-            lock.writeLock().lock();
-            try {
-                return writer.call();
-            } finally {
-                lock.writeLock().unlock();
+        public class NewResourceProvider {
+            private final ResourceController controller = new ResourceController();
+            private final Map<String, String> data = new HashMap<String, String>();
+
+            public String getResource(final String key) throws Exception {
+                return controller.invokeReader(new Callable<String>() {
+                    public String call() throws Exception {
+                        return data.get(key);
+                    }
+                });
+            }
+
+            public void refresh() throws Exception {
+                controller.invokeWriter(new Callable<Void>() {
+                    public Void call() throws Exception {
+                        // reload settings
+                        return null;
+                    }
+                });
+            }
+        }
+
+        public class ResourceController {
+            private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
+            public <T> T invokeReader(Callable<T> reader) throws Exception {
+                lock.readLock().lock();
+                try {
+                    return reader.call();
+                } finally {
+                    lock.readLock().unlock();
+                }
+            }
+
+            public <T> T invokeWriter(Callable<T> writer) throws Exception {
+                lock.writeLock().lock();
+                try {
+                    return writer.call();
+                } finally {
+                    lock.writeLock().unlock();
+                }
             }
         }
     }
