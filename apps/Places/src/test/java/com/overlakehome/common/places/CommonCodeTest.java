@@ -313,6 +313,7 @@ public class CommonCodeTest {
         public void testThrowables() throws Exception {
             Exception e = new Exception();
             Throwables.propagateIfPossible(e);
+            Throwables.propagateIfInstanceOf(e, IOException.class);
             Throwables.propagate(e);
             Throwables.throwCause(e, false);
         }
