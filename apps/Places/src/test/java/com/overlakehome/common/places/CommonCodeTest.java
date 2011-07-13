@@ -179,6 +179,8 @@ public class CommonCodeTest {
     }
 
     public static class GoogleCommons {
+        // google guava common has tones of helper objects. http://code.google.com/p/guava-libraries/
+        // modern with fluent APIs, and genetics; well-designed with consistent; active development.
         @Test
         public void testMultimap() {
             Multimap<String, String> multiMap = HashMultimap.create();
