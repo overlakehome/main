@@ -339,90 +339,92 @@ public class CommonCodeTest {
         }
     }
 
-    // Builders and Fluent APIs http://en.wikipedia.org/wiki/Fluent_interface
-    // +More expressive, type-safer, and easier to use.
-    // -Harder to write, and some code formatters choke.
-    public void testFluent() {
-        Order order = new Order();
-        order.setItemName("lattes");
-        order.setQuantity(2);
-        order.pay(Currency.getInstance("USD"));
+    public static class Fluents {
+        // Builders and Fluent APIs http://en.wikipedia.org/wiki/Fluent_interface
+        // +More expressive, type-safe, and easier to use.
+        // -Harder to write, and some code formatters choke.
+        public void testFluent() {
+            Order order = new Order();
+            order.setItemName("lattes");
+            order.setQuantity(2);
+            order.pay(Currency.getInstance("USD"));
 
-        new FluentOrder()
-                .withItem("lattes")
-                .withQuantity(2)
-                .pay(Currency.getInstance("USD"));
+            new FluentOrder()
+                    .withItem("lattes")
+                    .withQuantity(2)
+                    .pay(Currency.getInstance("USD"));
 
-        new OrderBuilder()
-                .withItem("lattes")
-                .withQuantity(2)
-                .pay(Currency.getInstance("USD"));
+            new OrderBuilder()
+                    .withItem("lattes")
+                    .withQuantity(2)
+                    .pay(Currency.getInstance("USD"));
+        }
+
+        class Order {
+            public void setItemName(String item) {
+            }
+
+            public void setQuantity(int quantity) {
+            }
+
+            public boolean pay(Currency currenty) {
+                return true;
+            }
+        }
+
+        class FluentOrder {
+            private String item;
+            private int quantity;
+
+            public FluentOrder withItem(String item) {
+                this.item = item;
+                return this;
+            }
+
+            public FluentOrder withQuantity(int quantity) {
+                this.quantity = quantity;
+                return this;
+            }
+
+            boolean pay(Currency currency) {
+                // pay order
+                return true;
+            }
+        }
+
+        class OrderBuilder {
+            QuantityHolder withItem(String item) {
+                return new QuantityHolder(item);
+            }
+        }
+
+        class QuantityHolder {
+            private final String item;
+    
+            public QuantityHolder(String item) {
+                this.item = item;
+            }
+    
+            OrderFiller withQuantity(int quantity) {
+                return new OrderFiller(item, quantity);
+            }
+        }
+    
+        class OrderFiller {
+            private final String item;
+            private final int quantity;
+    
+            OrderFiller(String item, int quantity) {
+                this.item = item;
+                this.quantity = quantity;
+            }
+    
+            boolean pay(Currency currency) {
+                /* pay order... */return true;
+            }
+        }
     }
-
-    class Order {
-        public void setItemName(String item) {
-        }
-
-        public void setQuantity(int quantity) {
-        }
-
-        public boolean pay(Currency currenty) {
-            return true;
-        }
-    }
-
-    class FluentOrder {
-        private String item;
-        private int quantity;
-
-        public FluentOrder withItem(String item) {
-            this.item = item;
-            return this;
-        }
-
-        public FluentOrder withQuantity(int quantity) {
-            this.quantity = quantity;
-            return this;
-        }
-
-        boolean pay(Currency currency) {
-            // pay order
-            return true;
-        }
-    }
-
-    class OrderBuilder {
-        QuantityHolder withItem(String item) {
-            return new QuantityHolder(item);
-        }
-    }
-
-    class QuantityHolder {
-        private final String item;
-
-        public QuantityHolder(String item) {
-            this.item = item;
-        }
-
-        OrderFiller withQuantity(int quantity) {
-            return new OrderFiller(item, quantity);
-        }
-    }
-
-    class OrderFiller {
-        private final String item;
-        private final int quantity;
-
-        OrderFiller(String item, int quantity) {
-            this.item = item;
-            this.quantity = quantity;
-        }
-
-        boolean pay(Currency currency) {
-            /* pay order... */return true;
-        }
-    }
-        
+            
     // Function objects http://en.wikipedia.org/wiki/Function_object
     // +Safe, Easier in Java 8 and Groovy
     // -Verbose
@@ -522,11 +524,10 @@ public class CommonCodeTest {
         FileReader reader = new FileReader(path);
         try {
             read = reader.read();
+            assert read > 0;
         } finally {
             reader.close();
         }
-
-        assert read > 0;
 
         // Modern resource management in Java 7
 //      try (FileReader reader = new FileReader(path)) {
