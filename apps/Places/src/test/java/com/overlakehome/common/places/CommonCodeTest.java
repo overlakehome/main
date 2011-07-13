@@ -200,7 +200,7 @@ public class CommonCodeTest {
         }
 
         @Test
-        public void testBimap() {
+        public void testBiMap() {
             BiMap<String, String> biMap = HashBiMap.create();
             biMap.put("Switzerland", "die Schweiz");
             biMap.put("Poland", "Polska");
@@ -228,31 +228,31 @@ public class CommonCodeTest {
         }
 
         @Test
-        public void testJ() {
+        public void testStringsJoinerAndSplitter() {
+            assertEquals(null, Strings.emptyToNull(""));
+            assertEquals("", Strings.nullToEmpty(null));
+            assertTrue(Strings.isNullOrEmpty("") && Strings.isNullOrEmpty(null));
+            assertEquals("abcabcabc", Strings.repeat("abc", 3));
+
             Set<Integer> set = Sets.newHashSet(1, 2, 3);
             assertEquals("1, 2, 3", Joiner.on(", ").join(set));
-    
+
             String string = "1, 2, , 3";
             Iterable<String> itr = Splitter.on(",")
                     .omitEmptyStrings()
                     .trimResults()
                     .split(string);
-    
+
             Iterable<Integer> setAsInts = Iterables.transform(itr, new Function<String, Integer>() {
                 @Override
                 public Integer apply(String input) {
                     return Integer.valueOf(input);
                 }
             });
-    
+
             assertTrue(Lists.newArrayList(1, 2, 3).containsAll(Lists.newArrayList(setAsInts)));
-    
-            assertEquals(null, Strings.emptyToNull(""));
-            assertEquals("", Strings.nullToEmpty(null));
-            assertTrue(Strings.isNullOrEmpty("") && Strings.isNullOrEmpty(null));
-            assertEquals("abcabcabc", Strings.repeat("abc", 3));
-        }
-    
+       }
+
         @Test
         public void testPreconditions() {
             int userID = 1;
@@ -261,13 +261,12 @@ public class CommonCodeTest {
             Preconditions.checkNotNull(userName, "user %s missing name", userID);
             Preconditions.checkState(userName.length() > 0, "user %s missing name", userID);
         }
-    
+
         public class Person implements Comparable<Person> {
             String name;
             Date timestamp = new Date();
-    
+
             public Person(String string) {
-                // TODO Auto-generated constructor stub
             }
 
             @Override
@@ -277,12 +276,12 @@ public class CommonCodeTest {
                         .add("timestamp", timestamp)
                         .toString();
             }
-    
+
             @Override
             public int hashCode() {
                 return Objects.hashCode(name, timestamp);
             }
-    
+
             @Override
             public boolean equals(Object other) {
                 if (other == null) { return false; }
@@ -290,12 +289,12 @@ public class CommonCodeTest {
                 if (other.getClass() != getClass()) {
                     return false;
                 }
-    
+
                 Person rhs = (Person)other;
                 return Equivalences.equals().equivalent(name, rhs.name) &&
                        Equivalences.equals().equivalent(timestamp, rhs.timestamp);
             }
-    
+
             @Override
             public int compareTo(Person other) {
                 return ComparisonChain.start()
@@ -305,8 +304,7 @@ public class CommonCodeTest {
             }
 
             public String getName() {
-                // TODO Auto-generated method stub
-                return null;
+                return name;
             }
         }
 
