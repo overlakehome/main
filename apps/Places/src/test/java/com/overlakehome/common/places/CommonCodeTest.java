@@ -1,6 +1,7 @@
 package com.overlakehome.common.places;
 
 import static com.google.common.base.Predicates.equalTo;
+import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.or;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -19,6 +20,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
 import java.util.Date;
@@ -62,6 +64,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.primitives.Ints;
@@ -262,33 +265,48 @@ public class CommonCodeTest {
         }
 
         @Test
-        public void testFilterSortAndOrder() {
-            List<String> names = Lists.newArrayList("Aleksander", "Jaran", "Integrasco", "Guava", "Java");
-            Iterable<String> filtered = Iterables.filter(names, or(or(equalTo("Aleksander"),equalTo("Jaran")), new LengthLessThan(5)));
-            
-            // Collections.sort(List<T>, Comparator<? super T>)
-            i
-            Comparator<Person> byLastName = new Comparator<Person>() {
-                    public int compare(final Person p1, final Person p2) {
-                        return p1.getLastName().compareTo(p2.getLastName());
-                    }
-                };
-                Comparator<Person> byFirstName = new Comparator<Person>() {
-                07
-                    public int compare(final Person p1, final Person p2) {
-                08
-                        return p1.getFirstName().compareTo(p2.getFirstName());
-                09
-                    }
-                10
-                };
+        public void testTransformFilterAndSort() {
+            Function<String, Integer> lengthOf = new Function<String, Integer>() {
+                @Override
+                public Integer apply(String input) {
+                    return input.length();
+                }
+            };
 
+            List<String> names = Lists.newArrayList("Aleksander", "Jaran", "Integrasco", "Guava", "Java");
+            ImmutableMap<String, String> fromMap = ImmutableMap.of("key1", "value", "key2", "value2");
+            Map<String, Integer> toMap = Maps.transformValues(fromMap, lengthOf);
+            List<Integer> lengths = Lists.transform(names, lengthOf);
+
+            Iterable<String> filtered = Iterables.filter(
+                names, 
+                and(or(equalTo("Aleksander"), equalTo("Jaran")), lengthLessThanOf(5)));
+
+            List<Person> persons = Lists.newArrayList();
+            Comparator<Person> byLastName = new Comparator<Person>() {
+                public int compare(Person lhs, Person rhs) {
+                    return lhs.getLastName().compareTo(rhs.getLastName());
+                }
+            };
+
+            Comparator<Person> byFirstName = new Comparator<Person>() {
+                public int compare(Person lhs, Person rhs) {
+                    return lhs.getFirstName().compareTo(rhs.getFirstName());
+                }
+            };
+
+            Collections.sort(persons, byLastName);
+            List<Person> sorted = Ordering.from(byLastName).compound(byFirstName).reverse().sortedCopy(persons);
+        }
+
+        private static Predicate<String> lengthLessThanOf(int length) {
+            return new LengthLessThan(length);
         }
 
         private static class LengthLessThan implements Predicate<String> {
             private final int length;
 
-            private LengthLessThan(final int length) {
+            private LengthLessThan(int length) {
                 this.length = length;
             }
 
@@ -383,6 +401,14 @@ public class CommonCodeTest {
 
             public String getName() {
                 return name;
+            }
+
+            public String getFirstName() {
+                return null;
+            }
+
+            public String getLastName() {
+                return null;
             }
         }
 
