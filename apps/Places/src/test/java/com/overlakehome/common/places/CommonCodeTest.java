@@ -59,8 +59,8 @@ import com.google.common.collect.Table;
 
 public class CommonCodeTest {
     public static class ApacheCommons {
-        // apache.commons.lang has tones of helper objects. http://commons.apache.org/lang/
-        // v2.6 stable is JDK 1.3 compatible; no genetics; many functions obsoleted by JDK 5.
+        // apache.commons.lang has tons of helper objects. http://commons.apache.org/lang/
+        // v2.6 stable is JDK 1.3 compatible; no generics (JDK 1.5); many functions obsoleted by JDK 5.
         // v3.0 beta is JDK 1.5 compatible; not backward compatible with v2.6.
         @Test
         public void testStringUtils() {
@@ -179,8 +179,8 @@ public class CommonCodeTest {
     }
 
     public static class GoogleCommons {
-        // google guava common has tones of helper objects. http://code.google.com/p/guava-libraries/
-        // modern with fluent APIs, and genetics; well-designed with consistent; active development.
+        // Google Guava has tons of helper objects. http://code.google.com/p/guava-libraries/
+        // modern with generics, and fluent APIs; well-designed with consistency; active in development.
         @Test
         public void testMultimap() {
             Multimap<String, String> multiMap = HashMultimap.create();
@@ -499,7 +499,7 @@ public class CommonCodeTest {
 
     // Java 7 has general availability 2011/07/28 http://openjdk.java.net/projects/jdk7/
     // +Soon to be widely used; Succinct code
-    // -No Lambdas
+    // -No Lambdas, :(
     public void testJava6() throws IOException {
         // Traditional error handling
         try {
