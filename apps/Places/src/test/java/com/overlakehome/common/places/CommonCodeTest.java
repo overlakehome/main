@@ -1,7 +1,7 @@
 package com.overlakehome.common.places;
 
-import static com.google.common.base.Predicates.equalTo;
 import static com.google.common.base.Predicates.and;
+import static com.google.common.base.Predicates.equalTo;
 import static com.google.common.base.Predicates.or;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -16,8 +16,13 @@ import static org.apache.commons.lang.StringUtils.join;
 import static org.apache.commons.lang.StringUtils.left;
 import static org.apache.commons.lang.StringUtils.right;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,6 +44,7 @@ import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -67,12 +73,19 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Closeables;
+import com.google.common.io.Flushables;
 import com.google.common.primitives.Ints;
 
 public class CommonCodeTest {
     public static class ApacheCommons {
-        // apache.commons.lang has tons of helper objects. http://commons.apache.org/lang/
-        // v2.6 stable is JDK 1.3 compatible; no generics (JDK 1.5); many functions obsoleted by JDK 5.
+        // apache.commons.lang has tons of helper objects.
+        // http://commons.apache.org/lang/
+        // v2.6 stable is JDK 1.3 compatible; no generics (JDK 1.5); many
+        // functions obsoleted by JDK 5.
         // v3.0 beta is JDK 1.5 compatible; not backward compatible with v2.6.
         @Test
         public void testStringUtils() {
@@ -123,11 +136,15 @@ public class CommonCodeTest {
             assertTrue(ArrayUtils.contains(evens, 2));
             assertTrue(ArrayUtils.contains(odds, 3));
 
-            assertTrue(Arrays.equals(new int[] { 2, 4, 6, 8 }, ArrayUtils.add(evens, 8)));
-            assertTrue(Arrays.equals(new int[] { 2, 4, 6, 1, 3, 5 }, ArrayUtils.addAll(evens, odds)));
+            assertTrue(Arrays.equals(new int[] { 2, 4, 6, 8 },
+                    ArrayUtils.add(evens, 8)));
+            assertTrue(Arrays.equals(new int[] { 2, 4, 6, 1, 3, 5 },
+                    ArrayUtils.addAll(evens, odds)));
 
-            assertTrue(Arrays.equals(new int[] { 2, 6 }, ArrayUtils.remove(evens, 1)));
-            assertTrue(Arrays.equals(new int[] { 1, 3 }, ArrayUtils.remove(odds, 2)));
+            assertTrue(Arrays.equals(new int[] { 2, 6 },
+                    ArrayUtils.remove(evens, 1)));
+            assertTrue(Arrays.equals(new int[] { 1, 3 },
+                    ArrayUtils.remove(odds, 2)));
         }
 
         @Test
@@ -150,37 +167,36 @@ public class CommonCodeTest {
 
             @Override
             public String toString() {
-                return new ToStringBuilder(this)
-                        .append("name", name)
-                        .append("timestamp", timestamp)
-                        .toString();
+                return new ToStringBuilder(this).append("name", name)
+                        .append("timestamp", timestamp).toString();
             }
 
             @Override
             public boolean equals(Object other) {
-                if (other == null) { return false; }
-                if (other == this) { return true; }
-                if (other.getClass() != getClass()) { return false; }
+                if (other == null) {
+                    return false;
+                }
+                if (other == this) {
+                    return true;
+                }
+                if (other.getClass() != getClass()) {
+                    return false;
+                }
 
                 Person rhs = (Person)other;
-                return new EqualsBuilder()
-                        .append(name, rhs.name)
-                        .append(timestamp, rhs.timestamp)
-                        .isEquals();
+                return new EqualsBuilder().append(name, rhs.name)
+                        .append(timestamp, rhs.timestamp).isEquals();
             }
 
             @Override
             public int hashCode() {
-                return new HashCodeBuilder(97, 31)
-                        .append(name)
-                        .append(timestamp)
-                        .toHashCode();
+                return new HashCodeBuilder(97, 31).append(name)
+                        .append(timestamp).toHashCode();
             }
 
             @Override
             public int compareTo(Person other) {
-                return new CompareToBuilder()
-                        .append(this.name, other.name)
+                return new CompareToBuilder().append(this.name, other.name)
                         .toComparison();
             }
 
@@ -191,14 +207,17 @@ public class CommonCodeTest {
     }
 
     public static class GoogleCommons {
-        // Google Guava has tons of helper objects. http://code.google.com/p/guava-libraries/
-        // modern with generics, and fluent APIs; well-designed with consistency; active in development.
+        // Google Guava has tons of helper objects.
+        // http://code.google.com/p/guava-libraries/
+        // modern with generics, and fluent APIs; well-designed with
+        // consistency; active in development.
         @Test
         public void testGoogleCollections() {
             List<Integer> list = Lists.newArrayList();
             Map<String, Map<Long, List<String>>> map = Maps.newHashMap();
             ImmutableList<String> list2 = ImmutableList.of("a", "b", "c", "d");
-            ImmutableMap<String, String> map2 = ImmutableMap.of("key1", "value", "key2", "value2");
+            ImmutableMap<String, String> map2 = ImmutableMap.of("key1",
+                    "value", "key2", "value2");
             int[] ints = Ints.toArray(list);
             int[] array = { 1, 2, 3, 4, 5 };
             boolean contains = Ints.contains(array, 4);
@@ -224,7 +243,8 @@ public class CommonCodeTest {
             assertTrue(multiMap.containsValue("Charles"));
 
             Collection<String> canooies = multiMap.get("Canoo");
-            Collection<String> c = Lists.newArrayList("Dierk","Andres", "Hamlet");
+            Collection<String> c = Lists.newArrayList("Dierk", "Andres",
+                    "Hamlet");
             assertTrue(canooies.containsAll(c));
         }
 
@@ -236,7 +256,7 @@ public class CommonCodeTest {
             biMap.put("Austria", "…sterreich");
             assertEquals("Polska", biMap.get("Poland"));
             assertEquals("Switzerland", biMap.inverse().get("die Schweiz"));
-       }
+        }
 
         @Test
         public void testTable() {
@@ -273,14 +293,18 @@ public class CommonCodeTest {
                 }
             };
 
-            List<String> names = Lists.newArrayList("Aleksander", "Jaran", "Integrasco", "Guava", "Java");
-            ImmutableMap<String, String> fromMap = ImmutableMap.of("key1", "value", "key2", "value2");
-            Map<String, Integer> toMap = Maps.transformValues(fromMap, lengthOf);
+            List<String> names = Lists.newArrayList("Aleksander", "Jaran",
+                    "Integrasco", "Guava", "Java");
+            ImmutableMap<String, String> fromMap = ImmutableMap.of("key1",
+                    "value", "key2", "value2");
+            Map<String, Integer> toMap = Maps
+                    .transformValues(fromMap, lengthOf);
             List<Integer> lengths = Lists.transform(names, lengthOf);
 
             Iterable<String> filtered = Iterables.filter(
-                names, 
-                and(or(equalTo("Aleksander"), equalTo("Jaran")), lengthLessThanOf(5)));
+                    names,
+                    and(or(equalTo("Aleksander"), equalTo("Jaran")),
+                            lengthLessThanOf(5)));
 
             List<Person> persons = Lists.newArrayList();
             Comparator<Person> byLastName = new Comparator<Person>() {
@@ -296,7 +320,8 @@ public class CommonCodeTest {
             };
 
             Collections.sort(persons, byLastName);
-            List<Person> sorted = Ordering.from(byLastName).compound(byFirstName).reverse().sortedCopy(persons);
+            List<Person> sorted = Ordering.from(byLastName)
+                    .compound(byFirstName).reverse().sortedCopy(persons);
         }
 
         private static Predicate<String> lengthLessThanOf(int length) {
@@ -326,51 +351,57 @@ public class CommonCodeTest {
             assertEquals("1, 2, 3", Joiner.on(", ").join(set));
 
             String string = "1, 2, , 3";
-            Iterable<String> itr = Splitter.on(",")
-                    .omitEmptyStrings()
-                    .trimResults()
-                    .split(string);
+            Iterable<String> itr = Splitter.on(",").omitEmptyStrings()
+                    .trimResults().split(string);
 
-            Iterable<Integer> setAsInts = Iterables.transform(itr, new Function<String, Integer>() {
-                @Override
-                public Integer apply(String input) {
-                    return Integer.valueOf(input);
-                }
-            });
+            Iterable<Integer> setAsInts = Iterables.transform(itr,
+                    new Function<String, Integer>() {
+                        @Override
+                        public Integer apply(String input) {
+                            return Integer.valueOf(input);
+                        }
+                    });
 
-            assertTrue(Lists.newArrayList(1, 2, 3).containsAll(Lists.newArrayList(setAsInts)));
+            assertTrue(Lists.newArrayList(1, 2, 3).containsAll(
+                    Lists.newArrayList(setAsInts)));
         }
 
         @Test
         public void testMatchers() {
-            CharMatcher.is('a'); CharMatcher.isNot('b'); CharMatcher.anyOf("abcd").negate();
+            CharMatcher.is('a');
+            CharMatcher.isNot('b');
+            CharMatcher.anyOf("abcd").negate();
             CharMatcher.inRange('a', 'z').or(CharMatcher.inRange('A', 'Z'));
-            assertEquals("89983", CharMatcher.DIGIT.retainFrom("some text 89983 and more"));
-            assertEquals("some text  and more", CharMatcher.DIGIT.removeFrom("some text 89983 and more"));
+            assertEquals("89983",
+                    CharMatcher.DIGIT.retainFrom("some text 89983 and more"));
+            assertEquals("some text  and more",
+                    CharMatcher.DIGIT.removeFrom("some text 89983 and more"));
         }
 
         @Test
         public void testPreconditions() {
             int userID = 1;
             String userName = "some name";
-            Preconditions.checkArgument(userID > 0, "userid is negative: %s", userID);
-            Preconditions.checkNotNull(userName, "user %s missing name", userID);
-            Preconditions.checkState(userName.length() > 0, "user %s missing name", userID);
+            Preconditions.checkArgument(userID > 0, "userid is negative: %s",
+                    userID);
+            Preconditions
+                    .checkNotNull(userName, "user %s missing name", userID);
+            Preconditions.checkState(userName.length() > 0,
+                    "user %s missing name", userID);
         }
 
         public class Person implements Comparable<Person> {
             String name;
             Date timestamp = new Date();
 
-            public Person(String string) {
+            public Person(String name) {
+                this.name = name;
             }
 
             @Override
             public String toString() {
-                return Objects.toStringHelper(this)
-                        .add("name", name)
-                        .add("timestamp", timestamp)
-                        .toString();
+                return Objects.toStringHelper(this).add("name", name)
+                        .add("timestamp", timestamp).toString();
             }
 
             @Override
@@ -380,23 +411,26 @@ public class CommonCodeTest {
 
             @Override
             public boolean equals(Object other) {
-                if (other == null) { return false; }
-                if (other == this) { return true; }
+                if (other == null) {
+                    return false;
+                }
+                if (other == this) {
+                    return true;
+                }
                 if (other.getClass() != getClass()) {
                     return false;
                 }
 
                 Person rhs = (Person)other;
-                return Equivalences.equals().equivalent(name, rhs.name) &&
-                       Equivalences.equals().equivalent(timestamp, rhs.timestamp);
+                return Equivalences.equals().equivalent(name, rhs.name)
+                        && Equivalences.equals().equivalent(timestamp,
+                                rhs.timestamp);
             }
 
             @Override
             public int compareTo(Person other) {
-                return ComparisonChain.start()
-                        .compare(name, other.name)
-                        .compare(timestamp, other.timestamp)
-                        .result();
+                return ComparisonChain.start().compare(name, other.name)
+                        .compare(timestamp, other.timestamp).result();
             }
 
             public String getName() {
@@ -437,12 +471,66 @@ public class CommonCodeTest {
 
             assertEquals("Alice", getName.apply(alice));
             Collection<String> names = Collections2.transform(people, getName);
-            assertTrue(names.containsAll(Lists.newArrayList("Alice", "Bob", "Carol")));
+            assertTrue(names.containsAll(Lists.newArrayList("Alice", "Bob",
+                    "Carol")));
+        }
+
+        @Test
+        public void testIOs() throws IOException, NoSuchAlgorithmException {
+            ByteArrayDataOutput byteOut = ByteStreams.newDataOutput();
+            byteOut.writeDouble(Math.PI);
+            byteOut.writeInt(RandomUtils.nextInt());
+            byteOut.writeChar('\n');
+
+            ByteArrayDataInput byteIn = ByteStreams.newDataInput(byteOut.toByteArray());
+            assertEquals(Math.PI, byteIn.readDouble());
+            byteIn.readInt();
+            assertEquals('\n', byteIn.readChar());
+
+//          InputStream is = ByteStreams.class.getResourceAsStream("test.data");
+//          OutputStream os = System.out;
+//          ByteStreams.copy(is, os);
+//
+//          is = ByteStreams.class.getResourceAsStream("test.data");
+//          byte[] bytes = ByteStreams.toByteArray(is);
+//
+//          CRC32 crc32 = new CRC32();
+//          long checksum = ByteStreams.getChecksum(
+//                  ByteStreams.newInputStreamSupplier(bytes), crc32);
+//
+//          MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+//          byte[] digest = ByteStreams.getDigest(
+//                  ByteStreams.newInputStreamSupplier(bytes), sha256);
+//
+//          InputSupplier<FileInputStream> fileIn = Files
+//                  .newInputStreamSupplier(new File("data", "large.txt"));
+//                  InputSupplier<InputStream> slicedStream =
+//                  ByteStreams.slice( fileIn, 10, 1000 );
+//                  byte[] data = ByteStreams.toByteArray( slicedStream );
+//
+            OutputStream os = null;
+            try {
+                os = new FileOutputStream(new File("data", "output.txt"));
+                // Do something fantastic with this file!!!
+                // etc.
+                byte magnificentByte = 1;
+                os.write(magnificentByte);
+            } catch (FileNotFoundException fnfe) {
+                // Do something about this file not being found.
+            } catch (IOException ioe) {
+                // Egad, there's been an exception! Do something!!!
+            } finally {
+                if (null != os) {
+                    Flushables.flushQuietly(os);
+                    Closeables.closeQuietly(os);
+                }
+            }
         }
     }
 
     public static class Fluents {
-        // Builders and Fluent APIs http://en.wikipedia.org/wiki/Fluent_interface
+        // Builders and Fluent APIs
+        // http://en.wikipedia.org/wiki/Fluent_interface
         // +More expressive, type-safe, and easier to use.
         // -Harder to write, and some code formatters choke.
         public void testFluent() {
@@ -451,14 +539,10 @@ public class CommonCodeTest {
             order.setQuantity(2);
             order.pay(Currency.getInstance("USD"));
 
-            new FluentOrder()
-                    .withItem("lattes")
-                    .withQuantity(2)
+            new FluentOrder().withItem("lattes").withQuantity(2)
                     .pay(Currency.getInstance("USD"));
 
-            new OrderBuilder()
-                    .withItem("lattes")
-                    .withQuantity(2)
+            new OrderBuilder().withItem("lattes").withQuantity(2)
                     .pay(Currency.getInstance("USD"));
         }
 
@@ -502,25 +586,25 @@ public class CommonCodeTest {
 
         class QuantityHolder {
             private final String item;
-    
+
             public QuantityHolder(String item) {
                 this.item = item;
             }
-    
+
             OrderFiller withQuantity(int quantity) {
                 return new OrderFiller(item, quantity);
             }
         }
-    
+
         class OrderFiller {
             private final String item;
             private final int quantity;
-    
+
             OrderFiller(String item, int quantity) {
                 this.item = item;
                 this.quantity = quantity;
             }
-    
+
             boolean pay(Currency currency) {
                 /* pay order... */return true;
             }
@@ -599,7 +683,8 @@ public class CommonCodeTest {
         }
     }
 
-    // Java 7 has general availability 2011/07/28 http://openjdk.java.net/projects/jdk7/
+    // Java 7 has general availability 2011/07/28
+    // http://openjdk.java.net/projects/jdk7/
     // +Soon to be widely used; Succinct code
     // -No Lambdas, :(
     public void testJava6() throws IOException {
@@ -615,13 +700,13 @@ public class CommonCodeTest {
         }
 
         // Modern error handling in Java 7
-//      try {
-//          doSomething();
-//      } catch (UnsupportedOperationException
-//               | IllegalStateException
-//               | IllegalArgumentException e) {
-//          handleError(e);
-//      }
+        // try {
+        // doSomething();
+        // } catch (UnsupportedOperationException
+        // | IllegalStateException
+        // | IllegalArgumentException e) {
+        // handleError(e);
+        // }
 
         String path = "~/.gitconfig";
         int read = -1;
@@ -634,24 +719,24 @@ public class CommonCodeTest {
         }
 
         // Modern resource management in Java 7
-//      try (FileReader reader = new FileReader(path)) {
-//          read = reader.read();
-//      }
+        // try (FileReader reader = new FileReader(path)) {
+        // read = reader.read();
+        // }
 
-//      class MyResource implements AutoCloseable {
-//          String getResource() {
-//              return "some resource";
-//          }
-//
-//          @Override
-//          public void close() throws Exception {
-//              // closing
-//          }
-//      }
-//
-//      try (MyResource resource = new MyResource()) {
-//          return resource.getResource();
-//      }
+        // class MyResource implements AutoCloseable {
+        // String getResource() {
+        // return "some resource";
+        // }
+        //
+        // @Override
+        // public void close() throws Exception {
+        // // closing
+        // }
+        // }
+        //
+        // try (MyResource resource = new MyResource()) {
+        // return resource.getResource();
+        // }
     }
 
     private static void doSomething() {
