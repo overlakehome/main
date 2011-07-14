@@ -1,5 +1,7 @@
 package com.overlakehome.common.places;
 
+import static com.google.common.base.Predicates.equalTo;
+import static com.google.common.base.Predicates.or;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.apache.commons.lang.StringUtils.defaultString;
@@ -17,6 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,11 +40,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Equivalences;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
@@ -51,11 +56,15 @@ import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
+import com.google.common.primitives.Ints;
 
 public class CommonCodeTest {
     public static class ApacheCommons {
@@ -182,6 +191,21 @@ public class CommonCodeTest {
         // Google Guava has tons of helper objects. http://code.google.com/p/guava-libraries/
         // modern with generics, and fluent APIs; well-designed with consistency; active in development.
         @Test
+        public void testGoogleCollections() {
+            List<Integer> list = Lists.newArrayList();
+            Map<String, Map<Long, List<String>>> map = Maps.newHashMap();
+            ImmutableList<String> list2 = ImmutableList.of("a", "b", "c", "d");
+            ImmutableMap<String, String> map2 = ImmutableMap.of("key1", "value", "key2", "value2");
+            int[] ints = Ints.toArray(list);
+            int[] array = { 1, 2, 3, 4, 5 };
+            boolean contains = Ints.contains(array, 4);
+            int indexOf = Ints.indexOf(array, 4);
+            int max = Ints.max(array);
+            int min = Ints.min(array);
+            int[] concat = Ints.concat(array, new int[] { 6, 7 });
+        }
+
+        @Test
         public void testMultimap() {
             Multimap<String, String> multiMap = HashMultimap.create();
             multiMap.put("Canoo", "Hamlet");
@@ -230,6 +254,50 @@ public class CommonCodeTest {
         }
 
         @Test
+        public void testStrings() {
+            assertEquals(null, Strings.emptyToNull(""));
+            assertEquals("", Strings.nullToEmpty(null));
+            assertTrue(Strings.isNullOrEmpty("") && Strings.isNullOrEmpty(null));
+            assertEquals("abcabcabc", Strings.repeat("abc", 3));
+        }
+
+        @Test
+        public void testFilterSortAndOrder() {
+            List<String> names = Lists.newArrayList("Aleksander", "Jaran", "Integrasco", "Guava", "Java");
+            Iterable<String> filtered = Iterables.filter(names, or(or(equalTo("Aleksander"),equalTo("Jaran")), new LengthLessThan(5)));
+            
+            // Collections.sort(List<T>, Comparator<? super T>)
+            i
+            Comparator<Person> byLastName = new Comparator<Person>() {
+                    public int compare(final Person p1, final Person p2) {
+                        return p1.getLastName().compareTo(p2.getLastName());
+                    }
+                };
+                Comparator<Person> byFirstName = new Comparator<Person>() {
+                07
+                    public int compare(final Person p1, final Person p2) {
+                08
+                        return p1.getFirstName().compareTo(p2.getFirstName());
+                09
+                    }
+                10
+                };
+
+        }
+
+        private static class LengthLessThan implements Predicate<String> {
+            private final int length;
+
+            private LengthLessThan(final int length) {
+                this.length = length;
+            }
+
+            public boolean apply(final String s) {
+                return s.length() < length;
+            }
+        }
+
+        @Test
         public void testStringsJoinerAndSplitter() {
             assertEquals(null, Strings.emptyToNull(""));
             assertEquals("", Strings.nullToEmpty(null));
@@ -253,7 +321,15 @@ public class CommonCodeTest {
             });
 
             assertTrue(Lists.newArrayList(1, 2, 3).containsAll(Lists.newArrayList(setAsInts)));
-       }
+        }
+
+        @Test
+        public void testMatchers() {
+            CharMatcher.is('a'); CharMatcher.isNot('b'); CharMatcher.anyOf("abcd").negate();
+            CharMatcher.inRange('a', 'z').or(CharMatcher.inRange('A', 'Z'));
+            assertEquals("89983", CharMatcher.DIGIT.retainFrom("some text 89983 and more"));
+            assertEquals("some text  and more", CharMatcher.DIGIT.removeFrom("some text 89983 and more"));
+        }
 
         @Test
         public void testPreconditions() {
