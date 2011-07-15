@@ -84,10 +84,8 @@ import com.google.common.primitives.Ints;
 
 public class CommonCodeTest {
     public static class ApacheCommons {
-        // apache.commons.lang has tons of helper objects.
-        // http://commons.apache.org/lang/
-        // v2.6 stable is JDK 1.3 compatible; no generics (JDK 1.5); many
-        // functions obsoleted by JDK 5.
+        // apache.commons.lang has tons of helper objects. // http://commons.apache.org/lang/
+        // v2.6 stable is JDK 1.3 compatible; no generics (JDK 1.5); many functions obsoleted by JDK 5.
         // v3.0 beta is JDK 1.5 compatible; not backward compatible with v2.6.
         @Test
         public void testStringUtils() {
@@ -138,15 +136,11 @@ public class CommonCodeTest {
             assertTrue(ArrayUtils.contains(evens, 2));
             assertTrue(ArrayUtils.contains(odds, 3));
 
-            assertTrue(Arrays.equals(new int[] { 2, 4, 6, 8 },
-                    ArrayUtils.add(evens, 8)));
-            assertTrue(Arrays.equals(new int[] { 2, 4, 6, 1, 3, 5 },
-                    ArrayUtils.addAll(evens, odds)));
+            assertTrue(Arrays.equals(new int[] { 2, 4, 6, 8 }, ArrayUtils.add(evens, 8)));
+            assertTrue(Arrays.equals(new int[] { 2, 4, 6, 1, 3, 5 }, ArrayUtils.addAll(evens, odds)));
 
-            assertTrue(Arrays.equals(new int[] { 2, 6 },
-                    ArrayUtils.remove(evens, 1)));
-            assertTrue(Arrays.equals(new int[] { 1, 3 },
-                    ArrayUtils.remove(odds, 2)));
+            assertTrue(Arrays.equals(new int[] { 2, 6 }, ArrayUtils.remove(evens, 1)));
+            assertTrue(Arrays.equals(new int[] { 1, 3 }, ArrayUtils.remove(odds, 2)));
         }
 
         @Test
@@ -175,30 +169,28 @@ public class CommonCodeTest {
 
             @Override
             public boolean equals(Object other) {
-                if (other == null) {
-                    return false;
-                }
-                if (other == this) {
-                    return true;
-                }
-                if (other.getClass() != getClass()) {
-                    return false;
-                }
+                if (other == null) { return false; }
+                if (other == this) { return true; }
+                if (other.getClass() != getClass()) { return false; }
 
                 Person rhs = (Person)other;
-                return new EqualsBuilder().append(name, rhs.name)
-                        .append(timestamp, rhs.timestamp).isEquals();
+                return new EqualsBuilder()
+                        .append(name, rhs.name)
+                        .append(timestamp, rhs.timestamp)
+                        .isEquals();
             }
 
             @Override
             public int hashCode() {
-                return new HashCodeBuilder(97, 31).append(name)
+                return new HashCodeBuilder(97, 31)
+                        .append(name)
                         .append(timestamp).toHashCode();
             }
 
             @Override
             public int compareTo(Person other) {
-                return new CompareToBuilder().append(this.name, other.name)
+                return new CompareToBuilder()
+                        .append(this.name, other.name)
                         .toComparison();
             }
 
@@ -209,17 +201,14 @@ public class CommonCodeTest {
     }
 
     public static class GoogleCommons {
-        // Google Guava has tons of helper objects.
-        // http://code.google.com/p/guava-libraries/
-        // modern with generics, and fluent APIs; well-designed with
-        // consistency; active in development.
+        // Google Guava has tons of helper objects. // http://code.google.com/p/guava-libraries/
+        // modern with generics, and fluent APIs; well-designed with consistency; active in development.
         @Test
         public void testCollections() {
             List<Integer> list = Lists.newArrayList();
             Map<String, Map<Long, List<String>>> map = Maps.newHashMap();
             ImmutableList<String> list2 = ImmutableList.of("a", "b", "c", "d");
-            ImmutableMap<String, String> map2 = ImmutableMap.of("key1",
-                    "value", "key2", "value2");
+            ImmutableMap<String, String> map2 = ImmutableMap.of("key1", "value", "key2", "value2");
             int[] ints = Ints.toArray(list);
             int[] array = { 1, 2, 3, 4, 5 };
             boolean contains = Ints.contains(array, 4);
@@ -304,18 +293,13 @@ public class CommonCodeTest {
                 }
             };
 
-            List<String> names = Lists.newArrayList("Aleksander", "Jaran",
-                    "Integrasco", "Guava", "Java");
-            ImmutableMap<String, String> fromMap = ImmutableMap.of("key1",
-                    "value", "key2", "value2");
-            Map<String, Integer> toMap = Maps
-                    .transformValues(fromMap, lengthOf);
+            List<String> names = Lists.newArrayList("Aleksander", "Jaran", "Integrasco", "Guava", "Java");
+            ImmutableMap<String, String> fromMap = ImmutableMap.of("key1", "value", "key2", "value2");
+            Map<String, Integer> toMap = Maps.transformValues(fromMap, lengthOf);
             List<Integer> lengths = Lists.transform(names, lengthOf);
 
-            Iterable<String> filtered = Iterables.filter(
-                    names,
-                    and(or(equalTo("Aleksander"), equalTo("Jaran")),
-                            lengthLessThanOf(5)));
+            Iterable<String> filtered = Iterables.filter(names,
+                    and(or(equalTo("Aleksander"), equalTo("Jaran")), lengthLessThanOf(5)));
 
             List<Person> persons = Lists.newArrayList();
             Comparator<Person> byLastName = new Comparator<Person>() {
@@ -550,10 +534,14 @@ public class CommonCodeTest {
             order.setQuantity(2);
             order.pay(Currency.getInstance("USD"));
 
-            new FluentOrder().withItem("lattes").withQuantity(2)
+            new FluentOrder()
+                    .withItem("lattes")
+                    .withQuantity(2)
                     .pay(Currency.getInstance("USD"));
 
-            new OrderBuilder().withItem("lattes").withQuantity(2)
+            new OrderBuilder()
+                    .withItem("lattes")
+                    .withQuantity(2)
                     .pay(Currency.getInstance("USD"));
         }
 
