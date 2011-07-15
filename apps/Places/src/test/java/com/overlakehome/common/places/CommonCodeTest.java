@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -49,7 +51,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.base.CharMatcher;
-import com.google.common.base.Equivalences;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
@@ -68,6 +69,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
@@ -212,7 +214,7 @@ public class CommonCodeTest {
         // modern with generics, and fluent APIs; well-designed with
         // consistency; active in development.
         @Test
-        public void testGoogleCollections() {
+        public void testCollections() {
             List<Integer> list = Lists.newArrayList();
             Map<String, Map<Long, List<String>>> map = Maps.newHashMap();
             ImmutableList<String> list2 = ImmutableList.of("a", "b", "c", "d");
@@ -225,6 +227,15 @@ public class CommonCodeTest {
             int max = Ints.max(array);
             int min = Ints.min(array);
             int[] concat = Ints.concat(array, new int[] { 6, 7 });
+
+            ConcurrentMap<Person, Integer> lengths = new MapMaker()
+                .weakKeys()
+                .expireAfterAccess(10, TimeUnit.MINUTES)
+                .makeComputingMap(new Function<Person, Integer>() {
+                    public Integer apply(Person p) {
+                        return p.getPreferredName().length();
+                    }
+                });
         }
 
         @Test
@@ -348,50 +359,49 @@ public class CommonCodeTest {
             assertEquals("abcabcabc", Strings.repeat("abc", 3));
 
             Set<Integer> set = Sets.newHashSet(1, 2, 3);
-            assertEquals("1, 2, 3", Joiner.on(", ").join(set));
+            assertEquals("1, 2, 3", Joiner.on(", ").skipNulls().join(set));
 
             String string = "1, 2, , 3";
             Iterable<String> itr = Splitter.on(",").omitEmptyStrings()
                     .trimResults().split(string);
 
-            Iterable<Integer> setAsInts = Iterables.transform(itr,
-                    new Function<String, Integer>() {
-                        @Override
-                        public Integer apply(String input) {
-                            return Integer.valueOf(input);
-                        }
-                    });
+            Iterable<Integer> setAsInts = Iterables.transform(itr, 
+                new Function<String, Integer>() {
+                    @Override
+                    public Integer apply(String input) {
+                        return Integer.valueOf(input);
+                    }
+                }
+            );
 
             assertTrue(Lists.newArrayList(1, 2, 3).containsAll(
                     Lists.newArrayList(setAsInts)));
         }
 
         @Test
-        public void testMatchers() {
+        public void testCharMatchers() {
+//          CharMatcher.WHITESPACE; CharMatcher.JAVA_DIGIT; CharMatcher.ASCII; CharMatcher.ANY;
+//          CharMatcher#matchesAllOf, matchesAnyOf, matchesNoneOf, trimFrom, trimLeadingFrom, trimTrailingFrom, ...
             CharMatcher.is('a');
             CharMatcher.isNot('b');
             CharMatcher.anyOf("abcd").negate();
             CharMatcher.inRange('a', 'z').or(CharMatcher.inRange('A', 'Z'));
-            assertEquals("89983",
-                    CharMatcher.DIGIT.retainFrom("some text 89983 and more"));
-            assertEquals("some text  and more",
-                    CharMatcher.DIGIT.removeFrom("some text 89983 and more"));
+            assertEquals("89983", CharMatcher.DIGIT.retainFrom("some text 89983 and more"));
+            assertEquals("some text  and more", CharMatcher.DIGIT.removeFrom("some text 89983 and more"));
         }
 
         @Test
         public void testPreconditions() {
             int userID = 1;
             String userName = "some name";
-            Preconditions.checkArgument(userID > 0, "userid is negative: %s",
-                    userID);
-            Preconditions
-                    .checkNotNull(userName, "user %s missing name", userID);
-            Preconditions.checkState(userName.length() > 0,
-                    "user %s missing name", userID);
+            Preconditions.checkArgument(userID > 0, "userid is negative: %s", userID);
+            Preconditions.checkNotNull(userName, "user %s missing name", userID);
+            Preconditions.checkState(userName.length() > 0, "user %s missing name", userID);
         }
 
         public class Person implements Comparable<Person> {
             String name;
+            String nickname;
             Date timestamp = new Date();
 
             public Person(String name) {
@@ -400,8 +410,10 @@ public class CommonCodeTest {
 
             @Override
             public String toString() {
-                return Objects.toStringHelper(this).add("name", name)
-                        .add("timestamp", timestamp).toString();
+                return Objects.toStringHelper(this)
+                           .add("name", name)
+                           .add("timestamp", timestamp)
+                           .toString();
             }
 
             @Override
@@ -411,26 +423,25 @@ public class CommonCodeTest {
 
             @Override
             public boolean equals(Object other) {
-                if (other == null) {
-                    return false;
-                }
-                if (other == this) {
-                    return true;
-                }
-                if (other.getClass() != getClass()) {
-                    return false;
-                }
+                if (other == null) { return false; }
+                if (other == this) { return true; }
+                if (other.getClass() != getClass()) { return false; }
 
                 Person rhs = (Person)other;
-                return Equivalences.equals().equivalent(name, rhs.name)
-                        && Equivalences.equals().equivalent(timestamp,
-                                rhs.timestamp);
+                return Objects.equal(name, rhs.name)
+                       && Objects.equal(timestamp, rhs.timestamp);
             }
 
             @Override
             public int compareTo(Person other) {
-                return ComparisonChain.start().compare(name, other.name)
-                        .compare(timestamp, other.timestamp).result();
+                return ComparisonChain.start()
+                           .compare(name, other.name)
+                           .compare(timestamp, other.timestamp)
+                           .result();
+            }
+
+            public String getPreferredName() {
+                return Objects.firstNonNull(nickname, name);
             }
 
             public String getName() {
@@ -471,12 +482,12 @@ public class CommonCodeTest {
 
             assertEquals("Alice", getName.apply(alice));
             Collection<String> names = Collections2.transform(people, getName);
-            assertTrue(names.containsAll(Lists.newArrayList("Alice", "Bob",
-                    "Carol")));
+            assertTrue(names.containsAll(Lists.newArrayList("Alice", "Bob", "Carol")));
         }
 
         @Test
         public void testIOs() throws IOException, NoSuchAlgorithmException {
+            // Java 7 will make most of google.common.io obsolete.
             ByteArrayDataOutput byteOut = ByteStreams.newDataOutput();
             byteOut.writeDouble(Math.PI);
             byteOut.writeInt(RandomUtils.nextInt());
