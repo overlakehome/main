@@ -137,7 +137,7 @@ public class Place {
 
     public String getAddress() {
         if (null == streetAddress || 0 == streetAddress.length()) {
-           return String.format("%s, %s, %s", city, state);
+           return String.format("%s, %s", city, state);
         } else {
             return String.format("%s, %s, %s", streetAddress, city, state);
         }
